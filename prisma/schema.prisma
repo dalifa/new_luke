@@ -1,14 +1,230 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+model User{
+  id             String     @id @default(auto()) @map("_id") @db.ObjectId
+  name           String?
+  email          String?    @unique
+  emailVerified  DateTime?
+  image          String?
+  password       String?
+  //
+  accounts       Account[]
+  //
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+}
+// selon Auth.JS site officiel au 03/01/2024
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.String
+  access_token      String? @db.String
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
+
+  @@unique([provider, providerAccountId])
+}
+//
+
+model Profile {
+  id                   String   @id @default(auto()) @map("_id") @db.ObjectId
+  googleEmail          String?   
+  usercodepin          Int      @unique @default(1000)
+  credit               Int      @default(0)
+  jackpot              Int      @default(0)
+  jackpotCents         Int      @default(0) // en cents x 100
+  //
+  username             String 
+  phone                Int 
+  firstname            String    
+  lastname             String    
+  city                 String    
+  countryId            String   @db.ObjectId
+  country              Country? @relation(fields: [countryId], references: [id], onDelete: Cascade)    
+  bio                  String    
+  // lorsqu'il choisira son pays, on lui mettra ici son currency correspondant
+  currency             String   @default("f cfa")
+  //
+  role                 UserRole @default(USER)
+  isPartner            Boolean  @default(false)
+  // le maximum qu'il peut recevoir des user approvisionnant leur compte
+  maxPartnerCredit     Int      @default(0)
+  // ce qu'il peut actuellement encaisser des user
+  partnerCredit        Int      @default(0)
+  // ce que le partenaire peut remettre à un user qui recupère sa cagnotte
+  partnerCreditToRemit Int      @default(0)
+  //
+  isActiveAccount      Boolean  @default(true)
+  //
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+//
+enum UserRole {
+  ADMIN
+  USER
+}
+//
+model CollectionList {
+  id                 String     @id @default(auto()) @map("_id") @db.ObjectId
+  ownId              Int        @default(1)
+  amount             Int
+  currency           String     @default("f cfa")
+  collectionType     String     @default("Snippet")
+  isGroupComplete    Boolean    @default(false)
+  // la collecte est cloturé ?
+  isCollectionClosed Boolean  @default(false)
+  //
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+//
+model Collection {
+  id                 String  @id @default(auto()) @map("_id") @db.ObjectId
+  ownId              Int     @default(1)
+  amount             Int
+  currency           String  @default("f cfa")
+  collectionType     String  @default("Snippet")
+  group              Int     @default(3)
+  groupStatus        Int   
+  // le group est complet ?
+  isGroupComplete    Boolean @default(false)
+  // la collecte est cloturé ?
+  isCollectionClosed Boolean @default(false)
+  // le participant
+  email              String?
+  usercodepin        Int     @default(1000)
+  hasGive            Boolean @default(false) // le participant a t-il donné ?
+  //
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  //
+}
+//
+model CollectionResult {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  donatorcodepin   Int
+  donatorEmail      String?
+  collectionOwnId   Int?
+  amount            Int?
+  currency          String @default("f cfa")
+  collectionType    String @default("Snippet")
+  recipientcodepin Int
+  recipientEmail    String?
+  createdAt         DateTime @default(now())
+}
+//
+model TransferDemand {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  email              String?
+  usercodepin           Int      @default(1000)
+  amountToTransfer   Int
+  currency           String   @default("not specified")  
+  transferCode       Int      @default(0)
+  isUsed             Boolean  @default(false) 
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+//
+model Activity {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  usercodepin Int      @default(1000)
+  activity       String
+  concerned      Json?
+  action         Json?
+  createdAt      DateTime @default(now())
+}
+//
+model Amount {
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  amount     Int     @default(1)
+  currency   String  @default("nothig")
+  rank       String  @default("nothing")
+}
+//
+model Country {
+  id               String  @id @default(auto()) @map("_id") @db.ObjectId
+  name             String
+  currency         String
+  usezone          String 
+  flag             String? @default("not yet")
+  profile          Profile[]
+}
+//
+model MyObject {
+  id                 String     @id @default(auto()) @map("_id") @db.ObjectId
+  googleEmail        String?
+  usercodepin        Int      @unique @default(1000)
+  objectToFinanceId  String   @db.ObjectId
+  object             ToFinance? @relation(fields: [objectToFinanceId], references: [id], onDelete: Cascade)    
+  //
+}
+// projet à financer
+model ToFinance {
+  id               String  @id @default(auto()) @map("_id") @db.ObjectId
+  objectName       String
+  object           MyObject[]
+}
+// Enregistrer ici les commissions que touche KABOLA e/se
+model Commission {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userEmail         String?
+  usercodepin       Int
+  transferCode      Int?
+  userJackpot       Int?
+  amountToTransfer  Int?
+  commission        Int?   @default(0)
+  // cents x 100
+  commissionCents   Int    @default(0)
+  currency          String @default("not specified")
+  origin            String? 
+  //
+  createdAt      DateTime   @default(now())
+}
+// taux de commission en %
+model CommissionRate {
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
+  rate           Int     @default(1)
+  //
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+}
+//
+model Cents {
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
+  // ex: 0,57
+  amount         String
+  // 5
+  cent1          Int     @default(0)
+  // 7
+  cent2          Int     @default(0)
+  // multiplié par 100 = 57
+  byten          Int
+}
+//
+model Metric {
+  id                        String  @id @default(auto()) @map("_id") @db.ObjectId
+  currentgroup              Int  @default(3)
+  currentNbrOfCollection    Int  @default(1)
+  nextOwnIdSnippetToEnter   Int  @default(1)
+  nextOwnIdTotalityToEnter  Int  @default(1)
+  currentLukecode           Int  @default(1001) // only for test
+}
+//
