@@ -54,7 +54,7 @@ export async function POST(req: Request) {
 // UPDATE METRIC
 export async function PATCH(req: Request) {
   try {
-    const { currentgroup, currentNbrOfCollection, currentLukecode } = await req.json();
+    const { currentgroup, currentNbrOfCollection } = await req.json();
     const session = await auth();
 
     if (!session) {
@@ -79,7 +79,6 @@ export async function PATCH(req: Request) {
         data: {
           currentgroup,
           currentNbrOfCollection,
-          currentLukecode
         }
       });
       return NextResponse.json(updatedMetric);
