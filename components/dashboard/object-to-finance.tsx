@@ -1,11 +1,10 @@
 //
 import { auth } from "@/auth";
-import { ProfileForm } from "./profile-infos-form";
 import { prismadb } from "@/lib/prismadb";
 import { currentUserInfos } from "@/hooks/own-current-user";
 import { ProjectToFinanceForm } from "./object-to-finance-form";
 
-// 
+//  
 const AddObjectToFinance = async () => {
   const session = await auth();
   const connectedUser = await currentUserInfos()
