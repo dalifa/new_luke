@@ -1,6 +1,6 @@
 "use server";
 
-import { currentUserInfos } from "@/hooks/own-current-user";
+import { connectedAmountOne, currentUserInfos } from "@/hooks/own-current-user";
 import { prismadb } from "@/lib/prismadb";
 import { revalidatePath } from "next/cache";  
 import { redirect } from "next/navigation"; 
@@ -13,12 +13,7 @@ export const amountOneEnterAction = async () => {
   const connectedProfile = await currentUserInfos() // en prod
 
   // On selectionne le montant par rapport à sa monnaie
-  const myAmountOne = await prismadb.amount.findFirst({
-    where: { 
-      currency: connectedProfile?.currency,
-      rank: "one" // le montant N°1 quel que soit la monnaie 
-     }
-  })
+  const myAmountOne = await connectedAmountOne()
   // 1- Vérifier s'il a du crédit et si son crédit est >= à amountTwo
   if( connectedProfile?.credit && myAmountOne?.amount && connectedProfile.credit >= myAmountOne.amount )
   {

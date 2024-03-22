@@ -61,7 +61,7 @@ interface ProfileProps{
 }
 
 // pour faire l'anti slash faire shift + option + slash \\
-export const ProfileForm : React.FC <ProfileProps> = ({
+export const ProfileInfosForm : React.FC <ProfileProps> = ({
   initialData,
   countries
 }) => {

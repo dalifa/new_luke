@@ -86,7 +86,7 @@ model CollectionList {
   id                 String     @id @default(auto()) @map("_id") @db.ObjectId
   ownId              Int        @default(1)
   amount             Int
-  currency           String     @default("f cfa")
+  currency           String     @default("nothig")
   collectionType     String     @default("Snippet")
   isGroupComplete    Boolean    @default(false)
   // la collecte est cloturé ?
@@ -100,7 +100,7 @@ model Collection {
   id                 String  @id @default(auto()) @map("_id") @db.ObjectId
   ownId              Int     @default(1)
   amount             Int
-  currency           String  @default("f cfa")
+  currency           String  @default("nothing")
   collectionType     String  @default("Snippet")
   group              Int     @default(3)
   groupStatus        Int   
@@ -120,11 +120,11 @@ model Collection {
 //
 model CollectionResult {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  donatorcodepin   Int
+  donatorcodepin    Int
   donatorEmail      String?
   collectionOwnId   Int?
   amount            Int?
-  currency          String @default("f cfa")
+  currency          String @default("nothig")
   collectionType    String @default("Snippet")
   recipientcodepin Int
   recipientEmail    String?
@@ -136,7 +136,7 @@ model TransferDemand {
   email              String?
   usercodepin           Int      @default(1000)
   amountToTransfer   Int
-  currency           String   @default("not specified")  
+  currency           String   @default("nothig")  
   transferCode       Int      @default(0)
   isUsed             Boolean  @default(false) 
   createdAt          DateTime @default(now())
@@ -190,10 +190,10 @@ model Commission {
   transferCode      Int?
   userJackpot       Int?
   amountToTransfer  Int?
-  commission        Int?   @default(0)
+  commission        Int?    @default(0)
   // cents x 100
-  commissionCents   Int    @default(0)
-  currency          String @default("not specified")
+  commissionCents   Int     @default(0)
+  currency          String  @default("nothing")
   origin            String? 
   //
   createdAt      DateTime   @default(now())
@@ -215,16 +215,16 @@ model Cents {
   cent1          Int     @default(0)
   // 7
   cent2          Int     @default(0)
-  // multiplié par 100 = 57
+  // multiplié par 100 = 0,57 x 100 = 57
   byten          Int
 }
-//
+// ####
+// TRÈS IMPORTANT
 model Metric {
   id                        String  @id @default(auto()) @map("_id") @db.ObjectId
   currentgroup              Int  @default(3)
   currentNbrOfCollection    Int  @default(1)
   nextOwnIdSnippetToEnter   Int  @default(1)
   nextOwnIdTotalityToEnter  Int  @default(1)
-  currentLukecode           Int  @default(1001) // only for test
 }
 //

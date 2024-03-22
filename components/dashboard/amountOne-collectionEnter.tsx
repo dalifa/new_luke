@@ -6,7 +6,7 @@ import { amountOneEnterAction } from '@/actions/amountOneEnter';
 
 interface AmountOneProps {
   children?: React.ReactNode;
-}; 
+};  
 
 export const AmountOneCollectionEnter = ({
   children 

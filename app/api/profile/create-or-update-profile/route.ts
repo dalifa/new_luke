@@ -39,7 +39,7 @@ export async function POST(req: Request) {
     const chosenCountry = await prismadb.country.findFirst({
         where: { id: countryId }
     })
-    // on calcul le lukecode: nbre de profile + 1000
+    // on calcul le lukecode: nbre de profile + 1000  
     const profileCount = await prismadb.user.count()
     // Activity Registration
     await prismadb.activity.create({

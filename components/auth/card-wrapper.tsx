@@ -35,8 +35,10 @@ export const CardWrapper = ({
                    variant={"link"} 
                    className="w-full text-slate-500 font-semibold"
                 >
-                    <Link href={"/"}>
-                        <span className="flex flex-row items-center gap-x-1 text-lg lg:text-xl"> <ArrowLeft/> Retour Accueil </span>
+                    <Link href={"/home"}>
+                        <span className="flex flex-row items-center gap-x-1 text-lg lg:text-xl">
+                            <ArrowLeft/> Retour Accueil 
+                        </span>
                     </Link>
                 </Button>
             </CardFooter>

@@ -14,7 +14,7 @@ import AddObjectToFinance from '@/components/dashboard/object-to-finance';
 const Collection = async ({
     params
   }: {
-    // collectionId = le nom du fichier s'il est différent, ça ne marche pas
+    // collectionId = le nom du fichier s'il est différent, ça ne marche pas 
     params: { collectionId: string }
   }) => {
     const connectedProfile = await currentUserInfos()

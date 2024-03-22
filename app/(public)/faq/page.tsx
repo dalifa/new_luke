@@ -40,8 +40,8 @@ const Faq = () => {
                   <AccordionItem value="item-2">
                     <AccordionTrigger>Is it styled?</AccordionTrigger>
                     <AccordionContent>
-                      deuxième commit pour voir quelle commandes utiliser
-                      components&apos; aesthetic.
+                    New Luke marche, après avoir fait quelques vérif, je depoie.
+                    
                     </AccordionContent>
                   </AccordionItem>
                   {/* 3 */}

@@ -8,7 +8,7 @@ import BackButton from './backButton';
 const Navbar = async () => {
   const session = await auth();
     return (
-      <div className='fixed z-20 top-0 flex w-full h-12 md:h-14 bg-blue-800 text-white items-center justify-center'>
+      <div className='fixed z-20 top-0 flex w-full h-12 md:h-14 bg-blue-800 text-white items-center justify-center border-b border-white'>
         <div className='flex flex-col items-center w-full lg:w-4/5 px-5 lg:px-0'>
         {
           session ? (
@@ -39,7 +39,7 @@ const Navbar = async () => {
                   Luke 6:38
                 </div>
                   <div className='font-semibold text-xs md:text-base'>
-                    Je donnes, je reçois ! 😊
+                    Je donne, je reçois ! 😊
                   </div>
               </div>
             )

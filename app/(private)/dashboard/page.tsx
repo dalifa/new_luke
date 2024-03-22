@@ -1,5 +1,6 @@
 import { auth } from '@/auth';
 import { CollectionEnter } from '@/components/dashboard/collection-enter';
+import { CollectionsInProgress } from '@/components/dashboard/collections-in-progress';
 import { Counters } from '@/components/dashboard/counters';
 import { Card } from '@/components/ui/card';
 import { currentUserInfos } from '@/hooks/own-current-user';
@@ -82,12 +83,30 @@ const Dashboard = async () => {
             isUsed: false
         }
     })
+    // y t-il une collecte d'ouverte ?
+    const openCollectionExist = await prismadb.collectionList.count({
+        where: { 
+            currency: connectedProfile?.currency,
+            collectionType: "snippet",
+            isGroupComplete: false
+        }
+    })
+
 
     return (
         <div className='h-ull flex items-center flex-col'>
             <div className='w-full md:w-4/5 flex flex-col items-center gap-y-4 m-4 px-5'>
                 <div className='w-full grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4'>
                     <Counters/>
+                    { openCollectionExist > 0 && (
+                        <Card className='bg-white shadow-slate-300 shadow-lg p-4'>
+                            <p className='text-center mb-5 font-semibold text-slate-600 text-md lg:text-lg'>
+                                Collectes en cours
+                            </p>
+                            <CollectionsInProgress/>
+                        </Card>
+                    )}
+                    
                     <Card className='bg-white shadow-slate-300 shadow-lg p-4'>
                         <p className='text-center mb-5 font-semibold text-slate-600 text-md lg:text-lg'>Participer à une collecte</p>
                         <CollectionEnter/>
@@ -138,7 +157,7 @@ const Dashboard = async () => {
                                     <Link key={myAmountThreecollection.id} href={`/dashboard/${myAmountThreecollection.id}`}>
                                       <div className='text-md rounded-md bg-green-700 p-2 m-2 text-white text-center'>
                                         <p className='font-semibold text-center'>Collecte N°: { myAmountThreecollection.ownId } - 
-                                        De: { myAmountThreecollection.amount} {myAmountThreecollection.currency}</p>
+                                        De: { myAmountThreecollection.amount}{myAmountThreecollection.currency}</p>
                                       </div>
                                     </Link>
                                     ))
@@ -154,7 +173,7 @@ const Dashboard = async () => {
                                     <Link key={myAmountFourcollection.id} href={`/dashboard/${myAmountFourcollection.id}`}>
                                       <div className='text-md rounded-md bg-green-700 p-2 m-2 text-white text-center'>
                                         <p className='font-semibold text-center'>Collecte N°: { myAmountFourcollection.ownId } - 
-                                        De: { myAmountFourcollection.amount} {myAmountFourcollection.currency}</p>
+                                        De: { myAmountFourcollection.amount}{myAmountFourcollection.currency}</p>
                                       </div>
                                     </Link>
                                     ))
@@ -170,9 +189,6 @@ const Dashboard = async () => {
                 </div> 
 
                 <div className='w-full grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4'>
-                    <Card className='bg-white shadow-slate-300 shadow-lg p-4'>
-                        <p className='text-center mb-5 font-semibold text-slate-600 text-md lg:text-lg'>Infos des collections</p>
-                    </Card>
                     <Card className='bg-white shadow-slate-300 shadow-lg p-4'>
                         <p className='text-center mb-5 font-semibold text-slate-600 text-md lg:text-lg'> Statistiques des collections</p>
                     </Card>

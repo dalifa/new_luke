@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 
 interface AmountThreeProps {
   children?: React.ReactNode;
-}; 
+};  
 
 export const AmountThreeCollectionEnter = ({
   children 
