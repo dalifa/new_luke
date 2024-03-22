@@ -1,3 +1,4 @@
+/*
 "use server";
 
 import { currentUserInfos } from "@/hooks/own-current-user";
@@ -29,3 +30,4 @@ export const amount3Totality = async () => {
   }
 
 };
+*/
