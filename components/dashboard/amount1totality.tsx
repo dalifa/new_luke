@@ -1,3 +1,4 @@
+/*
 "use client";
 
 import { amount1Totality } from "@/actions/amount1Totality";
@@ -19,4 +20,4 @@ export const Amount1TotalityButton = ({
     </div>
   ); 
 };
- 
+ */

@@ -1,4 +1,4 @@
-import { auth } from '@/auth';
+
 import { CollectionEnter } from '@/components/dashboard/collection-enter';
 import { CollectionsInProgress } from '@/components/dashboard/collections-in-progress';
 import { Counters } from '@/components/dashboard/counters';
