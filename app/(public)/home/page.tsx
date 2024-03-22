@@ -29,7 +29,7 @@ const Home = () => {
                 </Link>
               </Button>
           </div>
-          {/* section 1 */}
+          {/* section 1 */} 
           <div className="max-w-7xl lg:mx-auto p-5 md:px-10 xl:px-0 w-full my-4 flex flex-col gap-8 md:gap-12">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-semibold text-xl lg:text-2xl">
               <Card className='flex items-center flex-col gap-y-4 bg-blue-700 border-none p-10 shadow-md text-white'>
@@ -38,7 +38,7 @@ const Home = () => {
               </Card>
               <Card className='flex items-center flex-col gap-y-4 bg-blue-700 border-none p-10 shadow-md text-white'>
                 <GrCurrency className='w-12 h-12 lg:w-14 lg:h-14'/> 
-                Je finance le projet d'un autre chrétien. {/* GrGift ou GrCurrency */}
+                Je finance le projet d&apos;un autre chrétien. {/* GrGift ou GrCurrency */}
               </Card>
               <Card className='flex items-center flex-col gap-y-4 bg-blue-700 border-none p-10 shadow-md text-white'>
                 <GrGift className='w-12 h-12 lg:w-14 lg:h-14'/> 

@@ -33,55 +33,49 @@ const Faq = () => {
                   <AccordionItem value="item-1">
                     <AccordionTrigger>Question 1?</AccordionTrigger>
                     <AccordionContent>
-                      j'ai crée la branch lukebranch il faut rendre cette branche principale ?;
+                      reponse une
                     </AccordionContent>
                   </AccordionItem>
                   {/* 2 */}
                   <AccordionItem value="item-2">
-                    <AccordionTrigger>Is it styled?</AccordionTrigger>
+                    <AccordionTrigger>question 2?</AccordionTrigger>
                     <AccordionContent>
-                    New Luke marche, après avoir fait quelques vérif, je depoie.
-                    
+                      reponse deux
                     </AccordionContent>
-                  </AccordionItem>
+                  </AccordionItem> 
                   {/* 3 */}
                   <AccordionItem value="item-3">
-                    <AccordionTrigger>Is it animated?</AccordionTrigger>
+                    <AccordionTrigger>question 3?</AccordionTrigger>
                     <AccordionContent>
-                      Yes. It&apos;s animated by default, but you can disable it if you
-                      prefer.
+                      reponse trois
                     </AccordionContent>
                   </AccordionItem>
                   {/* 4 */}
                   <AccordionItem value="item-3">
-                    <AccordionTrigger>Is it animated?</AccordionTrigger>
+                    <AccordionTrigger>question 4?</AccordionTrigger>
                     <AccordionContent>
-                      Yes. It&apos;s animated by default, but you can disable it if you
-                      prefer.
+                      reponse quatre
                     </AccordionContent>
                   </AccordionItem>
                   {/* 5 */}
                   <AccordionItem value="item-3">
-                    <AccordionTrigger>Is it animated?</AccordionTrigger>
+                    <AccordionTrigger>question 5?</AccordionTrigger>
                     <AccordionContent>
-                      Yes. It&apos;s animated by default, but you can disable it if you
-                      prefer.
+                      reponse cinq
                     </AccordionContent>
                   </AccordionItem>
                   {/* 6 */}
                   <AccordionItem value="item-3">
-                  <AccordionTrigger>Is it animated?</AccordionTrigger>
+                  <AccordionTrigger>question 6?</AccordionTrigger>
               <AccordionContent>
-                Yes. It&apos;s animated by default, but you can disable it if you
-                prefer.
+                reponse six
               </AccordionContent>
             </AccordionItem>
             {/* 7 */}
             <AccordionItem value="item-3">
-              <AccordionTrigger>Is it animated?</AccordionTrigger>
+              <AccordionTrigger>question 7?</AccordionTrigger>
               <AccordionContent>
-                Yes. It&apos;s animated by default, but you can disable it if you
-                prefer.
+                reponse sept
               </AccordionContent>
             </AccordionItem>
           </Accordion>

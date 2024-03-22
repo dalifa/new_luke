@@ -6,7 +6,7 @@ import BackButton from '@/components/nav/backButton'
 const luke = "Luke 6:38" 
 
 const Ccm = () => {
-    return (
+    return ( 
         <div className='relative flex w-full items-center flex-col pb-20 px-2'>
             <div className='absolute -z-10 w-full'>
                 <Image
@@ -60,11 +60,11 @@ const Ccm = () => {
                         Pour créditer son compte
                     </h2>
                     <p className='text-md lg:text-lg font-normal'>
-                        Dans ces premiers temps de lancement de notre plateforme, nous vous proposons de passer par l'un de nos partenaires, dont vous trouverez la liste
+                        Dans ces premiers temps de lancement de notre plateforme, nous vous proposons de passer par l&apos;un de nos partenaires, dont vous trouverez la liste
                         dans votre espace personnel, pour approvisionner votre compte.<br/>
-                        Vous pourrez lui remettre l'argent de la main à la main et en votre présence, il validera votre approvisionnement, ou lui faire un transfert de type 
-                        Palib par exemple pour la France ou MoMo pour certains pays d'Afrique. Gardez la preuve de votre transfert, ce qui nous permettra de garantir votre argent.<br/>
-                        Ceci est provisoir, nous vous donnerons la possibilité d'approvisionner votre compte directement sur la plateforme avec votre carte bancaire, dans 
+                        Vous pourrez lui remettre l&apos;argent de la main à la main et en votre présence, il validera votre approvisionnement, ou lui faire un transfert de type 
+                        Palib par exemple pour la France ou MoMo pour certains pays d&apos;Afrique. Gardez la preuve de votre transfert, ce qui nous permettra de garantir votre argent.<br/>
+                        Ceci est provisoir, nous vous donnerons la possibilité d&apos;approvisionner votre compte directement sur la plateforme avec votre carte bancaire, dans 
                         les mois à venir. 
                     </p>
                     <h2 className='text-slate-500 text-lg lg:text-xl mt-3'>
@@ -76,7 +76,7 @@ const Ccm = () => {
                         recevoir de ceux qui vous auront choisi. 
                         <br/><br/>
                         Dans une <span className='font-medium'>Collecte Snippet</span>,<br/> 
-                        vous recevez autant de fois le montant initial, que vous avez choisi de donner, qu'il y aura de participants qui vous auront choisi.
+                        vous recevez autant de fois le montant initial, que vous avez choisi de donner, qu&apos;il y aura de participants qui vous auront choisi.
                         <br/>
                         Par exemple, si votre groupe est de 20 participants, et le montant choisi est de 5€. Si 5 participants choisissent de vous donner leur
                         participation, vous recevrez 5 x 5€ soit 25€.
@@ -97,7 +97,7 @@ const Ccm = () => {
                     <p className='text-md lg:text-lg font-normal'>
                         Vous pouvez récupérer tout ou partie de votre cagnotte en faisant une demande de transfert depuis votre espace personnel.
                         <br/><br/>
-                        Un de nos partenaire vous fera par la suite un Paylib ou MoMo par exemple, de la somme demandée.<br/><br/>
+                        Un de nos partenaire vous fera par la suite un Paylib pour l&apos;europe ou un MoMo pour l&apos;Afrique par exemple, de la somme demandée.<br/><br/>
                         Vous pouvez aussi transférer depuis un formulaire dédié à cet effet, tout ou partie de votre cagnotte vers votre crédit pour
                         la redonner dans des collectes ultérieurs.<br/><br/>
                     </p>

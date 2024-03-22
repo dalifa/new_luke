@@ -1,7 +1,7 @@
 // ÇA MARCHE
 
 import { auth } from "@/auth";
-import { currentUserInfos, theThirdAmount } from "@/hooks/own-current-user";
+import { connectedAmountThree, currentUserInfos } from "@/hooks/own-current-user";
 import { prismadb } from "@/lib/prismadb";
 import { NextResponse } from "next/server";
 
@@ -27,7 +27,7 @@ export async function PATCH( req: Request ) {
         /* ON NE PEUT FAIRE LE TRANSFERT QUE SI SON JACKPOT DÉPASSE LE 3è 
         MONTANT SELON SA MONNAIE */ 
         // on select le 3è montant selon la monnaie du connected
-        const thirdAmount = await theThirdAmount();
+        const thirdAmount = await connectedAmountThree();
         //
         if(currentUser?.jackpot && thirdAmount?.amount && currentUser?.jackpot > thirdAmount?.amount )
         {

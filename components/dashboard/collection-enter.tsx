@@ -12,7 +12,7 @@ import { currentUserInfos } from "@/hooks/own-current-user";
 import { AlertTriangle } from "lucide-react";
 
 export async function CollectionEnter() {
-    //  
+    //   
     const metrics = await prismadb.metric.findFirst()
     //
     const connectedProfile = await currentUserInfos()
@@ -315,7 +315,7 @@ export async function CollectionEnter() {
                         <p className="text-orange-600 text-2xl text-center">
                             <AlertTriangle/>
                         </p>
-                        <p className="text-blue-800 text-justify">L'option Totality n&apos;est pas pour l&apos;instant fonctionnelle.</p>
+                        <p className="text-blue-800 text-justify">L&apos;option Totality n&apos;est pas pour l&apos;instant fonctionnelle.</p>
                         </div>
                     </CardContent>
                 </Card>

@@ -55,21 +55,23 @@ const Partner = async () => {
                             connectedUser?.isPartner === true ? (
                                 <PartnerTransferForm/>
                             ): (
-                                <p className='text-sm text-slate-500 text-center'>Vous n'etes pas un de nos partenaire</p>
+                                <p className='text-sm text-slate-500 text-center'>Vous n&apos;etes pas un de nos partenaire</p>
                             )
                         }
                     </Card>
                     <Card className=' border-2 border-violet-600 p-4'>
                         <div className='mb-10'>
                             <p className='text-center text-blue-800 text-md md:text-lg font-semibold'>
-                                Créditer le compte d'un membre
+                                Créditer le compte d&apos;un membre
                             </p>
                         </div>
                         {
                             connectedUser?.isPartner === true ? (
                                 <PartnerCreditForm/>
                             ) : (
-                                <p className='text-sm text-slate-500 text-center'>Vous n'etes pas un de nos partenaire</p>
+                                <p className='text-sm text-slate-500 text-center'>
+                                    Vous n&apos;etes pas un de nos partenaire
+                                </p>
                             )
                         }
                     </Card>

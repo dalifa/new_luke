@@ -1,7 +1,7 @@
 // ÇA MARCHE
 
 import { auth } from "@/auth";
-import { currentUser, currentUserInfos, theThirdAmount } from "@/hooks/own-current-user";
+import { currentUser, currentUserInfos, connectedAmountThree } from "@/hooks/own-current-user";
 import { prismadb } from "@/lib/prismadb";
 import { NextResponse } from "next/server";
 
@@ -25,7 +25,7 @@ export async function POST( req: Request ) {
     const connectedUser = await currentUserInfos() 
     /* ON NE PEUT PAS DEMANDER UN RETRAIT SI SON JACKPOT EST INFERIEUR AU 3è MONTANT SELON SA MONNAIE */ 
     // on select le 3è montant selon la monnaie du connected
-    const thirdAmount = await theThirdAmount();
+    const thirdAmount = await connectedAmountThree();
     // on vérifie s'il a une cagnotte et si elle est > au montant demandé
     if(connectedUser && thirdAmount && connectedUser?.jackpot > amountToRecover && amountToRecover > thirdAmount?.amount )
     { 
