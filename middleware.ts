@@ -22,7 +22,7 @@ export default auth((req) => {
     //return null;
     // chatGPT me conseil de mettre return ou return undefined 
     // car j'avais une erreur d'incompatibilité de type en mettant: return null
-    return undefined;
+    //return undefined;
   }
 
   if (isAuthRoute) {
@@ -30,7 +30,8 @@ export default auth((req) => {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
     }
     //return null;
-    return undefined;
+    //même avec ce que chat gpt m'a conseillé, j'ai une erreur lors de deployement dans vercel
+    //return undefined;
   }
 
   if (!isLoggedIn && !isPublicRoute) {
@@ -50,7 +51,7 @@ export default auth((req) => {
   //return null;
   // chatGPT me conseil de mettre return ou return undefined 
   // car j'avais une erreur d'incompatibilité de type en mettant: return null
-  return undefined;
+  //return undefined;
 })
 
 // Optionally, don't invoke Middleware on some paths
