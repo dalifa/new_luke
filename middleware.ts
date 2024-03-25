@@ -18,12 +18,13 @@ export default auth((req) => {
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
+  /*
   if (isApiAuthRoute) {
-    //return null;
+    return null;
     // chatGPT me conseil de mettre return ou return undefined 
     // car j'avais une erreur d'incompatibilité de type en mettant: return null
     //return undefined;
-  }
+  }  */
 
   if (isAuthRoute) {
     if (isLoggedIn) {
