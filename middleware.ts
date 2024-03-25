@@ -26,14 +26,14 @@ export default auth((req) => {
     //return undefined;
   }  */
 
-  if (isAuthRoute) {
+  //if (isAuthRoute) {
     if (isLoggedIn) {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
     }
     //return null;
     //même avec ce que chat gpt m'a conseillé, j'ai une erreur lors de deployement dans vercel
     //return undefined;
-  }
+  //}
 
   if (!isLoggedIn && !isPublicRoute) {
     let callbackUrl = nextUrl.pathname;
