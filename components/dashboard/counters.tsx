@@ -45,7 +45,6 @@ export async function Counters() {
             {/*PIN = Personal Indentification Number*/}
             <div className="flex w-full mb-2 items-center flex-row justify-between">
                 <div>
-                    
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger asChild>

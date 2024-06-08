@@ -42,7 +42,6 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 //
-
 model Profile {
   id                   String   @id @default(auto()) @map("_id") @db.ObjectId
   googleEmail          String?   
@@ -60,7 +59,7 @@ model Profile {
   country              Country? @relation(fields: [countryId], references: [id], onDelete: Cascade)    
   bio                  String    
   // lorsqu'il choisira son pays, on lui mettra ici son currency correspondant
-  currency             String   @default("f cfa")
+  currency             String   @default("nothing")
   //
   role                 UserRole @default(USER)
   isPartner            Boolean  @default(false)
@@ -72,6 +71,8 @@ model Profile {
   partnerCreditToRemit Int      @default(0)
   //
   isActiveAccount      Boolean  @default(true)
+  //
+  recipients           Recipient[]
   //
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
@@ -86,8 +87,8 @@ model CollectionList {
   id                 String     @id @default(auto()) @map("_id") @db.ObjectId
   ownId              Int        @default(1)
   amount             Int
-  currency           String     @default("nothig")
-  collectionType     String     @default("Snippet")
+  currency           String     @default("nothing")
+  collectionType     String     @default("snippet")
   isGroupComplete    Boolean    @default(false)
   // la collecte est cloturé ?
   isCollectionClosed Boolean  @default(false)
@@ -101,7 +102,7 @@ model Collection {
   ownId              Int     @default(1)
   amount             Int
   currency           String  @default("nothing")
-  collectionType     String  @default("Snippet")
+  collectionType     String  @default("snippet")
   group              Int     @default(3)
   groupStatus        Int   
   // le group est complet ?
@@ -120,14 +121,25 @@ model Collection {
 //
 model CollectionResult {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  //code pin du donateur
   donatorcodepin    Int
+  //email du donateur
   donatorEmail      String?
+  // rang du donateur n° permettant de distingué chaque participant
+  donatorRank       Int     @default(0)
+  // own id de la collecte
   collectionOwnId   Int?
+  // montant à donner dans la collecte
   amount            Int?
-  currency          String @default("nothig")
-  collectionType    String @default("Snippet")
-  recipientcodepin Int
+  // la monnaie concerné de la collecte
+  currency          String @default("nothing")
+  // le type de collecte
+  collectionType    String @default("snippet")
+  //
+  recipientcodepin  Int
   recipientEmail    String?
+  //number of donations received = concerne toujours le recipient
+  nuodore           Int  @default(0)
   createdAt         DateTime @default(now())
 }
 //
@@ -136,7 +148,7 @@ model TransferDemand {
   email              String?
   usercodepin           Int      @default(1000)
   amountToTransfer   Int
-  currency           String   @default("nothig")  
+  currency           String   @default("nothing")  
   transferCode       Int      @default(0)
   isUsed             Boolean  @default(false) 
   createdAt          DateTime @default(now())
@@ -145,8 +157,8 @@ model TransferDemand {
 //
 model Activity {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  usercodepin Int      @default(1000)
-  activity       String
+  usercodepin    Int      @default(1000)
+  activity       Json
   concerned      Json?
   action         Json?
   createdAt      DateTime @default(now())
@@ -155,7 +167,7 @@ model Activity {
 model Amount {
   id         String  @id @default(auto()) @map("_id") @db.ObjectId
   amount     Int     @default(1)
-  currency   String  @default("nothig")
+  currency   String  @default("nothing")
   rank       String  @default("nothing")
 }
 //
@@ -182,7 +194,14 @@ model ToFinance {
   objectName       String
   object           MyObject[]
 }
-// Enregistrer ici les commissions que touche KABOLA e/se
+
+model Recipient {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  donatorCodepin   Int
+  profileId        String   @db.ObjectId
+  profile          Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+}
+// Enregistrer ici les commissions que touche l'e/se
 model Commission {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
   userEmail         String?
@@ -225,6 +244,11 @@ model Metric {
   currentgroup              Int  @default(3)
   currentNbrOfCollection    Int  @default(1)
   nextOwnIdSnippetToEnter   Int  @default(1)
-  nextOwnIdTotalityToEnter  Int  @default(1)
+  // Totality Current Group
+  tcg       Int  @default(3)
+  // Totality Current Nomber Of Collection
+  tocunooc  Int  @default(1)
+  // next own id totality to enter
+  noitte    Int  @default(1)
 }
 //

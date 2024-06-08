@@ -16,7 +16,7 @@ export const Header = ({
 }: HeaderProps) => { 
     return (
         <div className="w-full flex flex-col items-center justify-center gap-y-6">
-            <h1 className="text-3xl text-blue-800 font-semibold mb-5">Luke 6:38</h1>
+            <h1 className="text-3xl text-blue-500 font-semibold mb-5 mt-2">Luke 6:38</h1>
             <h1 className={cn(
                 "text-xl text-slate-500 font-semibold",
                 font.className,

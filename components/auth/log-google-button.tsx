@@ -21,11 +21,12 @@ export const LogGoogleButton = () => {
     return (
         <div className="flex flex-col gap-y-3 items-center w-full gap-x-2 py-5">
             <Button size="lg"
-              className="w-full text-white" 
+              className="w-full text-white h-14" 
               variant={"blue"}
               onClick={() => onClick("google")}
             >
-              <FcGoogle className="h-5 w-5"/> <span className="ml-2 text-lg">GOOGLE</span>
+              <FcGoogle className="h-5 w-5"/>
+               <span className="ml-2 text-lg">GOOGLE</span>
             </Button>
         </div>
     )

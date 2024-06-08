@@ -29,8 +29,8 @@ export async function Menu() {
   //
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <div className="p-1 hover:bg-blue-700 rounded">
+      <DropdownMenuTrigger asChild className="hover:bg-blue-600">
+        <div className="p-1 rounded">
             <MenuIcon className="cursor-pointer"/>
         </div>
       </DropdownMenuTrigger>

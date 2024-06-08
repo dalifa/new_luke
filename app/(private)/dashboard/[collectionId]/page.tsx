@@ -54,15 +54,15 @@ const Collection = async ({
     return (
         <div className='h-full w-full flex items-center flex-col'>
             <div className='w-full md:w-4/5 flex flex-col items-center gap-y-5 px-5'>
-                <Card className='flex flex-col items-center w-full p-5 text-sm md:text-md bg-white font-semibold shadow-md shadow-slate-300'>
-                    <p className='text-slate-600 text-justify'>
-                        Participants à votre collecte n° {theParams?.ownId} de {theParams?.amount}{theParams?.currency}
+                <Card className='flex flex-col items-center w-full p-5 text-sm md:text-md bg-white font-medium shadow-md shadow-slate-300'>
+                    <p className='text-slate-600 text-center text-lg lg:text-xl'>
+                        Participants à votre collecte {theParams?.collectionType} n° {theParams?.ownId} de {theParams?.amount}{theParams?.currency}
                     </p>
                 </Card>
                 <div className='w-full'>
                 {
                     profileDatas && allParticipants && (
-                        <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3'>
+                        <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4'>
                         {
                             allParticipants.map((allParticipant:any) => (
                                 <Card key={allParticipant.id} className='p-2 bg-white text-slate-500 shadow-sm shadow-slate-300'>
@@ -70,8 +70,8 @@ const Collection = async ({
                                         profileDatas.map((profileData) => (
                                             <div key={profileData.id}>
                                                 {allParticipant.usercodepin == profileData.usercodepin && (
-                                                    <div className='flex flex-col gap-y-4'>
-                                                        <div className='flex flex-row gap-x-5'>
+                                                    <div className='grid grid-cols-2 gap-y-4'>
+                                                        <div className='flex flex-row gap-x-2'>
                                                             {
                                                                 userDatas && (
                                                                     // en prod
@@ -98,7 +98,42 @@ const Collection = async ({
                                                                 <p className='text-xs text-slate-500'>De: {profileData.city}</p>
                                                             </div> 
                                                         </div>
-                                                        <div className='grid grid-cols-2'>
+                                                        <div className='flex items-end justify-end'>
+                                                            {
+                                                                profileData.usercodepin !== connectedProfile?.usercodepin && (
+                                                                    <div>
+                                                                    {
+                                                                        theParams?.group === theParams?.groupStatus ? (
+                                                                            <>
+                                                                            {
+                                                                                connectedParticipant?.hasGive !== true ? (
+                                                                                    <Link href={`/dashboard/${params.collectionId}/${allParticipant.id}`}>
+                                                                                        <Button variant={"blue"} size={"sm"} className='rounded-md text-white'>    
+                                                                                           Donner <GrMoney className="h-5 w-5 cursor-pointer ml-2"/>
+                                                                                        </Button>
+                                                                                    </Link>
+                                                                                ):(
+                                                                                    <Link href={"/dashboard/historique"}>
+                                                                                        <p className='mt-6 text-xs'>Merci de tout coeur. 🙏</p> 
+                                                                                    </Link>
+                                                                                )
+                                                                            }
+                                                                            </>
+                                                                        ):(
+                                                                            <>
+                                                                            <p className='mt-6 text-xs'>
+                                                                                <span className='text-green-700'>{theParams?.groupStatus } {/*espape utile*/}</span>
+                                                                                 participants / {theParams?.group}
+                                                                            </p>
+                                                                            </>
+                                                                        )
+                                                                    }
+                                                                    </div>
+                                                                )
+                                                            }
+                                                            </div>
+
+                                                        {/* <div className='grid grid-cols-2'>
                                                             <div className='flex flex-col gap-y-1'>
                                                                 <div>
                                                                     <p className='text-xs font-medium'>Objet à faire financer</p>
@@ -154,7 +189,7 @@ const Collection = async ({
                                                                         ):(
                                                                             <>
                                                                             <p className='mt-6 text-xs'>
-                                                                                <span className='text-green-700'>{theParams?.groupStatus } {/*espape utile*/}</span>
+                                                                                <span className='text-green-700'>{theParams?.groupStatus } {/*espape utile * /}</span>
                                                                                  participants / {theParams?.group}
                                                                             </p>
                                                                             </>
@@ -164,7 +199,7 @@ const Collection = async ({
                                                                 )
                                                             }
                                                             </div>
-                                                        </div>
+                                                        </div> */}
                                                     </div>
                                                 )}
                                             </div>

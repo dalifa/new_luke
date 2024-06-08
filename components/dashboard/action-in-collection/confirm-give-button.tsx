@@ -9,9 +9,9 @@ export function ConfirmGiveButton() {
  
   return (
     <Button type="submit" aria-disabled={pending} 
-      className="cursor-pointer bg-blue-800
+      className="cursor-pointer bg-blue-500
        text-white text-center rounded p-1 
-       md:p-2 hover:bg-green-700"
+       lg:p-2 hover:bg-blue-600"
     >
         Donner avec joie 
     </Button>

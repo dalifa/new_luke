@@ -1,7 +1,6 @@
 "use client"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft } from "lucide-react"
 
 
 const BackCancel = () => {
@@ -9,10 +8,9 @@ const BackCancel = () => {
     return (
         <Button 
             onClick={() => router.back()} 
-            className='cursor-pointer
-            border-2 border-red-400 text-red-400 bg-white hover:text-white hover:bg-red-500'
+            className='cursor-pointer border-red-400 text-white bg-red-500 hover:bg-red-600'
         >
-            Annuler
+            Annuler le don
         </Button>
     )
 }

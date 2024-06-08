@@ -7,10 +7,10 @@ export default function PublicLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="h-full bg-slate-50">
+    <div className="h-full bg-white pt-5">
       {/* nav  
       <Navbar/> */}
-      <main className="pt-14 md:pt-20 pb-20 bg-slate-50">
+      <main className="pt-14 md:pt-20 pb-20 bg-white">
         { children }
       </main>
       {/* footer 

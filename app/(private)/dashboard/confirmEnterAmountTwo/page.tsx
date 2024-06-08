@@ -1,9 +1,9 @@
 import BackCancel from "@/components/dashboard/action-in-collection/backCancelled"
-import { AmountTwoCollectionEnter } from "@/components/dashboard/amountTwo-collectionEnter"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "@/components/ui/card"
 import { currentUserInfos } from "@/hooks/own-current-user"
 import UpdateObjectToFinance from "@/components/dashboard/object-to-finance"
 import { prismadb } from "@/lib/prismadb"
+import { AmountTwoCollectionEnter } from "@/components/dashboard/enter-in-collection/amountTwo-collectionEnter"
 
 
 const confirmEnterAmountTwo = async () => {

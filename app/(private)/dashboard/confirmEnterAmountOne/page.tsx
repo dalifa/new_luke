@@ -1,5 +1,5 @@
 import BackCancel from "@/components/dashboard/action-in-collection/backCancelled"
-import { AmountOneCollectionEnter } from "@/components/dashboard/amountOne-collectionEnter"
+import { AmountOneCollectionEnter } from "@/components/dashboard/enter-in-collection/amountOne-collectionEnter"
 import UpdateObjectToFinance from "@/components/dashboard/object-to-finance"
 import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card"
 import { currentUserInfos } from "@/hooks/own-current-user"
@@ -8,7 +8,7 @@ import { prismadb } from "@/lib/prismadb"
 
 const confirmEnterAmountOne = async () => {
     // en prod 
-    const connectedProfile = await currentUserInfos()
+    const connectedProfile = await currentUserInfos() 
     // somme 1 
     const myAmountOne = await prismadb.amount.findFirst({
         where: { 

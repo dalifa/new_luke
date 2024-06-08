@@ -11,7 +11,7 @@ const DATE_FORMAT = "d MMM yyyy"
 const History = async () => {
     const connectedProfile = await currentUserInfos()
     const myClosedCollections = await prismadb.collection.findMany({
-        take: 100,
+        take: 20, // 50
         where: { 
             usercodepin: connectedProfile?.usercodepin,
             isCollectionClosed: true

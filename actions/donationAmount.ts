@@ -12,7 +12,7 @@ import { redirect } from "next/navigation";
   // l'id du recipient choisi (son id dans la collecte: table collection ) 
   // console.log("le recipient est: ", params) // ça marche   
   const connectedProfile = await currentUserInfos()
-  // recipientId in collection table == params
+  // recipientId in collection table == params 
   // recipient collection datas 
   const recipientCollectionData = await prismadb.collection.findFirst({
     where: { id: params }

@@ -8,12 +8,10 @@ export const publicRoutes = [
   "/home",
   "/ccm",
   "/cgu",
-  "/entreprises-partenaires",
   "/faq",
-  "/infos",
   "/infos-legales",
-  "/nos-stats",
   "/partenariat",
+  "/statistiques",
 ];
 
 /**
