@@ -1,4 +1,3 @@
-"use client";
 
 import { 
   connectedAmountFive, 
@@ -11,15 +10,65 @@ import {
  } from "@/hooks/own-current-user";
 import { prismadb } from "@/lib/prismadb";
 import { ScrollArea } from "../ui/scroll-area";
+import { auth } from "@/auth";
 
 export const CollectionsInProgress = async () => {
-  const myAmountOne = await connectedAmountOne()
-  const myAmountTwo = await connectedAmountTwo()
-  const myAmountThree = await connectedAmountThree()
-  const myAmountFour = await connectedAmountFour()
-  const myAmountFive = await connectedAmountFive()
-  const myAmountSix = await connectedAmountSix()
-  const myAmountSeven = await connectedAmountSeven()
+  const session = await auth();
+    //
+    const profile = await prismadb.profile.findFirst({
+        where: { googleEmail : session?.user.email }
+    })
+    const myAmountOne = await prismadb.amount.findFirst({
+      where: {
+          rank: "one",
+          currency: profile?.currency
+      }
+  })
+    const myAmountTwo = await prismadb.amount.findFirst({
+      where: {
+          rank: "two",
+          currency: profile?.currency
+      }
+  })
+    const myAmountThree = await prismadb.amount.findFirst({
+      where: {
+          rank: "three",
+          currency: profile?.currency
+      }
+  })
+    const myAmountFour = await prismadb.amount.findFirst({
+      where: {
+          rank: "four",
+          currency: profile?.currency
+      }
+  })
+  const myAmountFive = await prismadb.amount.findFirst({
+    where: {
+        rank: "five",
+        currency: profile?.currency
+    }
+})
+const myAmountSix = await prismadb.amount.findFirst({
+  where: {
+      rank: "six",
+      currency: profile?.currency
+  }
+})
+const myAmountSeven = await prismadb.amount.findFirst({
+  where: {
+      rank: "seven",
+      currency: profile?.currency
+  }
+})
+    // 
+    /*
+  const myAmountOne = await connectedAmountOne();
+  const myAmountTwo = await connectedAmountTwo();
+  const myAmountThree = await connectedAmountThree();
+  const myAmountFour = await connectedAmountFour();
+  const myAmountFive = await connectedAmountFive();
+  const myAmountSix = await connectedAmountSix();
+  const myAmountSeven = await connectedAmountSeven() */
   //
   const amountOneOpenCollectionsCount = await prismadb.collectionList.count({
     where: { 
