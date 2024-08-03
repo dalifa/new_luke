@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import { Inter, Montserrat } from 'next/font/google'
 import './globals.css'
 import { ToastProvider } from '@/providers/toast-provider'
+import DrawerFooter from '@/components/nav/drawerFooter'
 import Navbar from '@/components/nav/navbar'
-import Footer from '@/components/nav/footer'
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -22,9 +22,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={mont.className}>
-        <Navbar/>
-        <ToastProvider />
-        {children}
+        <div className="h-full bg-white">
+          {children}
+        </div>
       </body>
     </html>
   )

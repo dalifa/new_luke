@@ -1,24 +1,24 @@
 "use client";
 
-import { amountFourEnterAction } from "@/actions/amountFourEnter";
-import { useFormStatus } from 'react-dom'
+import { useFormStatus } from 'react-dom' 
 import { Button } from "@/components/ui/button";
+import { amountSixTotalityEnterAction } from '@/actions/amountSix-TotalityEnter';
 
-interface AmountFourProps {
+interface AmountOneProps {
   children?: React.ReactNode;
-};   
-
-export const AmountFourCollectionEnter = ({
+};  
+//
+export const AmountSixTotalityCollectionEnter = ({
   children 
-}: AmountFourProps) => {
-  const onClickAmountFour = () => {
-    amountFourEnterAction();
+}: AmountOneProps) => {
+  const onClickAmount = () => {
+    amountSixTotalityEnterAction();
   };
-  //  
+  //   
   const { pending } = useFormStatus()
 
   return (
-    <Button onClick={onClickAmountFour} type="submit" aria-disabled={pending} className="cursor-pointer bg-blue-800 text-white text-center rounded p-1 md:p-2 hover:bg-green-700">
+    <Button onClick={onClickAmount} type="submit" aria-disabled={pending} className="cursor-pointer bg-blue-800 text-white text-center rounded p-1 md:p-2 hover:bg-green-700">
       {children}
     </Button> 
   ); 

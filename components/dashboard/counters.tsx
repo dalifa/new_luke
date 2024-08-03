@@ -37,7 +37,7 @@ export async function Counters() {
     })
     //
     return (
-        <Card className='bg-white shadow-slate-300 shadow-lg p-4 flex items-center flex-col gap-2'>
+        <Card className='bg-white shadow-blue-200 shadow-lg p-4 flex items-center flex-col gap-2'>
             <p className='text-center mb-2 text-slate-500 font-semibold text-md lg:text-lg'>
                 Vos compteurs
             </p>
@@ -48,7 +48,7 @@ export async function Counters() {
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger asChild>
-                                <p className='mb-2 text-slate-600 font-medium text-sm lg:text-md'>Code PIN:</p>
+                                <p className='mb-2 text-slate-600 font-medium text-sm lg:text-md cursor-pointer'>Code PIN:</p>
                             </TooltipTrigger>
                             <TooltipContent>
                                 <p>Personal Identification Number</p>
@@ -77,14 +77,20 @@ export async function Counters() {
                     {/* cagnotte > 0 */}
                     {
                         connectedUser && connectedUser?.jackpot > 0 && (
-                            <span className="text-green-800 font-semibold"> {connectedUser?.jackpot}</span>
+                            <span className="text-green-800 font-semibold">&nbsp;{connectedUser?.jackpot}</span>
                                     
+                        )
+                    }
+                    {/* cagnotte = 0 et centimes = 0 */}
+                    {
+                        connectedUser && connectedUser?.jackpot == 0 && connectedUser.jackpotCents == 0 && (
+                            <span className="text-green-800 font-semibold">&nbsp;00</span>            
                         )
                     }
                     {/* cagnotte = 0 et centimes > 0 */}
                     {
                         connectedUser && connectedUser?.jackpot < 1 && connectedUser.jackpotCents > 0 && (
-                            <span className="text-green-800 font-semibold"> 0</span>
+                            <span className="text-green-800 font-semibold">&nbsp;0</span>
                                     
                         )
                     }

@@ -30,6 +30,7 @@ yarn-error.log*
 .env
 luke2024comment.txt
 middleware_copy.ts
+process.txt
 
 
 # vercel

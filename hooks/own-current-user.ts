@@ -8,124 +8,88 @@ export const currentUser = async () => {
 };
 //
 export const currentUserInfos = async () => {
-    const session = await auth();
-    //
-    const profile = await prismadb.profile.findFirst({
-        where: { googleEmail: session?.user.email }
-    })
-    return profile
+  const session = await auth();
+  //
+  const profile = await prismadb.profile.findFirst({
+    where: { googleEmail: session?.user.email }
+  })
+  return profile
 } 
 //
-export const connectedAmountOne = async () => {
-    const session = await auth();
-    //
-    const profile = await prismadb.profile.findFirst({
-        where: { googleEmail : session?.user.email }
+// on select les amounts. la currency étant par defaut l'euro €
+  export const amountOne = async () => {
+    const AmountOne = await prismadb.amount.findFirst({
+      where: { 
+        rank: "one"
+     }
     })
     //
-    const amountOne = await prismadb.amount.findFirst({
-        where: {
-            rank: "one",
-            currency: profile?.currency
-        }
+    return AmountOne;
+  };
+  //
+  export const amountTwo = async () => {
+    const AmountTwo = await prismadb.amount.findFirst({
+      where: { 
+        rank: "two"
+     }
     })
-    return amountOne
-}
+    //
+    return AmountTwo;
+  };
+  //
+  export const amountThree = async () => {
+    const AmountThree = await prismadb.amount.findFirst({
+      where: { 
+        rank: "three"
+     }
+    })
+    //
+    return AmountThree;
+  };
+  //
+  export const amountFour = async () => {
+    const AmountFour = await prismadb.amount.findFirst({
+      where: { 
+        rank: "four"
+     }
+    })
+    //
+    return AmountFour;
+  };
+  //
+  export const amountFive = async () => {
+    const AmountFive = await prismadb.amount.findFirst({
+      where: { 
+        rank: "five"
+     }
+    })
+    //
+    return AmountFive;
+  };
+  //
+  export const amountSix = async () => {
+    const AmountSix = await prismadb.amount.findFirst({
+      where: { 
+        rank: "six"
+     }
+    })
+    //
+    return AmountSix;
+  };
+  //
+  export const amountSeven = async () => {
+    const AmountSeven = await prismadb.amount.findFirst({
+      where: { 
+        rank: "seven"
+     }
+    })
+    //
+    return AmountSeven;
+  };
+  //
 // 
-export const connectedAmountTwo = async () => {
-    const session = await auth();
-    //
-    const profile = await prismadb.profile.findFirst({
-        where: { googleEmail : session?.user.email }
-    })
-    //
-    const amountTwo = await prismadb.amount.findFirst({
-        where: {
-            rank: "two",
-            currency: profile?.currency
-        }
-    })
-    return amountTwo
+// pour affiche un nom avec la premiere lettre en Majuscule
+export function capitalize(string: string) {
+    if (!string) return '';
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
 }
-// 
-export const connectedAmountThree = async () => {
-    const session = await auth();
-    //
-    const profile = await prismadb.profile.findFirst({
-        where: { googleEmail : session?.user.email }
-    })
-    //
-    const amountThree = await prismadb.amount.findFirst({
-        where: {
-            rank: "three",
-            currency: profile?.currency
-        }
-    })
-    return amountThree
-}
-//  
-export const connectedAmountFour = async () => {
-    const session = await auth();
-    //
-    const profile = await prismadb.profile.findFirst({
-        where: { googleEmail : session?.user.email }
-    })
-    //
-    const amountFour = await prismadb.amount.findFirst({
-        where: {
-            rank: "four",
-            currency: profile?.currency
-        }
-    })
-    return amountFour
-}
-// 
-export const connectedAmountFive = async () => {
-    const session = await auth();
-    //
-    const profile = await prismadb.profile.findFirst({
-        where: { googleEmail : session?.user.email }
-    })
-    //
-    const amountFive = await prismadb.amount.findFirst({
-        where: {
-            rank: "five",
-            currency: profile?.currency
-        }
-    })
-    return amountFive
-}
-// 
-export const connectedAmountSix = async () => {
-    const session = await auth();
-    //
-    const profile = await prismadb.profile.findFirst({
-        where: { googleEmail : session?.user.email }
-    })
-    //
-    const amountSix = await prismadb.amount.findFirst({
-        where: {
-            rank: "six",
-            currency: profile?.currency
-        }
-    })
-    return amountSix
-}
-// 
-export const connectedAmountSeven = async () => {
-    const session = await auth();
-    //
-    const profile = await prismadb.profile.findFirst({
-        where: { googleEmail : session?.user.email }
-    })
-    //
-    const amountSeven = await prismadb.amount.findFirst({
-        where: {
-            rank: "seven",
-            currency: profile?.currency
-        }
-    })
-    return amountSeven
-}
-// 
-

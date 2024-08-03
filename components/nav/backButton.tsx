@@ -1,7 +1,6 @@
 "use client"
+import { ChevronLeft } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
-import { Button } from "../ui/button"
-import { ArrowLeft, ChevronLeft } from "lucide-react"
 
 
 const BackButton = () => {
@@ -12,7 +11,7 @@ const BackButton = () => {
             {
                 pathname !== "/" ? (
                     <ChevronLeft onClick={() => router.back()} 
-            className='cursor-pointer h-6 w-6 '/>
+                    className='cursor-pointer h-6 w-6 '/>
                 ):(<span className="text-yellow">🤗</span>)
             }
         </>

@@ -19,13 +19,13 @@ const Transfer = async () => {
     })
     return ( 
         <div className='h-ull flex items-center flex-col'>
-            <div className='w-full md:w-4/5 flex flex-col items-center gap-y-4 m-4 p-5'>
-                <div className='w-full grid grid-cols-1 gap-2 md:gap-4'>
+            <div className='w-full md:w-4/5 lg:w-3/5 flex flex-col items-center gap-y-4 mx-4 lg:my-10 p-5'>
+                <div className='w-full grid grid-cols-1 gap-4 md:gap-4'>
                     <div>
-                      <Counters/>
+                      <Counters/> 
                     </div>
                     <div className='w-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5'>
-                    <Card className='bg-white p-4 shadow-md shadow-slate-300'>
+                    <Card className='bg-white p-4 shadow-lg shadow-blue-200'>
                         <div className='mb-10'>
                             <p className='text-center text-slate-500 text-md md:text-lg font-semibold'>
                                 Transférer votre cagnotte vers votre crédit
@@ -33,7 +33,7 @@ const Transfer = async () => {
                         </div>
                         <JackpotToCreditForm/>
                     </Card>
-                    <Card className='bg-white p-4 shadow-md shadow-slate-300'>
+                    <Card className='bg-white p-4 shadow-lg shadow-blue-200'>
                         <div className='mb-10'>
                             <p className='text-center text-slate-500 text-md md:text-lg font-semibold'>
                                 Obtenir un code de retrait de cagnotte
@@ -41,7 +41,7 @@ const Transfer = async () => {
                         </div>
                         {
                             transferDemandCount === 2 ? (
-                                <p className='text-center text-blue-800 text-xs'>
+                                <p className='text-center text-blue-500 text-xs'>
                                     Vous avez déjà deux demandes en attente ...
                                 </p>
                             ):(

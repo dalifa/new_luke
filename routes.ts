@@ -4,14 +4,15 @@
  * @type {string[]}
  */
 export const publicRoutes = [
-  "/",
+  "/", 
   "/home",
   "/ccm",
   "/cgu",
   "/faq",
-  "/infos-legales",
+  "/infos",
   "/partenariat",
-  "/statistiques",
+  "/stats",
+  "/securite"
 ];
 
 /**

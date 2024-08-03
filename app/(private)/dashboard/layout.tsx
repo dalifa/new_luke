@@ -1,20 +1,22 @@
-import Footer from "@/components/nav/footer"
-import Navbar from "@/components/nav/navbar"
-
-export default function PublicLayout({
+import { PrivateTopbar } from "@/components/nav/private-topbar";
+import { currentUser } from "@/hooks/own-current-user"
+//
+export default async function PublicLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const connected = await currentUser();
   return (
-    <div className="h-full bg-white pt-5">
-      {/* nav  
-      <Navbar/> */}
-      <main className="pt-14 md:pt-20 pb-20 bg-white">
-        { children }
+    <div className="h-full bg-white">
+      {
+        connected && (
+          <PrivateTopbar/>
+        )
+      }
+      <main className="pt-14 pb-20 bg-white">
+        {children}
       </main>
-      {/* footer 
-      <Footer/> */}
     </div>
   )
 }

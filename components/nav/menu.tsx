@@ -18,14 +18,11 @@ import SignOut from "@/components/auth/sign-out"
 import { auth, signOut } from "@/auth"
 import { prismadb } from "@/lib/prismadb"
 import Link from "next/link"
-import { connectedAmountOne, connectedAmountThree, connectedAmountTwo, currentUserInfos, } from "@/hooks/own-current-user"
+import { currentUserInfos, } from "@/hooks/own-current-user"
 
 export async function Menu() {
   const connectedUser = await currentUserInfos()
   //
-  const myAmountOne = await connectedAmountOne()
-  const myAmountTwo = await connectedAmountTwo()
-  const myAmountThree = await connectedAmountThree()
   //
   return (
     <DropdownMenu>
@@ -56,6 +53,7 @@ export async function Menu() {
                 <span>Profil</span>
             </Link>
           </DropdownMenuItem>
+          {/* 
           <div>
           {
             // si le jackpot existe et est > au 3è montant selon la monnaie du connecté: alors ...TRANSFERT POSSIBLE
@@ -72,6 +70,7 @@ export async function Menu() {
             ):("")
           }
           </div>
+          */}
           <DropdownMenuItem>
             <Link href={"/dashboard/historique"} 
                 className="flex items-center flex-row gap-x-2
@@ -139,3 +138,4 @@ export async function Menu() {
     </DropdownMenu>
   )
 }
+

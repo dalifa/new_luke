@@ -44,7 +44,8 @@ export default auth((req) => {
     const encodedCallbackUrl = encodeURIComponent(callbackUrl);
     // redirection vers home après déconnexion
     return Response.redirect(new URL(
-      `/home?callbackUrl=${encodedCallbackUrl}`,
+    `/home?callbackUrl=${encodedCallbackUrl}`,  // ceci s'il y a la page home
+    //`/?callbackUrl=${encodedCallbackUrl}`,
       nextUrl
     ));
   }

@@ -42,6 +42,25 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 //
+// reponses aux questions pour l'engagement
+model Response{
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  googleEmail      String? // le connecté que l'on questionne
+  // croyez vous qu'il n'y a de salut qu'au nom de jésus ?
+  response1        Boolean  @default(false)
+  // jesus à dit: luke 6:38 dites vous amen ?
+  response2        Boolean  @default(false)
+  // vous engagez vous à donner au moins 5€ / mois à un enfant de Dieu ?
+  response3        Boolean  @default(false)
+  // avez vous paylib
+  response4        Boolean  @default(false)
+  //
+  response5        Boolean  @default(false)
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+//
 model Profile {
   id                   String   @id @default(auto()) @map("_id") @db.ObjectId
   googleEmail          String?   
@@ -51,7 +70,7 @@ model Profile {
   jackpotCents         Int      @default(0) // en cents x 100
   //
   username             String 
-  phone                Int 
+  phone                String
   firstname            String    
   lastname             String    
   city                 String    
@@ -72,8 +91,6 @@ model Profile {
   //
   isActiveAccount      Boolean  @default(true)
   //
-  recipients           Recipient[]
-  //
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
 }
@@ -88,7 +105,7 @@ model CollectionList {
   ownId              Int        @default(1)
   amount             Int
   currency           String     @default("nothing")
-  collectionType     String     @default("snippet")
+  collectionType     String     @default("")
   isGroupComplete    Boolean    @default(false)
   // la collecte est cloturé ?
   isCollectionClosed Boolean  @default(false)
@@ -102,7 +119,7 @@ model Collection {
   ownId              Int     @default(1)
   amount             Int
   currency           String  @default("nothing")
-  collectionType     String  @default("snippet")
+  collectionType     String  @default("")
   group              Int     @default(3)
   groupStatus        Int   
   // le group est complet ?
@@ -112,6 +129,7 @@ model Collection {
   // le participant
   email              String?
   usercodepin        Int     @default(1000)
+  isOnlyDonator      Boolean @default(false)
   hasGive            Boolean @default(false) // le participant a t-il donné ?
   //
   createdAt          DateTime @default(now())
@@ -134,7 +152,7 @@ model CollectionResult {
   // la monnaie concerné de la collecte
   currency          String @default("nothing")
   // le type de collecte
-  collectionType    String @default("snippet")
+  collectionType    String @default("")
   //
   recipientcodepin  Int
   recipientEmail    String?
@@ -142,11 +160,11 @@ model CollectionResult {
   nuodore           Int  @default(0)
   createdAt         DateTime @default(now())
 }
-//
+// les retraits demandés sur son jackpot 
 model TransferDemand {
   id                 String   @id @default(auto()) @map("_id") @db.ObjectId
   email              String?
-  usercodepin           Int      @default(1000)
+  usercodepin        Int      @default(1000)
   amountToTransfer   Int
   currency           String   @default("nothing")  
   transferCode       Int      @default(0)
@@ -176,30 +194,19 @@ model Country {
   name             String
   currency         String
   usezone          String 
-  flag             String? @default("not yet")
   profile          Profile[]
 }
 //
-model MyObject {
-  id                 String     @id @default(auto()) @map("_id") @db.ObjectId
-  googleEmail        String?
-  usercodepin        Int      @unique @default(1000)
-  objectToFinanceId  String   @db.ObjectId
-  object             ToFinance? @relation(fields: [objectToFinanceId], references: [id], onDelete: Cascade)    
-  //
-}
-// projet à financer
-model ToFinance {
-  id               String  @id @default(auto()) @map("_id") @db.ObjectId
-  objectName       String
-  object           MyObject[]
-}
 
-model Recipient {
+model AlreadyMeet {
   id               String   @id @default(auto()) @map("_id") @db.ObjectId
-  donatorCodepin   Int
-  profileId        String   @db.ObjectId
-  profile          Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  //email du connecté
+  connectedEmail   String?
+  connectedCodepin Int
+  // email du participant déjà rencontré
+  metEmail         String
+  metCodepin       Int
+  createdAt        DateTime @default(now())
 }
 // Enregistrer ici les commissions que touche l'e/se
 model Commission {
@@ -213,6 +220,7 @@ model Commission {
   // cents x 100
   commissionCents   Int     @default(0)
   currency          String  @default("nothing")
+  // si transfert de jackpot vers credit ou retrait
   origin            String? 
   //
   createdAt      DateTime   @default(now())
@@ -241,14 +249,11 @@ model Cents {
 // TRÈS IMPORTANT
 model Metric {
   id                        String  @id @default(auto()) @map("_id") @db.ObjectId
+  
   currentgroup              Int  @default(3)
   currentNbrOfCollection    Int  @default(1)
   nextOwnIdSnippetToEnter   Int  @default(1)
-  // Totality Current Group
-  tcg       Int  @default(3)
-  // Totality Current Nomber Of Collection
-  tocunooc  Int  @default(1)
-  // next own id totality to enter
-  noitte    Int  @default(1)
+  // next own id collection to enter
+  nextOwnIdCollectionToEnter Int  @default(1)
 }
 //
