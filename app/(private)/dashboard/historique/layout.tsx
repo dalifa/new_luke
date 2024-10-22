@@ -1,5 +1,5 @@
-import Footer from "@/components/nav/footer"
-import Navbar from "@/components/nav/navbar"
+
+//import Navbar from "@/components/nav/navbar"
 
 export default function PublicLayout({
   children,
@@ -8,7 +8,7 @@ export default function PublicLayout({
 }) {
   return (
     <div className="h-full bg-white">
-      <main className="pb-20 bg-white">
+      <main className="md:pt-10 pb-20 bg-white">
         { children }
       </main>
     </div>

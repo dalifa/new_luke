@@ -14,53 +14,120 @@ import { redirect } from "next/navigation";
   const connectedProfile = await currentUserInfos()
   // recipientId in collection table == params 
   // recipient collection datas 
-  const recipientCollectionData = await prismadb.collection.findFirst({
+  const recipientData = await prismadb.collection.findFirst({
     where: { id: params }
   })
-  // recipient profile 
+  // recipient profile
   const recipientProfile = await prismadb.profile.findFirst({
     where: { 
-      usercodepin: recipientCollectionData?.usercodepin,
+      usercodepin: recipientData?.usercodepin,
     }
   })
 
   // on vérifie si la collecte concerné est pas cloturée et son group est bien complet
-  if(recipientCollectionData?.isGroupComplete === true && recipientCollectionData.isCollectionClosed === false)
+  if(recipientData?.isGroupComplete === true && recipientData.isCollectionClosed === false)
   {
     // on vérifie que le connecté est bien dans la même collecte que le recipient
     const inTheSameCollection = await prismadb.collection.count({
       where: {
         usercodepin: connectedProfile?.usercodepin,  // en prod
-        ownId: recipientCollectionData.ownId, // obligatoire
-        amount: recipientCollectionData.amount, // obligatoire
-        currency: recipientCollectionData.currency, // obligatoire
-        collectionType: recipientCollectionData.collectionType // obligatoire
+        ownId: recipientData.ownId, // obligatoire
+        amount: recipientData.amount, // obligatoire
+        currency: recipientData.currency, // obligatoire
+        collectionType: recipientData.collectionType // obligatoire
       }
     })
-    //
+    // il est dans la même collecte que son recipient
     if(inTheSameCollection === 1)
     {
-      // on vérifie que le connecté n'ait pas encore donné 
+      // on vérifie que le connecté n'ai pas encore donné 
       const connectedCollectionData = await prismadb.collection.findFirst({
         where: {
           usercodepin: connectedProfile?.usercodepin,  // en prod
-          ownId: recipientCollectionData.ownId,
-          amount: recipientCollectionData.amount, // obligatoire
-          currency: recipientCollectionData.currency, // obligatoire
-          collectionType: recipientCollectionData.collectionType // obligatoire
+          ownId: recipientData.ownId,
+          amount: recipientData.amount, // obligatoire
+          currency: recipientData.currency, // obligatoire
+          collectionType: recipientData.collectionType // obligatoire
         }
       })
-      //
+      // le connecter n'a pas encore donné
       if(connectedCollectionData?.hasGive === false)
       { 
+        // Activity Registration
+        await prismadb.activity.create({
+          data: {
+            usercodepin: connectedProfile?.usercodepin,   // en prod
+            activity:  "don dans une collecte", // String
+            concerned: "le destinataire du don est: " + recipientData?.usercodepin + ".", // Json?
+            action: "don de : " + recipientData?.amount + recipientData?.currency + " dans une collecte " + recipientData.collectionType + " de ownId: " + recipientData.ownId  // Json?
+          }
+        })
+        // ## on verifie si le recipient avait dejà reçu un 1er don
+        const recipientDonationExist = await prismadb.collectionResult.count({
+          where: {
+            collectionOwnId : recipientData?.ownId,
+            amount : recipientData?.amount,
+            currency : recipientData?.currency,
+            collectionType: recipientData?.collectionType,
+            recipientcodepin: recipientData?.usercodepin,
+            recipientEmail : recipientData?.googleEmail
+          }
+        })
+        // si le recipient ne figure pas dans la table
+        if(recipientDonationExist < 1 )
+        {
+          // on enregistre le don du connecté à recipient dans la table CollectionResult
+          await prismadb.collectionResult.create({
+            data: {
+              donatorcodepin : connectedCollectionData?.usercodepin,
+              donatorEmail : connectedCollectionData?.googleEmail,
+              collectionOwnId : recipientData?.ownId,
+              amount : recipientData?.amount,
+              currency : recipientData?.currency,
+              collectionType: recipientData?.collectionType,
+              recipientcodepin: recipientData?.usercodepin,
+              recipientEmail : recipientData?.googleEmail,
+              donationReceived: 1
+            }
+          }) 
+        }
+        else{
+          //
+          await prismadb.collectionResult.create({
+            data: {
+              donatorcodepin : connectedCollectionData?.usercodepin,
+              donatorEmail : connectedCollectionData?.googleEmail,
+              collectionOwnId : recipientData?.ownId,
+              amount : recipientData?.amount,
+              currency : recipientData?.currency,
+              collectionType: recipientData?.collectionType,
+              recipientcodepin: recipientData?.usercodepin,
+              recipientEmail : recipientData?.googleEmail,
+              donationReceived: 1
+            }
+          })
+          // update de donationReceived à 2
+          await prismadb.collectionResult.updateMany({
+            where: {
+              collectionOwnId : recipientData?.ownId,
+              amount : recipientData?.amount,
+              currency : recipientData?.currency,
+              collectionType: recipientData?.collectionType,
+              recipientcodepin: recipientData?.usercodepin,
+              recipientEmail : recipientData?.googleEmail,
+              donationReceived: 1
+            },
+            data: { donationReceived: 2 }
+          })
+        }
         // on update collection on met hasgive du connected à true 
         await prismadb.collection.updateMany({
           where: {
             usercodepin: connectedCollectionData.usercodepin,
-            ownId: connectedCollectionData.ownId, // obligatoire
-            amount : connectedCollectionData?.amount, // obligatoire
-            currency : connectedCollectionData?.currency, // obligatoire
-            collectionType: connectedCollectionData?.collectionType, // obligatoire
+            ownId: recipientData.ownId, // obligatoire
+            amount : recipientData?.amount, // obligatoire
+            currency : recipientData?.currency, // obligatoire
+            collectionType: recipientData?.collectionType, // obligatoire
             // il faut mettre ces 5 fields pour bien différencier la collecte 
             // d'autres collectes de somme ou type différents
           },
@@ -68,189 +135,40 @@ import { redirect } from "next/navigation";
             hasGive: true
           }
         })
-        // Activity Registration
-        await prismadb.activity.create({
-          data: {
-            usercodepin: connectedProfile?.usercodepin,   // en prod
-            activity:  "don dans une collecte", // String
-            concerned: "le destinataire du don est: " + recipientCollectionData?.usercodepin + ".", // Json?
-            action: "don de : " + recipientCollectionData?.amount + recipientCollectionData?.currency + " dans une collecte " + recipientCollectionData.collectionType + " de ownId: " + recipientCollectionData.ownId  // Json?
-          }
-        })
-        // on count si il y a un donator rank
-        const rank = await prismadb.collectionResult.count({
-          where:{
-            collectionOwnId: recipientCollectionData?.ownId,
-            amount: recipientCollectionData?.amount,
-            currency: recipientCollectionData?.currency,
-            collectionType: recipientCollectionData?.collectionType,
-          }
-        })
-        if(rank === 0)
+        /* ####### a voir si on le met
+        if(recipientProfile)
         {
-          // ##
-          // on enregistre le don du connecté à recipient dans la table CollectionResult
-          await prismadb.collectionResult.create({
+        // ON ENTRE SON RECIPIENT DANS LA TABLE RECIPIENT
+          await prismadb.recipient.create({
             data: {
-              donatorcodepin: connectedCollectionData?.usercodepin,
-              donatorEmail: connectedCollectionData?.email,
-              donatorRank: 1,
-              collectionOwnId: recipientCollectionData?.ownId,
-              amount: recipientCollectionData?.amount,
-              currency: recipientCollectionData?.currency,
-              collectionType: recipientCollectionData?.collectionType,
-              recipientcodepin: recipientCollectionData?.usercodepin,
-              recipientEmail: recipientCollectionData?.email
+              profileEmail: connectedProfile?.id,
+              profileUsercodepin: connectedProfile?.usercodepin,
+              recipientEmail: recipientProfile?.id,
+              recipientUsercodepin: recipientProfile?.usercodepin
             }
           })
-        }else{
-          // rank > 0
-          const rankExist = await prismadb.collectionResult.findFirst({
-            where:{
-              collectionOwnId: recipientCollectionData?.ownId,
-              amount: recipientCollectionData?.amount,
-              currency: recipientCollectionData?.currency,
-              collectionType: recipientCollectionData?.collectionType,
-            },
-            orderBy: {id: "desc"} // si 1 on select 1 / si 1 et 2 on select 2
-          })
-          // 
-          if(rankExist)  // on s'assure qu'il exist
-          {
-            await prismadb.collectionResult.create({
-              data: {
-                donatorcodepin: connectedCollectionData?.usercodepin,
-                donatorEmail: connectedCollectionData?.email,
-                donatorRank: rankExist?.donatorRank + 1,
-                collectionOwnId: recipientCollectionData?.ownId,
-                amount: recipientCollectionData?.amount,
-                currency: recipientCollectionData?.currency,
-                collectionType: recipientCollectionData?.collectionType,
-                recipientcodepin: recipientCollectionData?.usercodepin,
-                recipientEmail: recipientCollectionData?.email
-              }
-            })
-          }
-        }
-        //
-        // ##### COLLECTION SNIPPET
-        if (recipientCollectionData?.collectionType === "snippet")
-        {
-          // on update le jackpot du recipient + amount
-          const myJackpot = await prismadb.profile.findFirst({
-            where: { 
-              googleEmail: recipientProfile?.googleEmail,
-              usercodepin: recipientCollectionData.usercodepin
-            }
-          })
-          //
-          if(myJackpot)
-          {
-            await prismadb.profile.updateMany({
-              where: { usercodepin: recipientCollectionData.usercodepin },
-              data: { jackpot: myJackpot.jackpot + recipientCollectionData?.amount}
-            })
-          }
-          //
-          const allHasGive = await prismadb.collection.count({
-            where: {
-              ownId: recipientCollectionData?.ownId, // obligatoire
-              amount : recipientCollectionData?.amount, // obligatoire
-              currency : recipientCollectionData?.currency, // obligatoire
-              collectionType: recipientCollectionData?.collectionType, // obligatoire
-              //
-              hasGive: true  // très important
-            }
-          })
-          //
-          if(recipientCollectionData.group === allHasGive)
-          {
-            console.log(allHasGive + " ont donné")
-            // on close la collecte dans collection
-            const closeCollection = await prismadb.collection.updateMany({
-            where: {
-              ownId: recipientCollectionData?.ownId, // obligatoire
-              amount : recipientCollectionData?.amount, // obligatoire
-              currency : recipientCollectionData?.currency, // obligatoire
-              collectionType: recipientCollectionData?.collectionType, // obligatoire
-              // supllément
-              hasGive: true
-            },
-            data: {
-              isCollectionClosed: true
-            }
-            })
-            // on close la collecte dans collectionList
-            const closeCollectionList = await prismadb.collectionList.updateMany({
-            where: {
-              ownId: recipientCollectionData.ownId, // obligatoire
-              amount : recipientCollectionData?.amount, // obligatoire
-              currency : recipientCollectionData?.currency, // obligatoire
-              collectionType: recipientCollectionData?.collectionType, // obligatoire
-              // supplément
-              isGroupComplete: true
-            },
-            data: {
-              isCollectionClosed: true
-            }
-            })
-          }
-        }
-// ###############################################################################        
-// ############### COLLECTION TOTALITY
-        if (recipientCollectionData?.collectionType === "totality"){
-          // on select le nbre of donation received par ce recipient
-          const countNuodore = await prismadb.collectionResult.findFirst({
-            where: {
-              collectionOwnId: recipientCollectionData?.ownId,
-              amount: recipientCollectionData?.amount,
-              currency: recipientCollectionData?.currency,
-              collectionType: recipientCollectionData?.collectionType,
-              recipientcodepin: recipientCollectionData?.usercodepin,
-              recipientEmail: recipientCollectionData?.email
-            }
-          })
-          // nuodore = numbre of donation received
-          if(countNuodore){
-            await prismadb.collectionResult.updateMany({
-              where: {
-                //donatorcodepin: connectedCollectionData?.usercodepin,
-                //donatorEmail: connectedCollectionData?.email,
-                collectionOwnId: recipientCollectionData?.ownId,
-                amount: recipientCollectionData?.amount,
-                currency: recipientCollectionData?.currency,
-                collectionType: recipientCollectionData?.collectionType,
-                recipientcodepin: recipientCollectionData?.usercodepin,
-                recipientEmail: recipientCollectionData?.email
-              },
-              data: {
-                nuodore: countNuodore?.nuodore + 1
-              }
-            })
-          } 
-          //
-          // on compte ceux qui ont donné
-          const allHasGive = await prismadb.collection.count({
+        }  */
+        // on compte ceux qui ont donné
+        const allHasGive = await prismadb.collection.count({
           where: {
-            ownId: recipientCollectionData?.ownId, // obligatoire
-            amount : recipientCollectionData?.amount, // obligatoire
-            currency : recipientCollectionData?.currency, // obligatoire
-            collectionType: recipientCollectionData?.collectionType, // obligatoire
+            ownId: recipientData?.ownId, // obligatoire
+            amount : recipientData?.amount, // obligatoire
+            currency : recipientData?.currency, // obligatoire
+            collectionType: recipientData?.collectionType, // obligatoire
             //
-            hasGive: true  // très important
+            hasGive: true
           }
         })
         // on vérifie si ceux qui ont donné sont == à ceux qui y participe
-        if(recipientCollectionData.group === allHasGive)
+        if(recipientData?.group === allHasGive)
         {
-          console.log(allHasGive + " ont donné")
           // on close la collecte dans collection
-          const closeCollection = await prismadb.collection.updateMany({
+          await prismadb.collection.updateMany({
             where: {
-              ownId: recipientCollectionData?.ownId, // obligatoire
-              amount : recipientCollectionData?.amount, // obligatoire
-              currency : recipientCollectionData?.currency, // obligatoire
-              collectionType: recipientCollectionData?.collectionType, // obligatoire
+              ownId: recipientData?.ownId, // obligatoire
+              amount : recipientData?.amount, // obligatoire
+              currency : recipientData?.currency, // obligatoire
+              collectionType: recipientData?.collectionType, // obligatoire
               // supllément
               hasGive: true
             },
@@ -259,12 +177,12 @@ import { redirect } from "next/navigation";
             }
           })
           // on close la collecte dans collectionList
-          const closeCollectionList = await prismadb.collectionList.updateMany({
+          await prismadb.collectionList.updateMany({
             where: {
-              ownId: recipientCollectionData.ownId, // obligatoire
-              amount : recipientCollectionData?.amount, // obligatoire
-              currency : recipientCollectionData?.currency, // obligatoire
-              collectionType: recipientCollectionData?.collectionType, // obligatoire
+              ownId: recipientData.ownId, // obligatoire
+              amount : recipientData?.amount, // obligatoire
+              currency : recipientData?.currency, // obligatoire
+              collectionType: recipientData?.collectionType, // obligatoire
               // supplément
               isGroupComplete: true
             },
@@ -272,152 +190,48 @@ import { redirect } from "next/navigation";
               isCollectionClosed: true
             }
           })
-          
-          // un participant avec nuodore === 1 => il y a 2 fois nuodore = 2
-          const winnerCount = await prismadb.collectionResult.count({
-            where:{
-              collectionOwnId: recipientCollectionData?.ownId,
-              amount: recipientCollectionData?.amount,
-              currency: recipientCollectionData?.currency,
-              collectionType: recipientCollectionData?.collectionType,
-              nuodore: 1
+          // ON SELECT CELUI QUI A DONATION RECEIVED == 2
+          const winner = await prismadb.collectionResult.findFirst({
+            where: {
+              collectionOwnId : recipientData?.ownId,
+              amount : recipientData?.amount,
+              currency : recipientData?.currency,
+              collectionType: recipientData?.collectionType,
+              recipientcodepin: recipientData?.usercodepin,
+              recipientEmail : recipientData?.googleEmail,
+              donationReceived: 2
             }
-          }) 
-          if(winnerCount === 1)
+          })
+          // ON LUI DONNE LE TRIPL
+          // ON SELECT SON CREDIT ET SON JACKPOT
+          const winnerProfile = await prismadb.profile.findFirst({
+            where: {
+              googleEmail: winner?.recipientEmail,
+              usercodepin: winner?.recipientcodepin
+            }
+          })
+          if(winnerProfile)
           {
-            // on select le winner dans collection result (c'est un recipient)
-            const winner = await prismadb.collectionResult.findFirst({
-              where: {
-                collectionOwnId: recipientCollectionData?.ownId,
-                amount: recipientCollectionData?.amount,
-                currency: recipientCollectionData?.currency,
-                collectionType: recipientCollectionData?.collectionType,
-                // le nuodore c'est toujours pour le recipient
-                nuodore: 2
-              }
-            })
-            // ON LUI DONNE LA CAGNOTTE
-            // on update le jackpot du recipient + (3 x amount)
-            const winnerProfile = await prismadb.profile.findFirst({
+            // on update son credit du montant initial
+            await prismadb.profile.updateMany({
               where: { 
-                googleEmail: winner?.recipientEmail,
-                usercodepin: winner?.recipientcodepin
-              }
+                googleEmail: winnerProfile?.googleEmail,
+                usercodepin: winnerProfile?.usercodepin
+              },
+              data: { credit: winnerProfile?.credit + recipientData?.amount }
             })
+            // on update son jackpot du montant initial x 2
+            const jackpotReceived = recipientData?.amount + recipientData?.amount
             //
-            if(winnerProfile)
-            {
-              console.log("le winner est " + winnerProfile?.googleEmail)
-              // La Cagnotte = recipientCollectionData?.amount multiplier par 3
-              // 2 x amount seront ajouté au jackpot
-              // 1 x amount représentant sa somme de depart sera remis dans son crédit
-              const theCagnotte = (recipientCollectionData?.amount + recipientCollectionData?.amount)
-              await prismadb.profile.updateMany({
-                where: { 
-                  googleEmail: winnerProfile?.googleEmail,
-                  usercodepin: winnerProfile?.usercodepin
-                },
-                data: { 
-                  jackpot: winnerProfile.jackpot + theCagnotte,
-                  credit: winnerProfile.credit + recipientCollectionData?.amount
-                }
-              })
-            }
+            await prismadb.profile.updateMany({
+              where: { 
+                googleEmail: winnerProfile?.googleEmail,
+                usercodepin: winnerProfile?.usercodepin
+              },
+              data: { jackpot: winnerProfile?.jackpot + jackpotReceived }
+            })
           }
-          else{
-                // on remet a chaque participant son Amount
-                // participant de rank = 1
-                const theOne = await prismadb.collectionResult.findFirst({
-                  where:{
-                    collectionOwnId: recipientCollectionData?.ownId,
-                    amount: recipientCollectionData?.amount,
-                    currency: recipientCollectionData?.currency,
-                    collectionType: recipientCollectionData?.collectionType,
-                    donatorRank: 1
-                  }
-                })
-                // on select son credit
-                const theOneJackpot = await prismadb.profile.findFirst({
-                  where: {
-                    googleEmail: theOne?.donatorEmail,
-                    usercodepin: theOne?.donatorcodepin
-                  }
-                })
-                if(theOneJackpot){
-                  // on update son credit
-                  await prismadb.profile.updateMany({
-                    where:{
-                      googleEmail: theOneJackpot?.googleEmail,
-                      usercodepin: theOneJackpot?.usercodepin
-                    },
-                    data: {
-                      credit: theOneJackpot?.credit + recipientCollectionData?.amount
-                    }
-                  })
-                }
-                // participant de rank = 2
-                const theTwo = await prismadb.collectionResult.findFirst({
-                  where:{
-                    collectionOwnId: recipientCollectionData?.ownId,
-                    amount: recipientCollectionData?.amount,
-                    currency: recipientCollectionData?.currency,
-                    collectionType: recipientCollectionData?.collectionType,
-                    donatorRank: 2
-                  }
-                })
-                // on select son credit
-                const theTwoJackpot = await prismadb.profile.findFirst({
-                  where: {
-                    googleEmail: theTwo?.donatorEmail,
-                    usercodepin: theTwo?.donatorcodepin
-                  }
-                })
-                if(theTwoJackpot){
-                  // on update son credit
-                  await prismadb.profile.updateMany({
-                    where:{
-                      googleEmail: theTwoJackpot?.googleEmail,
-                      usercodepin: theTwoJackpot?.usercodepin
-                    },
-                    data: {
-                      credit: theTwoJackpot?.credit + recipientCollectionData?.amount
-                    }
-                  })
-                }
-                // participant de rank = 3
-                const theThree = await prismadb.collectionResult.findFirst({
-                  where:{
-                    collectionOwnId: recipientCollectionData?.ownId,
-                    amount: recipientCollectionData?.amount,
-                    currency: recipientCollectionData?.currency,
-                    collectionType: recipientCollectionData?.collectionType,
-                    donatorRank: 3
-                  }
-                })
-                // on select son credit
-                const theThreeJackpot = await prismadb.profile.findFirst({
-                  where: {
-                    googleEmail: theThree?.donatorEmail,
-                    usercodepin: theThree?.donatorcodepin
-                  }
-                })
-                if(theThreeJackpot){
-                  // on update son credit
-                  await prismadb.profile.updateMany({
-                    where:{
-                      googleEmail: theThreeJackpot?.googleEmail,
-                      usercodepin: theThreeJackpot?.usercodepin
-                    },
-                    data: {
-                      credit: theThreeJackpot?.credit + recipientCollectionData?.amount
-                    }
-                  })
-                }
-              }//
-          }
-        }
-
-        
+        } 
         revalidatePath('/dashboard')
         redirect("/dashboard")
       } // donation registered 

@@ -1,5 +1,6 @@
 import ReactivateAccount from '@/components/admin/active-account'
 import AddCountry from '@/components/admin/add-country'
+//import AddProfileForTests from '@/components/admin/add-profile-for-tests'
 import DontMakePartner from '@/components/admin/dont-make-partner'
 import EnterAmount from '@/components/admin/enter-amount'
 import EnterCents from '@/components/admin/enter-cents'
@@ -14,8 +15,9 @@ import UpdatePartnerCredit from '@/components/admin/update-partner-credit'
  
 const Admin = async () => {
     return (
-        <div className='flex w-full h-full flex-col'>
+        <div className='pt-14 flex w-full h-full flex-col'>
             <div className='grid grid-cols-1 md:grid-cols-3 gap-3 m-4'>
+                {/* <AddProfileForTests/> */}
                 <ReactivateAccount/>
                 <UnactivateAccount/>
                 <MakePartner/>

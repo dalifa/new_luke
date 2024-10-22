@@ -14,7 +14,7 @@ const Partner = async () => {
     const metrics = await prismadb.metric.findFirst()
     //
     return (
-        <div className='h-ull flex items-center flex-col'>
+        <div className='pt-14 h-ull flex items-center flex-col'>
             <div className='w-full lg:w-4/5 flex flex-col items-center gap-y-5 m-4 p-5'>
                 <div className='grid grid-cols-1 gap-2 lg:grid-cols-3 w-full p-5 rounded shadow-md bg-blue-50'>
                     <div>

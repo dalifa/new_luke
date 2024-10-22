@@ -37,9 +37,9 @@ const HistoryDetails = async ({
     
 
     return (
-        <div className='h-ull flex items-center flex-col'>
-            <div className='w-full lg:w-4/5 flex flex-col items-center gap-y-4 m-4 px-2'>
-                <Card className='w-full p-4 mb-8 text-center bg-blue-200 text-slate-700 text-sm lg:text-md shadow-lg shadow-slate-200'>
+        <div className='pt-14 h-ull flex items-center flex-col'>
+            <div className='w-full lg:w-4/5 flex flex-col items-center gap-y-4 m-4 px-4'>
+                <Card className='w-full p-4 mb-8 text-center text-slate-700 text-sm lg:text-md shadow-md shadow-blue-100'>
                     Dans votre collecte {concernedCollection?.collectionType} n° {concernedCollection?.ownId} de {concernedCollection?.amount}
                     {concernedCollection?.currency}
                 {/*  du:  <span>{format(new Date(date?.createdAt), DATE_FORMAT)}</span> */}
@@ -49,7 +49,7 @@ const HistoryDetails = async ({
                     {/*<ScrollArea className='h-80'>*/}
                     {
                         results.map((result) => (
-                            <Card key={result.id} className='grid grid-cols-3 p-1 gap-1 shadow-lg shadow-slate-300'>
+                            <Card key={result.id} className='grid grid-cols-3 p-1 gap-1 shadow-lg shadow-blue-100'>
                               <div className=''>
                               {
                                 profiles.map((profile) => (
@@ -74,8 +74,16 @@ const HistoryDetails = async ({
                               </div>
 
                               <div className='flex items-center text-xs md:text-sm justify-center font-medium flex-col text-slate-700'>
-                                <span>a donné</span>
-                                <span>avec joie à</span>
+                                <p>
+                                  {
+                                    concernedCollection?.collectionType === "totality" ? (
+                                      <span>a désigné</span>
+                                    ):(
+                                      <span>a donné</span>
+                                    )
+                                  }
+                                </p>
+                                <span>avec joie {concernedCollection?.collectionType === "snippets" && (<> à </>)}</span>
                               </div>
 
                               <div className='flex items-center justify-center'>

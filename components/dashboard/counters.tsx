@@ -19,12 +19,12 @@ export async function Counters() {
     const connectedUser = await currentUserInfos()
     // last donation
     const lastDonation = await prismadb.collectionResult.findFirst({
-        where: { donatorcodepin: connectedUser?.usercodepin },
+        where: { donatorEmail: connectedUser?.googleEmail },
         orderBy:{ id: "desc" }
     })
     // last jackpot
     const lastjackpot = await prismadb.collectionResult.findFirst({
-        where: { recipientcodepin: connectedUser?.usercodepin },
+        where: { recipientEmail: connectedUser?.googleEmail },
         orderBy:{ id: "desc" }
     })
     //

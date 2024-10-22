@@ -7,10 +7,11 @@ const BackCancel = () => {
     const router = useRouter()
     return (
         <Button 
-            onClick={() => router.back()} 
-            className='cursor-pointer border-red-400 text-white bg-red-500 hover:bg-red-600'
+            onClick={() => router.back()}
+            variant={"outline"} 
+            className='w-full h-full cursor-pointer border-2 '
         >
-            Annuler le don
+            Annuler
         </Button>
     )
 }

@@ -9,6 +9,7 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+//
 
 model User{
   id             String     @id @default(auto()) @map("_id") @db.ObjectId
@@ -42,35 +43,32 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 //
-// reponses aux questions pour l'engagement
-model Response{
+// code de parrainage
+model referralCode{
   id               String   @id @default(auto()) @map("_id") @db.ObjectId
-  googleEmail      String? // le connecté que l'on questionne
-  // croyez vous qu'il n'y a de salut qu'au nom de jésus ?
-  response1        Boolean  @default(false)
-  // jesus à dit: luke 6:38 dites vous amen ?
-  response2        Boolean  @default(false)
-  // vous engagez vous à donner au moins 5€ / mois à un enfant de Dieu ?
-  response3        Boolean  @default(false)
-  // avez vous paylib
-  response4        Boolean  @default(false)
-  //
-  response5        Boolean  @default(false)
-
+  // godFather = parrain godMother = marraine
+  godFatherEmail   String?
+  godFatherCodepin Int      
+  // godSon = filleul godDaughter = filleule
+  godSonEmail      String?
+  godSonPhone      Int
+  secretCode       String
+  isUsed           Boolean @default(false)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }
 //
 model Profile {
   id                   String   @id @default(auto()) @map("_id") @db.ObjectId
-  googleEmail          String?   
+  googleEmail          String?
+  googleImage          String?   
   usercodepin          Int      @unique @default(1000)
   credit               Int      @default(0)
   jackpot              Int      @default(0)
   jackpotCents         Int      @default(0) // en cents x 100
   //
   username             String 
-  phone                String
+  phone                String 
   firstname            String    
   lastname             String    
   city                 String    
@@ -91,6 +89,10 @@ model Profile {
   //
   isActiveAccount      Boolean  @default(true)
   //
+  collectionParticipants    CollectionParticipant[]
+  profilesMets              ProfilesMet[]  @relation("profilesMet")
+  profilesOf                ProfilesMet[]  @relation("metProfiles")
+  //
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
 }
@@ -99,52 +101,46 @@ enum UserRole {
   ADMIN
   USER
 }
-//
-model CollectionList {
+// la collecte
+model Collection {
   id                 String     @id @default(auto()) @map("_id") @db.ObjectId
-  ownId              Int        @default(1)
   amount             Int
-  currency           String     @default("nothing")
-  collectionType     String     @default("")
+  currency           String     @default("€")
+  collectionType     String     @default("totality")
+  group              Int        @default(3)
+  groupStatus        Int        @default(0)
   isGroupComplete    Boolean    @default(false)
   // la collecte est cloturé ?
-  isCollectionClosed Boolean  @default(false)
+  isCollectionClosed Boolean    @default(false)
+  // les participants
+  collectionParticipants         CollectionParticipant[]
   //
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
 }
-//
-model Collection {
-  id                 String  @id @default(auto()) @map("_id") @db.ObjectId
-  ownId              Int     @default(1)
-  amount             Int
-  currency           String  @default("nothing")
-  collectionType     String  @default("")
-  group              Int     @default(3)
-  groupStatus        Int   
-  // le group est complet ?
-  isGroupComplete    Boolean @default(false)
-  // la collecte est cloturé ?
-  isCollectionClosed Boolean @default(false)
-  // le participant
-  email              String?
-  usercodepin        Int     @default(1000)
-  isOnlyDonator      Boolean @default(false)
-  hasGive            Boolean @default(false) // le participant a t-il donné ?
+// ceux qui participe a la collecte
+model CollectionParticipant {
+  id                 String      @id @default(auto()) @map("_id") @db.ObjectId
+  collectionId       String      @db.ObjectId
+  collection         Collection  @relation(fields: [collectionId], references: [id])
+  profileId          String      @db.ObjectId
+  profile            Profile     @relation(fields: [profileId], references: [id])
+  rank               Int
+  project            String      @default("Non renseigné") 
   //
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  isOnlyDonator      Boolean     @default(false)
+  hasGive            Boolean     @default(false) // le participant a t-il donné ?
   //
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  //
+  @@unique([collectionId, profileId]) // pour que cette paire (collectionId et profileId ne soit enregistrée qu'une seule fois)
 }
 //
 model CollectionResult {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  //code pin du donateur
-  donatorcodepin    Int
   //email du donateur
   donatorEmail      String?
-  // rang du donateur n° permettant de distingué chaque participant
-  donatorRank       Int     @default(0)
   // own id de la collecte
   collectionOwnId   Int?
   // montant à donner dans la collecte
@@ -154,13 +150,21 @@ model CollectionResult {
   // le type de collecte
   collectionType    String @default("")
   //
-  recipientcodepin  Int
   recipientEmail    String?
   //number of donations received = concerne toujours le recipient
-  nuodore           Int  @default(0)
+  donationReceived  Int  @default(0)
   createdAt         DateTime @default(now())
 }
-// les retraits demandés sur son jackpot 
+// les profiles met
+model ProfilesMet {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  profileId         String  @db.ObjectId
+  profile           Profile @relation("profilesMet", fields: [profileId], references: [id])
+  participantMetId  String  @db.ObjectId
+  participantMet    Profile @relation("metProfiles", fields: [participantMetId], references: [id])
+  @@unique([profileId, participantMetId])
+}
+//
 model TransferDemand {
   id                 String   @id @default(auto()) @map("_id") @db.ObjectId
   email              String?
@@ -187,6 +191,7 @@ model Amount {
   amount     Int     @default(1)
   currency   String  @default("nothing")
   rank       String  @default("nothing")
+  //
 }
 //
 model Country {
@@ -195,18 +200,6 @@ model Country {
   currency         String
   usezone          String 
   profile          Profile[]
-}
-//
-
-model AlreadyMeet {
-  id               String   @id @default(auto()) @map("_id") @db.ObjectId
-  //email du connecté
-  connectedEmail   String?
-  connectedCodepin Int
-  // email du participant déjà rencontré
-  metEmail         String
-  metCodepin       Int
-  createdAt        DateTime @default(now())
 }
 // Enregistrer ici les commissions que touche l'e/se
 model Commission {
@@ -220,7 +213,6 @@ model Commission {
   // cents x 100
   commissionCents   Int     @default(0)
   currency          String  @default("nothing")
-  // si transfert de jackpot vers credit ou retrait
   origin            String? 
   //
   createdAt      DateTime   @default(now())
@@ -245,15 +237,27 @@ model Cents {
   // multiplié par 100 = 0,57 x 100 = 57
   byten          Int
 }
-// ####
+// ####  
 // TRÈS IMPORTANT
 model Metric {
-  id                        String  @id @default(auto()) @map("_id") @db.ObjectId
-  
-  currentgroup              Int  @default(3)
-  currentNbrOfCollection    Int  @default(1)
-  nextOwnIdSnippetToEnter   Int  @default(1)
-  // next own id collection to enter
-  nextOwnIdCollectionToEnter Int  @default(1)
+  id                   String  @id @default(auto()) @map("_id") @db.ObjectId
+  currentgroup         Int  @default(3)
+  currentNbrOfTripl    Int  @default(1)
+  nextOwnIdToEnter     Int  @default(1)
+  //
+  cgt                  Int  @default(3) // Current Group Totality
+  noit                 Int  @default(2) // Next Own Id Totality
+  noot                 Int  @default(1) // Number Of Open Totality
+  //
+  cgs                  Int  @default(3) // Current Group Snippets
+  nois                 Int  @default(1) // Next Own Id Snippets
+  noos                 Int  @default(1) // Number Of Open Snippets
+  //
+  nextProfileForTests  String @default("aucun")
 }
 //
+model CurrentProfileForTest {
+  id                   String  @id @default(auto()) @map("_id") @db.ObjectId
+  profileTestId        String
+  username             String
+}
