@@ -1,13 +1,12 @@
 
 
 import { auth } from '@/auth';
-import { CollectionEnter } from '@/components/dashboard/collection-enter';
 import { CollectionsInProgress } from '@/components/dashboard/collections-in-progress';
 import { Counters } from '@/components/dashboard/counters';
-import { SnippetsCollectionEnter } from '@/components/dashboard/enter-in-collection/snippets-collection-enter';
-import { TotalityCollectionEnter } from '@/components/dashboard/enter-in-collection/totality-collection-enter';
+import { SnippetsCollectionEnter } from '@/components/dashboard/enter-in-collection/snippets/snippets-collection-enter';
+import { TotalityCollectionEnter } from '@/components/dashboard/enter-in-collection/totality/totality-collection-enter';
+import { TriplCollectionEnter } from '@/components/dashboard/enter-in-collection/tripl/tripl-collection-enter';
 import { Card } from '@/components/ui/card';
-import { currentUserInfos } from '@/hooks/own-current-user';
 import { prismadb } from '@/lib/prismadb';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -41,21 +40,30 @@ const Dashboard = async () => {
   const openTriplExist = await prismadb.collection.count({
     where: { 
       isCollectionClosed: false,
-      collectionType: "tripl"
+      collectionType: "tripl",
+      collectionParticipants: {
+        some: {profileId: connected?.id}
+      }
     }
   })
-  // y a t-il une collecte tripl d'ouverte ?
+  // y a t-il une collecte snippets d'ouverte ?
   const openSnippetsExist = await prismadb.collection.count({
     where: { 
       isCollectionClosed: false,
-      collectionType: "snippets"
+      collectionType: "snippets",
+      collectionParticipants: {
+        some: {profileId: connected?.id}
+      }
     }
   })
-  // y a t-il une collecte tripl d'ouverte ?
+  // y a t-il une collecte totality d'ouverte ?
   const openTotalityExist = await prismadb.collection.count({
     where: { 
       isCollectionClosed: false,
-      collectionType: "totality"
+      collectionType: "totality",
+      collectionParticipants: {
+        some: {profileId: connected?.id}
+      }
     }
   })
   // myAllOpenTripl
@@ -72,7 +80,7 @@ const Dashboard = async () => {
   const myAllOpenSnippets = await prismadb.collection.findMany({
     where: {
       isCollectionClosed: false,
-      collectionType: "snippet",
+      collectionType: "snippets",
       collectionParticipants: {
         some: {profileId: connected?.id}
       }
@@ -93,12 +101,12 @@ const Dashboard = async () => {
     <div className='pt-14 h-ull flex items-center flex-col bg-white'>
       <div className='w-full md:w-4/5 flex flex-col items-center gap-y-4 m-4 px-5 lg:py-20'>
         <div className='w-full grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4'>
-          {/* compteur déjà ouverte */}
+          {/* crédit et cagnotte */}
             <Counters/> 
-          {/* tripl en cours sur le site */}
+          {/* collectes en cours sur le site */}
             <CollectionsInProgress/> 
           {/* pour entrer dans un tripl */}
-            <CollectionEnter/> 
+            <TriplCollectionEnter/> 
           {/* ******* */}
           <Card className='bg-white shadow-slate-300 shadow-lg p-4'>
             <p className='text-center mb-3 font-semibold text-slate-800 text-md lg:text-lg'>
@@ -115,10 +123,9 @@ const Dashboard = async () => {
                 <div className='grid grid-cols-2'>
                   {
                     myAllOpenTripl.map((myOpenTripl) => (
-                      <Link key={myOpenTripl.id} href={`/dashboard/${myOpenTripl.id}`}>
+                      <Link key={myOpenTripl.id} href={`/dashboard/tripl/${myOpenTripl.id}`}>
                         <div className='text-md rounded-md bg-green-500 p-2 m-2 text-white text-center'>
-                          <p className='font-semibold'>Tripl 
-                            de {myOpenTripl?.amount}€</p>
+                          <p className='font-semibold'>Tripl de {myOpenTripl?.amount}€</p>
                         </div>
                       </Link>
                     ))
@@ -135,7 +142,7 @@ const Dashboard = async () => {
             <p className='text-center mb-3 font-semibold text-slate-800 text-md lg:text-lg'>
               Vos Collectes Snippets
             </p>
-            {/* my collections ici, on map les ownId */}
+            {/* my collections snippets */}
             {
               openSnippetsExist === 0 && (
                 <p className='text-slate-600 text-center mt-10'>Vous n&apos;avez pas de collecte Snippets en cours.</p>
@@ -148,8 +155,7 @@ const Dashboard = async () => {
                     myAllOpenSnippets.map((myOpenSnippet) => (
                       <Link key={myOpenSnippet.id} href={`/dashboard/snippets/${myOpenSnippet.id}`}>
                         <div className='text-md rounded-md bg-green-500 p-2 m-2 text-white text-center'>
-                          <p className='font-semibold'>Snippets n°{myOpenSnippet.id } - 
-                            De {myOpenSnippet?.amount}€</p>
+                          <p className='font-semibold'>Snippets de {myOpenSnippet?.amount}€</p>
                         </div>
                       </Link>
                     ))
@@ -166,7 +172,7 @@ const Dashboard = async () => {
             <p className='text-center mb-3 font-semibold text-slate-800 text-md lg:text-lg'>
               Vos Collectes Totality
             </p>
-            {/* my collections ici, on map les ownId */}
+            {/* my collections totality*/}
             {
               openTotalityExist === 0 && (
                 <p className='text-slate-600 text-center mt-10'>Vous n&apos;avez pas de collecte Totality en cours.</p>
@@ -179,8 +185,7 @@ const Dashboard = async () => {
                     myAllOpenTotalities.map((myOpenTotality) => (
                       <Link key={myOpenTotality.id} href={`/dashboard/totality/${myOpenTotality.id}`}>
                         <div className='text-md rounded-md bg-green-500 p-2 m-2 text-white text-center'>
-                          <p className='font-semibold'>Totality n°{myOpenTotality.id} - 
-                            De {myOpenTotality?.amount}€</p>
+                          <p className='font-semibold'>Totality de {myOpenTotality?.amount}€</p>
                         </div>
                       </Link>
                     ))

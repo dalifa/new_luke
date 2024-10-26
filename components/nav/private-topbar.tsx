@@ -11,7 +11,7 @@ export async function PrivateTopbar() {
   const connected = await currentUserInfos()
   //
   return (
-    <div className="flex flex-row fixed top-0 left-0 bg-blue-500 text-white w-full h-10 lg:h-14 items-center justify-between px-4 lg:px-8">
+    <div className="flex flex-row fixed top-0 left-0 z-10 bg-blue-500 text-white w-full h-10 lg:h-14 items-center justify-between px-4 lg:px-8">
       <div>
         <BackButton/>
       </div>

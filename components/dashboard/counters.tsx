@@ -38,7 +38,7 @@ export async function Counters() {
     //
     return (
         <Card className='bg-white shadow-blue-200 shadow-lg p-4 flex items-center flex-col gap-2'>
-            <p className='text-center mb-2 text-slate-500 font-semibold text-md lg:text-lg'>
+            <p className='text-center mb-2 text-slate-600 font-semibold text-md lg:text-lg'>
                 Vos compteurs
             </p>
             

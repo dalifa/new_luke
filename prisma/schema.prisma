@@ -138,22 +138,25 @@ model CollectionParticipant {
 }
 //
 model CollectionResult {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  //email du donateur
-  donatorEmail      String?
-  // own id de la collecte
-  collectionOwnId   Int?
+  id                 String  @id @default(auto()) @map("_id") @db.ObjectId
+  // email du donateur
+  donatorEmail       String?
+  donatorProfileId   String?
+  // id de la collecte
+  collectionId       String?
   // montant à donner dans la collecte
-  amount            Int?
+  amount             Int?
   // la monnaie concerné de la collecte
-  currency          String @default("nothing")
+  currency           String @default("nothing")
   // le type de collecte
-  collectionType    String @default("")
+  collectionType     String @default("")
   //
-  recipientEmail    String?
+  recipientEmail     String?
+  recipientProfileId String?
   //number of donations received = concerne toujours le recipient
-  donationReceived  Int  @default(0)
-  createdAt         DateTime @default(now())
+  donationReceived   Int  @default(0)
+  //
+  createdAt          DateTime @default(now())
 }
 // les profiles met
 model ProfilesMet {

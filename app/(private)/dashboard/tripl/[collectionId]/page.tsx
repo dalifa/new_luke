@@ -7,9 +7,9 @@ import { GrMoney } from "react-icons/gr";
 import Link from 'next/link';
 import { capitalize, currentUserInfos } from '@/hooks/own-current-user';
 import { Ban, CircleUserRound } from 'lucide-react';
-import { JustToGiveInSnippets } from '@/components/dashboard/action-in-collection/snippets/just-donator';
-import { AlsoReceiverInSnippets } from '@/components/dashboard/action-in-collection/snippets/also-receiver';
-import { MySnippetsProjectForm } from '@/components/dashboard/action-in-collection/snippets/myproject-form';
+import { MyProjectForm } from '@/components/dashboard/action-in-collection/tripl/myproject-form';
+import { JustToGive } from '@/components/dashboard/action-in-collection/tripl/just-donator';
+import { AlsoReceiver } from '@/components/dashboard/action-in-collection/tripl/also-receiver';
 //
 const Collection = async ({
   params
@@ -90,7 +90,7 @@ const Collection = async ({
                               <Avatar className='h-16 w-16 md:h-24 md:w-24 border-white border-2'>
                                 <AvatarImage src={participant?.profile.image || ""} />
                                   <AvatarFallback className="bg-slate-100">
-                                    <CircleUserRound className="text-violet-600 h-16 w-16 lg:h-24 lg:w-24" />
+                                    <CircleUserRound className="text-red-800 h-16 w-16 lg:h-24 lg:w-24" />
                                   </AvatarFallback>
                               </Avatar>
                             </div>
@@ -118,7 +118,7 @@ const Collection = async ({
                               <p>
                                 {
                                   hasGiveCount < collectionParams?.group && (
-                                    <MySnippetsProjectForm collectionId={params?.collectionId}/>
+                                    <MyProjectForm collectionId={params?.collectionId}/>
                                   ) 
                                 }
                               </p>
@@ -143,14 +143,14 @@ const Collection = async ({
                             {
                               participant?.isOnlyDonator === false && hasGiveCount < 1 && (justGiveCount < (collectionParams?.group)) ? (
                                 <div className='flex items-end justify-center mt-5'>
-                                  <JustToGiveInSnippets collectionId={params?.collectionId}/>
+                                  <JustToGive collectionId={params?.collectionId}/>
                                 </div>
                               ):(
                                 <>
                                   {
                                     participant?.isOnlyDonator === true && hasGiveCount < 1 && (justGiveCount < (collectionParams?.group)) && (
                                       <div className='flex items-end justify-center mt-5'>
-                                        <AlsoReceiverInSnippets collectionId={params?.collectionId}/>
+                                        <AlsoReceiver collectionId={params?.collectionId}/>
                                       </div>
                                     )
                                   }
@@ -182,7 +182,7 @@ const Collection = async ({
                               <Avatar className='h-16 w-16 md:h-24 md:w-24 border-white border-2'>
                                 <AvatarImage src={participant?.profile.image || ""} />
                                   <AvatarFallback className="bg-slate-100">
-                                    <CircleUserRound className="text-violet-600 h-16 w-16 lg:h-24 lg:w-24" />
+                                    <CircleUserRound className="text-red-800 h-16 w-16 lg:h-24 lg:w-24" />
                                   </AvatarFallback>
                               </Avatar>
                             </div>
@@ -209,7 +209,7 @@ const Collection = async ({
                             // le participant ne veut être que donateur ?
                             participant.isOnlyDonator === true && (
                               <div className='flex items-end justify-center mt-5'>
-                                <Button variant={"outline"} className='text-violet-600 flex gap-x-4'>
+                                <Button variant={"outline"} className='text-red-900 flex gap-x-4'>
                                   J'ai renoncé à recevoir <Ban className='w-5 h-5'/>
                                 </Button>
                               </div>
@@ -239,9 +239,9 @@ const Collection = async ({
                           ):(
                             <>
                             {
-                              collectionParams?.group === collectionParams?.groupStatus && participant?.isOnlyDonator !== true && (
-                                <Link href={`/dashboard/snippets/${params.collectionId}/${participant.id}`}>
-                                  <Button variant={"violet"} className='rounded-md text-white'>    
+                              collectionParams?.group === collectionParams?.groupStatus && (
+                                <Link href={`/dashboard/tripl/${params.collectionId}/${participant.id}`}>
+                                  <Button variant={"primary"} className='rounded-md text-white'>    
                                     Donner <GrMoney className="h-5 w-5 cursor-pointer ml-2"/>
                                   </Button>
                                 </Link>
@@ -265,7 +265,4 @@ const Collection = async ({
   )
 }
 //
-/*
-  connectedCollectionData?.profileId === connectedProfile?.id && 
-*/
 export default Collection
