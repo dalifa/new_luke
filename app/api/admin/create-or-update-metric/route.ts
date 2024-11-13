@@ -7,7 +7,7 @@ import { currentUserInfos } from "@/hooks/own-current-user";
 //
 export async function POST(req: Request) {
   try {
-    const { currentgroup, currentNbrOfCollection } = await req.json();
+    const { currentgroup, currentNbrOfTripl, currentDdcGroup } = await req.json();
 
     const session = await auth(); 
 
@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     if (!currentgroup) {
         return new NextResponse("username is required", { status: 400 });
     }
-    if (!currentNbrOfCollection) {
+    if (!currentNbrOfTripl) {
       return new NextResponse("firstname is required", { status: 400 });
     }
     //
@@ -25,20 +25,14 @@ export async function POST(req: Request) {
     //
     if(connectedUser?.role === "ADMIN") // mettre admin en prod
     {
-      // Activity Registration
-      await prismadb.activity.create({
-        data: {
-          usercodepin: connectedUser?.usercodepin, // Int
-          activity:  "création de currentGroup et currentNbrOfCollection", // String
-          concerned: "Admin action"  , // Json?
-          action:    "créer" // Json?
-        }
-      })
+      // TODO: Activity Registration
+      
       //
       const addMetric = await prismadb.metric.create({
         data: {
           currentgroup,
-          currentNbrOfCollection,
+          currentNbrOfTripl,
+          currentDdcGroup
         }
       });
       return NextResponse.json(addMetric);
@@ -54,7 +48,7 @@ export async function POST(req: Request) {
 // UPDATE METRIC
 export async function PATCH(req: Request) {
   try {
-    const { currentgroup, currentNbrOfCollection } = await req.json();
+    const { currentgroup, currentNbrOfTripl, currentDdcGroup } = await req.json();
     const session = await auth();
 
     if (!session) {
@@ -65,20 +59,14 @@ export async function PATCH(req: Request) {
     //
     if(connectedUser?.role === "ADMIN") // mettre admin en prod
     {
-     // Activity Registration
-      await prismadb.activity.create({
-        data: {
-          usercodepin: connectedUser?.usercodepin, // Int
-          activity:  "update de currentGroup ou currentNbrOfCollection" , // String
-          concerned: "Admin action"  , // Json?
-          action: "nouveau currentGroup: " + currentgroup + " et currentNbrOfCollection " + currentNbrOfCollection // Json?
-        }
-      })
+      // TODO: Activity Registration
+      
       //
       const updatedMetric = await prismadb.metric.updateMany({
         data: {
           currentgroup,
-          currentNbrOfCollection,
+          currentNbrOfTripl,
+          currentDdcGroup
         }
       });
       return NextResponse.json(updatedMetric);

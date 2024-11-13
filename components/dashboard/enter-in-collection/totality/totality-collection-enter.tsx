@@ -12,9 +12,10 @@ export async function TotalityCollectionEnter() {
   // 
   return(
     <Card className='bg-white shadow-slate-300 shadow-lg p-4'>
-      <p className='text-center mb-5 font-semibold text-slate-800 text-md lg:text-lg'>
+      <p className='text-center mb-5 font-semibold text-slate-800 text-md lg:text-lg'>Collectes Totality à venir ...</p>
+      {/* <p className='text-center mb-5 font-semibold text-slate-800 text-md lg:text-lg'>
         Participer à une collecte Totality
-      </p>
+      </p> */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">  
       {   
           amounts.map((amount:any) => (
@@ -25,9 +26,10 @@ export async function TotalityCollectionEnter() {
                 {
                   // si le credi exist et s'il est >= au montant choisi
                   connected && connected?.credit >= amount?.amount ? (
-                    <Link href={`/dashboard/totolity/enter-totality-confirm/${amount?.id}`}>
+                  /*  <Link href={`/dashboard/totolity/enter-totality-confirm/${amount?.id}`}>
                       <Button variant="blue" className=" w-full">{amount?.amount}€</Button>
-                    </Link>
+                    </Link> */
+                    <Button variant="blue" className=" w-full">{amount?.amount}€</Button>
                   ):(
                       <Button disabled variant="blue">{amount?.amount}€</Button>
                     )

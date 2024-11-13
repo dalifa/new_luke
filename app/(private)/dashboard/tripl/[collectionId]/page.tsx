@@ -17,8 +17,8 @@ const Collection = async ({
   // collectionId = le nom du fichier s'il est différent, ça ne marche pas 
   params: { collectionId: string }
 }) => {
+  // le connecté
   const connectedProfile = await currentUserInfos()
-
   // on selecte la collecte selon l'id params et tous les participants
   const collectionParams = await prismadb.collection.findFirst({
     where: { id: params.collectionId },
@@ -49,7 +49,7 @@ const Collection = async ({
   const recipientFirstName:any = await prismadb.profile.findFirst({
     where: { googleEmail: myRecipient?.recipientEmail }
   })
-  //
+  // 
   const maxLength = 65 // max de caractères pour le projet
   // nombre de ceux qui ont déjà donné
   const hasGiveCount = await prismadb.collectionParticipant.count({
@@ -115,7 +115,7 @@ const Collection = async ({
                                   )
                                 }
                               </p>
-                              <p>
+                              <p> 
                                 {
                                   hasGiveCount < collectionParams?.group && (
                                     <MyProjectForm collectionId={params?.collectionId}/>

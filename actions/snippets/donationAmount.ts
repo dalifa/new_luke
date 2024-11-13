@@ -87,7 +87,13 @@ import { redirect } from "next/navigation";
         currency : amountConcerned?.currency,
         collectionType: collectionData?.collection?.collectionType,
         recipientEmail : recipientProfile?.profile?.googleEmail,
-        donationReceived: 1
+      }
+    })
+    // on compte le nombre de fois qu'il est recipient dans cette collecte
+    const recipientNbr = await prismadb.collectionResult.count({
+      where:{
+        collectionId: collectionData?.collection?.id,
+        recipientEmail: recipientProfile?.profile?.googleEmail
       }
     })
     // update de donationReceived à 2 
@@ -98,10 +104,8 @@ import { redirect } from "next/navigation";
         currency : amountConcerned?.currency, // mis exprès mais le connectionId aurait suffit
         collectionType: collectionData?.collection?.collectionType, // mis exprès mais le connectionId aurait suffit
         recipientEmail : recipientProfile?.profile?.googleEmail,
-        
-        donationReceived: 1
       },
-      data: { donationReceived: 2 }
+      data: { donationReceived: recipientNbr }
     })
   }
   // On update collectionParticipant on met hasgive du connected à true 
@@ -118,9 +122,16 @@ import { redirect } from "next/navigation";
   {
     const metCount = await prismadb.profilesMet.count({
       where: {
-        profileId: connectedProfile?.id,
-        participantMetId: recipientProfile?.profile?.id
-        // TODO: METTRE AUSSI LE CONTRAIRE 
+        OR: [
+          {
+            profileId: connectedProfile?.id,
+            participantMetId: recipientProfile?.profile?.id 
+          },
+          {
+            profileId: recipientProfile?.profile?.id,
+            participantMetId: connectedProfile?.id 
+          },
+        ]
       }
     })
     if(metCount < 1)

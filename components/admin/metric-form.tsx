@@ -18,20 +18,22 @@ import {
   FormLabel,
   FormMessage
 } from "@/components/ui/form";
-
+//
 const formSchema = z.object({
   currentgroup: z.coerce.number().min(1, {
     message: "current Group."
   }),
-  currentNbrOfCollection: z.coerce.number().min(1, {
+  currentNbrOfTripl: z.coerce.number().min(1, {
     message: "current nbre of collection"
   }),
+  currentDdcGroup: z.coerce.number().min(1, {
+    message: "current nbre of group"
+  }),
 });
-
+//
 type MetricFormValues = z.infer<typeof formSchema>
 
 interface MetricProps{
-  //
   initialData: Metric | null,
 }
 
@@ -47,14 +49,16 @@ export const MetricForm : React.FC <MetricProps> = ({
     ...initialData,
   } : {
     currentgroup: 0,
-    currentNbrOfCollection: 0,
+    currentNbrOfTripl: 0,
+    currentDdcGroup: 0
   }
 
   const form = useForm<MetricFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
       currentgroup: 0,
-      currentNbrOfCollection: 0,
+      currentNbrOfTripl: 0,
+      currentDdcGroup: 0
     } 
   });
 
@@ -116,10 +120,28 @@ export const MetricForm : React.FC <MetricProps> = ({
               {/* current nbre of collection */}
               <FormField
                 control={form.control}
-                name="currentNbrOfCollection"
+                name="currentNbrOfTripl"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nbr of collections</FormLabel>
+                    <FormLabel>Nbr of Tripl</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={isLoading}
+                        className="bg-blue-100/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
+                        placeholder="current nbr of collection"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="currentDdcGroup"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Ddc current group</FormLabel>
                     <FormControl>
                       <Input
                         disabled={isLoading}

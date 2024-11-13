@@ -37,119 +37,107 @@ export async function Counters() {
     })
     //
     return (
-        <Card className='bg-white shadow-blue-200 shadow-lg p-4 flex items-center flex-col gap-2'>
-            <p className='text-center mb-2 text-slate-600 font-semibold text-md lg:text-lg'>
-                Vos compteurs
+      <Card className='bg-white shadow-blue-200 shadow-lg p-4'>
+        <p className='text-center mb-5 font-semibold text-slate-500 text-md lg:text-lg'>
+          Vos compteurs
+        </p>
+        <hr className='w-full mb-2'/>
+        {/*PIN = Personal Indentification Number*/}
+        <div className=' grid grid-cols-1 gap-4 bg-white'>
+          <div className="flex flex-row items-center justify-between text-slate-500">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <p className='mb-2 text-slate-500 font-medium text-sm lg:text-md cursor-pointer'>Code PIN:</p>
+                </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Personal Identification Number</p>
+                  </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <p className="text-blue-800 font-semibold">{connectedUser?.usercodepin}</p>
+          </div>
+          <div className="w-full flex flex-row items-center justify-between text-slate-500 text-sm font-medium">
+            <p className="text-slate-500">Crédit:  
+              {
+                connectedUser?.credit && connectedUser.credit > 0 ? (
+                  <span className="text-green-800 font-semibold"> {connectedUser?.credit}{connectedUser?.currency}</span>
+                ):(
+                    <span className="text-slate-500"> 00{connectedUser?.currency}</span>
+                  )
+              }
             </p>
-            
-            {/*PIN = Personal Indentification Number*/}
-            <div className="flex w-full mb-2 items-center flex-row justify-between">
-                <div>
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <p className='mb-2 text-slate-600 font-medium text-sm lg:text-md cursor-pointer'>Code PIN:</p>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>Personal Identification Number</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-
-                </div>
-                <div className="">
-                    <p className="text-blue-800 font-semibold">{connectedUser?.usercodepin}</p>
-                </div>
-            </div>
-            {/* credit et cagnotte*/}
-            <div className="w-full flex mb-4 flex-row items-center justify-between text-slate-600 text-sm font-medium">
-                <p className="text-slate-600">Crédit:  
-                    {
-                        connectedUser?.credit && connectedUser.credit > 0 ? (
-                            <span className="text-green-800 font-semibold"> {connectedUser?.credit}{connectedUser?.currency}</span>
-                        ):(
-                            <span className="text-slate-600"> 00{connectedUser?.currency}</span>
-                        )
-                    }
-                    </p>
-                    {/* ################## CAGNOTTE ##################### */}
-                    <p className="text-slate-600">Cagnotte:  
-                    {/* cagnotte > 0 */}
-                    {
-                        connectedUser && connectedUser?.jackpot > 0 && (
-                            <span className="text-green-800 font-semibold">&nbsp;{connectedUser?.jackpot}</span>
-                                    
-                        )
-                    }
-                    {/* cagnotte = 0 et centimes = 0 */}
-                    {
-                        connectedUser && connectedUser?.jackpot == 0 && connectedUser.jackpotCents == 0 && (
-                            <span className="text-green-800 font-semibold">&nbsp;00</span>            
-                        )
-                    }
-                    {/* cagnotte = 0 et centimes > 0 */}
-                    {
-                        connectedUser && connectedUser?.jackpot < 1 && connectedUser.jackpotCents > 0 && (
-                            <span className="text-green-800 font-semibold">&nbsp;0</span>
-                                    
-                        )
-                    }
-                    {/* ################# CENTIMES #################### */}
-                    {/* QUANT LES CENTIMES SONT >= A 10 CTS*/}
-                    {
-                        connectedUser && connectedUser.jackpotCents >= 10 && (
-                            <span className="text-green-800 font-semibold"> 
-                                ,{connectedUser?.jackpotCents}
-                            </span>
-                                        
-                        ) 
-                    }
-                    {/* QUAND LES CENTIMES SONT DE 01 A 09 CTS */}
-                    {
-                        connectedUser && connectedUser.jackpotCents >= 1 && connectedUser.jackpotCents < 10 && (
-                            <span className="text-green-800 font-semibold"> 
-                                ,0{connectedUser?.jackpotCents}
-                            </span>
-                                        
-                        )
-                          
-                    }
-                    {/* QUAND LES CENTIMES SONT == 0 CTS */}
-                    {
-                        connectedUser && connectedUser.jackpotCents < 1 && (
-                            "" // on n'affiche rien             
-                        )
-                          
-                    }
-                    {/* ###################### CURRENCY #####################*/}
-                    {/* cagnotte > 0 et centimes > 0*/}
-                    {
-                        connectedUser && connectedUser.jackpot > 0 && connectedUser.jackpotCents > 0 && (
-                        <span className="text-green-800">{connectedUser.currency}</span>
-                        )
-                    }
-                    {/* cagnotte = 0 et centimes > 0 */}
-                    {
-                        connectedUser && connectedUser.jackpot < 1 && connectedUser.jackpotCents > 0 && (
-                        <span className="text-green-800">{connectedUser.currency}</span>
-                        )
-                    }
-                    {/* cagnotte > 0 et centimes < 1 */}
-                    {
-                        connectedUser && connectedUser.jackpot > 0 && connectedUser.jackpotCents < 1 && (
-                        <span className="text-green-800">{connectedUser.currency}</span>
-                        )
-                    }
-                    {/* cagnotte < 1 et centimes < 1 */}
-                    {
-                        connectedUser && connectedUser.jackpot < 1 && connectedUser.jackpotCents < 1 && (
-                        <span className="text-slate-600">{connectedUser.currency}</span>
-                        )
-                    }
-                    </p>
-            </div>
-            {/* dernier don fait et dernière cagnotte reçu */}
-            <div className='w-full flex flex-col text-slate-600 text-sm font-medium mb-4 gap-y-2'> 
+            <p className="text-slate-500">Cagnotte:  
+              {/* cagnotte > 0 */}
+              {
+                connectedUser && connectedUser?.jackpot > 0 && (
+                  <span className="text-green-800 font-semibold">&nbsp;{connectedUser?.jackpot}</span>
+                )
+              }
+              {/* cagnotte = 0 et centimes = 0 */}
+              {
+                connectedUser && connectedUser?.jackpot == 0 && connectedUser.jackpotCents == 0 && (
+                  <span className="text-green-800 font-semibold">&nbsp;00</span>            
+                )
+              }
+              {/* cagnotte = 0 et centimes > 0 */}
+              {
+                connectedUser && connectedUser?.jackpot < 1 && connectedUser.jackpotCents > 0 && (
+                  <span className="text-green-800 font-semibold">&nbsp;0</span>
+                )
+              }
+              {/* ################# CENTIMES #################### */}
+              {/* QUANT LES CENTIMES SONT >= A 10 CTS*/}
+              {
+                connectedUser && connectedUser.jackpotCents >= 10 && (
+                  <span className="text-green-800 font-semibold"> 
+                    ,{connectedUser?.jackpotCents}
+                  </span>
+                ) 
+              }
+              {/* QUAND LES CENTIMES SONT DE 01 A 09 CTS */}
+              {
+                connectedUser && connectedUser.jackpotCents >= 1 && connectedUser.jackpotCents < 10 && (
+                  <span className="text-green-800 font-semibold"> 
+                    ,0{connectedUser?.jackpotCents}
+                  </span>
+                )
+              }
+              {/* QUAND LES CENTIMES SONT == 0 CTS */}
+              {
+                connectedUser && connectedUser.jackpotCents < 1 && (
+                  "" // on n'affiche rien             
+                )
+              }
+              {/* ###################### CURRENCY #####################*/}
+              {/* cagnotte > 0 et centimes > 0*/}
+              {
+                connectedUser && connectedUser.jackpot > 0 && connectedUser.jackpotCents > 0 && (
+                  <span className="text-green-800">{connectedUser.currency}</span>
+                )
+              }
+              {/* cagnotte = 0 et centimes > 0 */}
+              {
+                connectedUser && connectedUser.jackpot < 1 && connectedUser.jackpotCents > 0 && (
+                  <span className="text-green-800">{connectedUser.currency}</span>
+                )
+              }
+              {/* cagnotte > 0 et centimes < 1 */}
+              {
+                connectedUser && connectedUser.jackpot > 0 && connectedUser.jackpotCents < 1 && (
+                  <span className="text-green-800">{connectedUser.currency}</span>
+                )
+              }
+              {/* cagnotte < 1 et centimes < 1 */}
+              {
+                connectedUser && connectedUser.jackpot < 1 && connectedUser.jackpotCents < 1 && (
+                  <span className="text-slate-600">{connectedUser.currency}</span>
+                )
+              }
+            </p>
+          </div>
+          {/* dernier don fait et dernière cagnotte reçu */}
+            <div className='w-full flex flex-col text-slate-500 text-sm font-medium mb-4 gap-y-2'> 
                 {
                     lastDonation && (
                         <div className="flex flex-row justify-between w-full">
@@ -182,7 +170,7 @@ export async function Counters() {
                 }
             </div>
             {/* code de demande de transfert */}
-            <div className="w-full flex flex-col text-slate-600 text-sm font-medium">
+            <div className="w-full flex flex-col text-slate-500 text-sm font-medium">
                 {
                     transferCodes.map((transferCode) => (
                         <div key={transferCode.id} className="flex flex-col w-full mb-2">
@@ -199,6 +187,7 @@ export async function Counters() {
                     ))
                 }
             </div>
-        </Card>
+        </div>
+      </Card>
     )
 }

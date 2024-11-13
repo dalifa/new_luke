@@ -244,12 +244,12 @@ export const CollectionsInProgress = async () => {
           </p>
         )
       }
-      {/**/}
-    {
+      {/*
+      {
         snippetsCount === 0 && (
           <p>Aucune collecte Snippets en cours ...</p>
         )
-      }
+      } */}
       {
         twoOpenSnippetsCount > 0 && (
           <p>
@@ -309,11 +309,11 @@ export const CollectionsInProgress = async () => {
           </p>
         )
       }
-      {
+      {/* {
         totalityCount === 0 && (
           <p>Aucune collecte Totality en cours ...</p>
         )
-      }
+      } */}
       {/* ######## totality ######## */}
       {
         twoOpenTotalityCount > 0 && (

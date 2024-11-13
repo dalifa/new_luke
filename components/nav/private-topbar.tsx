@@ -1,10 +1,11 @@
-import { currentUserInfos } from "@/hooks/own-current-user"
+import { capitalize, currentUserInfos } from "@/hooks/own-current-user"
 import BackButton from "./backButton"
 import { PrivateSheet } from "./private-sheet"
 import Link from "next/link"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { CircleUserRound, ShieldEllipsis } from "lucide-react"
 import { auth } from "@/auth"
+import { prismadb } from "@/lib/prismadb"
 
 export async function PrivateTopbar() {
   const session = await auth()
@@ -19,6 +20,7 @@ export async function PrivateTopbar() {
         <p>LUKE 6:38</p>
       </div>
       <div className="flex flex-row items-center gap-2">
+        <p>{connected && (capitalize(connected?.username)) }</p>
         { session && (
           <Link href={"/dashboard/profil"}>
             <Avatar className='h-7 w-7 border-white border-2'>
@@ -29,13 +31,13 @@ export async function PrivateTopbar() {
             </Avatar>
           </Link>
         )}
-        {
-          connected?.role === "ADMIN" && (
+        {/* {  
+        // enlever User en Prod
+          connected?.role === "ADMIN" || connected?.role === "USER" && ( */}
             <Link href={"/dashboard/admin"}>
               <ShieldEllipsis/>
             </Link>
-          )
-        }
+        {/*  )}  */}
         <PrivateSheet/>
       </div>
     </div>

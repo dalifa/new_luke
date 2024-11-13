@@ -1,6 +1,6 @@
 import { auth } from '@/auth';
 import { Card } from '@/components/ui/card';
-import { currentUserInfos } from '@/hooks/own-current-user';
+import { capitalize, currentUserInfos } from '@/hooks/own-current-user';
 import { prismadb } from '@/lib/prismadb';
 import Link from 'next/link';
 // pour forma date
@@ -10,13 +10,15 @@ const DATE_FORMAT = "d MMM yyyy"
 
 const History = async () => {
     const connectedProfile = await currentUserInfos()
-    const myClosedCollections = await prismadb.collection.findMany({
+    const myClosedCollections = await prismadb.collectionParticipant.findMany({
         take: 20, // 50
         where: { 
-            usercodepin: connectedProfile?.usercodepin,
-            isCollectionClosed: true
+          profileId: connectedProfile?.id,
         },
-        orderBy: { ownId: "desc"}
+        include: {
+          collection: true
+        },
+        orderBy: { id: "desc"}
     })
     return (
       <div className='h-full flex items-center justify-center flex-col pt-10 px-5  gap-5 bg-white'>
@@ -28,16 +30,42 @@ const History = async () => {
         <div className='w-full grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4'>
           {
             myClosedCollections.map((myClosedCollection) => (
-              <Link href={`/dashboard/historique/${myClosedCollection.id}`} key={myClosedCollection.id}>
-                <Card className='flex items-center flex-col shadow-lg shadow-blue-100 p-4 text-center gap-y-2'>
-                  
-                  <p className='text-sm lg:text-md font-medium text-slate-600'>{myClosedCollection?.collectionType} n°: {myClosedCollection.ownId}</p>
-                  <p className='text-sm lg:text-md font-medium text-slate-600'>
-                    De: { myClosedCollection.amount}{myClosedCollection.currency}
-                  </p>
-                  <p className='text-xs text-gray-500'>Du: {format(new Date(myClosedCollection.createdAt), DATE_FORMAT)}</p>
-                </Card>
-              </Link>
+              <>
+              {
+                myClosedCollection?.collection?.isCollectionClosed === true && (
+                  <Link href={`/dashboard/historique/${myClosedCollection.id}`} key={myClosedCollection.id}>
+                    <Card className='flex items-center flex-col shadow-lg shadow-blue-100 p-4 text-center gap-y-2'>
+                      {myClosedCollection?.collection?.collectionType === "tripl" && (
+                        <p className='text-sm lg:text-md font-medium text-red-600'>{capitalize(myClosedCollection?.collection?.collectionType)}</p>
+                      )}
+                      {myClosedCollection?.collection?.collectionType === "snippets" && (
+                        <p className='text-sm lg:text-md font-medium text-violet-600'>{capitalize(myClosedCollection?.collection?.collectionType)}</p>
+                      )}
+                      {myClosedCollection?.collection?.collectionType === "totality" && (
+                        <p className='text-sm lg:text-md font-medium text-blue-600'>{capitalize(myClosedCollection?.collection?.collectionType)}</p>
+                      )}
+                      {/* le montant */}
+                      {myClosedCollection?.collection?.collectionType === "tripl" && (
+                        <p className='text-sm lg:text-md font-medium text-red-600'>
+                          De: {myClosedCollection?.collection?.amount}{myClosedCollection?.collection?.currency}
+                        </p>
+                      )}
+                      {myClosedCollection?.collection?.collectionType === "snippets" && (
+                        <p className='text-sm lg:text-md font-medium text-violet-600'>
+                          De: {myClosedCollection?.collection?.amount}{myClosedCollection?.collection?.currency}
+                        </p>
+                      )}
+                      {myClosedCollection?.collection?.collectionType === "totality" && (
+                        <p className='text-sm lg:text-md font-medium text-blue-600'>
+                          De: {myClosedCollection?.collection?.amount}{myClosedCollection?.collection?.currency}
+                        </p>
+                      )}
+                      <p className='text-xs text-gray-500'>Du: {format(new Date(myClosedCollection?.createdAt), DATE_FORMAT)}</p>
+                    </Card>
+                  </Link>
+                )
+              }
+              </>
             ))
           }
         </div>

@@ -68,7 +68,7 @@ model Profile {
   jackpotCents         Int      @default(0) // en cents x 100
   //
   username             String 
-  phone                String 
+  phone                String   @unique
   firstname            String    
   lastname             String    
   city                 String    
@@ -77,6 +77,10 @@ model Profile {
   bio                  String    
   // lorsqu'il choisira son pays, on lui mettra ici son currency correspondant
   currency             String   @default("nothing")
+  // total de ddc donné
+  ddcGiven             Int      @default(0)
+  ddcReceived          Int      @default(0)
+  // 
   //
   role                 UserRole @default(USER)
   isPartner            Boolean  @default(false)
@@ -87,6 +91,7 @@ model Profile {
   // ce que le partenaire peut remettre à un user qui recupère sa cagnotte
   partnerCreditToRemit Int      @default(0)
   //
+  validatorId          String   @default("aucun")
   isActiveAccount      Boolean  @default(true)
   //
   collectionParticipants    CollectionParticipant[]
@@ -107,11 +112,13 @@ model Collection {
   amount             Int
   currency           String     @default("€")
   collectionType     String     @default("totality")
-  group              Int        @default(3)
+  group              Int        @default(1)
   groupStatus        Int        @default(0)
   isGroupComplete    Boolean    @default(false)
   // la collecte est cloturé ?
   isCollectionClosed Boolean    @default(false)
+  // les combien de don ont été déjà fait. s'ils sont === à group ont met isCollectionClosed à true
+  donationCollected  Int        @default(0)
   // les participants
   collectionParticipants         CollectionParticipant[]
   //
@@ -121,14 +128,19 @@ model Collection {
 // ceux qui participe a la collecte
 model CollectionParticipant {
   id                 String      @id @default(auto()) @map("_id") @db.ObjectId
+  // id de la collecte soit tripl, snippets, totality ou ddc
   collectionId       String      @db.ObjectId
   collection         Collection  @relation(fields: [collectionId], references: [id])
+  // celui à qui on peut donner
   profileId          String      @db.ObjectId
   profile            Profile     @relation(fields: [profileId], references: [id])
+  // son rang parmi le participants à cette collecte
   rank               Int
+  // le projet qu'il souhaite faire financer
   project            String      @default("Non renseigné") 
-  //
+  // a renoncé à recevoir
   isOnlyDonator      Boolean     @default(false)
+  // si lui même a donné (uniquement pour tripl, snippets, totality)
   hasGive            Boolean     @default(false) // le participant a t-il donné ?
   //
   createdAt          DateTime    @default(now())
@@ -160,11 +172,15 @@ model CollectionResult {
 }
 // les profiles met
 model ProfilesMet {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  profileId         String  @db.ObjectId
-  profile           Profile @relation("profilesMet", fields: [profileId], references: [id])
-  participantMetId  String  @db.ObjectId
-  participantMet    Profile @relation("metProfiles", fields: [participantMetId], references: [id])
+  id                  String  @id @default(auto()) @map("_id") @db.ObjectId
+  profileId           String  @db.ObjectId
+  profile             Profile @relation("profilesMet", fields: [profileId], references: [id])
+  // 4 test
+  profilecodepin      Int
+  participantMetId    String  @db.ObjectId
+  participantMet      Profile @relation("metProfiles", fields: [participantMetId], references: [id])
+  // 4 test
+  participantcodepin  Int     
   @@unique([profileId, participantMetId])
 }
 //
@@ -182,10 +198,8 @@ model TransferDemand {
 //
 model Activity {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  usercodepin    Int      @default(1000)
-  activity       Json
-  concerned      Json?
-  action         Json?
+  author         Json?
+  activity       Json?
   createdAt      DateTime @default(now())
 }
 //
@@ -220,7 +234,7 @@ model Commission {
   //
   createdAt      DateTime   @default(now())
 }
-// taux de commission en %
+// taux de commission en %npx prisma generate
 model CommissionRate {
   id             String  @id @default(auto()) @map("_id") @db.ObjectId
   rate           Int     @default(1)
@@ -255,12 +269,16 @@ model Metric {
   cgs                  Int  @default(3) // Current Group Snippets
   nois                 Int  @default(1) // Next Own Id Snippets
   noos                 Int  @default(1) // Number Of Open Snippets
-  //
-  nextProfileForTests  String @default("aucun")
+  // Direct donation challenge
+  currentDdcGroup      Int  @default(1)
+  // total of ddc on site
+  totalDdcGiven        Int  @default(0)
 }
-//
+// Only For Tests
 model CurrentProfileForTest {
   id                   String  @id @default(auto()) @map("_id") @db.ObjectId
-  profileTestId        String
-  username             String
+  profileTestId        String?
+  usercodepin          Int
+  lastProfile          Int?
 }
+//
