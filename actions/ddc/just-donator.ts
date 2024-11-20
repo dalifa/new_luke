@@ -3,7 +3,6 @@
 import { currentUserInfos } from "@/hooks/own-current-user";
 import { prismadb } from "@/lib/prismadb";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 export const justDonator = async (collectionId: string) => {
   const connected = await currentUserInfos()

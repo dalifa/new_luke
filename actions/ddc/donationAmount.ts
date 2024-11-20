@@ -209,14 +209,7 @@ import { redirect } from "next/navigation";
               }
             })
           }
-          // ### CECI EST PROVISOIR PARCEQUE GROUP = 1
-        /*  await prismadb.collection.updateMany({
-            where: {
-              id: justCreatedCollection?.id
-            },
-            data: { isGroupComplete: true }
-          }) */
-          // ### fin du provisoir ####################
+          //
         } 
         // s'il y en a une d'ouvert
         if( anotherCollectionExist === 1 && collectionData?.collection)
