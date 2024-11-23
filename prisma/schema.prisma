@@ -114,6 +114,8 @@ model Collection {
   collectionType     String     @default("totality")
   group              Int        @default(1)
   groupStatus        Int        @default(0)
+  // permet d'updater le group
+  groupPlus          Int        @default(0)
   isGroupComplete    Boolean    @default(false)
   // la collecte est cloturé ?
   isCollectionClosed Boolean    @default(false)

@@ -178,13 +178,10 @@ export const CollectionsInProgress = async () => {
       <p className='text-center mb-5 font-semibold text-slate-600 text-md lg:text-lg'>
         Collectes en cours
       </p>
+      <hr className='w-full mb-2'/>
       <div className='bg-white z-10 flex items-center flex-col w-full text-slate-600 space-y-3'>
-        {
-          triplCount === 0 && (
-            <p>Aucune collecte tripl en cours ...</p>
-          )
-        }
-        {/* ######## totality ######## */}
+       {/*  { triplCount === 0 && ( <p>Aucune collecte tripl en cours ...</p> )}  */}
+        {/* ######## tripl ######## */}
       {
         twoOpenTriplCount > 0 && (
           <p>

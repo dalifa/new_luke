@@ -5,20 +5,20 @@ import { prismadb } from "@/lib/prismadb";
 import { revalidatePath } from "next/cache";  
 import { redirect } from "next/navigation"; 
 
-// 4 test
-
 // à la place de params je peux mettre id (qui représente id du fichier donationId) 
   export async function donationAmountAction(params: string) {
     const metric = await prismadb.metric.findFirst()
   // params c'est l'id du recipient choisi (son id dans la table collecteParticipant)  
   // le donator = le connecté
   //const connected = await currentUserInfos()
-  // 4 tests
+  //#### 4 tests
   const current = await prismadb.currentProfileForTest.findFirst()
   //
   const connected = await prismadb.profile.findFirst({
     where: { usercodepin: current?.usercodepin }
   })
+  // fin 4 test ########
+
   // recipient
   const recipient = await prismadb.collectionParticipant.findFirst({
     where: { id: params },
@@ -73,13 +73,13 @@ import { redirect } from "next/navigation";
           donationCollected: collectionData?.collection?.donationCollected + 1
         }
       })
-      // on vérifie si le nombre de donation reçu = group 
+      // on vérifie si le nombre de donation reçu = groupPlus 
       const donationCollectedCount = await prismadb.collection.findFirst({
         where: {
           id: collectionData?.collection?.id
         },
-      }) // on close la collecte si le nbre de don = group
-      if(donationCollectedCount?.donationCollected === donationCollectedCount?.group)
+      }) // on close la collecte si le nbre de don = groupPlus  // TRES IMPORT 
+      if(donationCollectedCount?.donationCollected === donationCollectedCount?.groupPlus)
       {
         await prismadb.collection.updateMany({
           where: {
@@ -120,6 +120,7 @@ import { redirect } from "next/navigation";
         await prismadb.collectionResult.create({
           data: {
             donatorEmail: connected?.googleEmail,
+            donatorProfileId: connected?.id,
             collectionId: collectionData?.collection?.id,
             amount : collectionData?.collection?.amount,
             currency : collectionData?.collection?.currency,
@@ -182,6 +183,7 @@ import { redirect } from "next/navigation";
               amount: collectionData?.collection?.amount,
               collectionType: collectionData?.collection?.collectionType,
               group: metric?.currentDdcGroup,
+              groupPlus: metric?.currentDdcGroup,
               groupStatus: 1
             }
           })

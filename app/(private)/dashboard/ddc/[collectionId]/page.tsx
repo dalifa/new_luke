@@ -59,12 +59,12 @@ const Collection = async ({
       isOnlyDonator: true
     }
   })
-  // le nbre de ceux à qui le connecté a donné
+  /* le nbre de ceux à qui le connecté a donné
   const myreceiversCount = await prismadb.profilesMet.count({
     where: {
       profileId: connected?.id,
     }
-  })
+  }) */
   // COMPARISON
   const { myreceivers, ddcParticipants } = await comparison(params.collectionId);
   const receiverIds = new Set(myreceivers.map((receiver) => receiver?.participantMetId));
@@ -204,11 +204,19 @@ const Collection = async ({
                                             Ancien donataire <HeartHandshake className="h-5 w-5 cursor-pointer ml-2"/>
                                           </Button>
                                         ):(
-                                          <Link href={`/dashboard/ddc/${params.collectionId}/${participant.id}`}>
-                                            <Button variant={"violet"} className='rounded-md text-white'>    
-                                              Donner avec joie <GrMoney className="h-5 w-5 cursor-pointer ml-2"/>
-                                            </Button>
-                                          </Link>
+                                          <>
+                                          {
+                                            currentDdc?.group === currentDdc?.groupStatus ? (
+                                              <Link href={`/dashboard/ddc/${params.collectionId}/${participant.id}`}>
+                                                <Button variant={"violet"} className='rounded-md text-white'>    
+                                                  Donner avec joie <GrMoney className="h-5 w-5 cursor-pointer ml-2"/>
+                                                </Button>
+                                              </Link>
+                                            ):(
+                                              <>{currentDdc && (<p className='text-slate-500 text-sm'>En construction ...</p>)}</>
+                                            )
+                                          }
+                                          </>
                                         )
                                       }
                                       </>

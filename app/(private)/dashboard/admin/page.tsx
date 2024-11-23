@@ -35,15 +35,15 @@ const Admin = async () => {
                     }
                 </div>
                 <ReactivateAccount/>
+                <Metric/>
+                <AddCountry/>
+                <EnterAmount/>
                 <UnactivateAccount/>
                 <MakePartner/>
                 <RateCommission/>
                 <DontMakePartner/>
                 <UpdatePartnerCredit/>
                 <MaxPartnerCredit/>
-                <Metric/>
-                <AddCountry/>
-                <EnterAmount/>
                 <EnterCents/>
                 <IncreaseCredit/>
                 

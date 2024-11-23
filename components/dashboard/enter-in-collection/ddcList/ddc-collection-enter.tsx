@@ -7,29 +7,25 @@ import { Button } from "@/components/ui/button";
 export async function DdcListEnter() {
   //   
   //const connected = await currentUserInfos()
-  // 4 tests
+  //### 4 tests
   const current = await prismadb.currentProfileForTest.findFirst()
   //
   const connected = await prismadb.profile.findFirst({
     where: { usercodepin: current?.usercodepin }
-  })
+  })  //### fin 4 test 
   // on select tous les montants
   const amounts:any = await prismadb.amount.findMany()
+  // 
+  const metric = await prismadb.metric.findFirst()
   // les ddc de différents montants en cours
   const openDdcs = await prismadb.collection.findMany({
-    //take: 1, // 4 test
     where: {
       collectionType: "ddc",
       isGroupComplete: true,
+      groupPlus: metric?.currentDdcGroup,
       isCollectionClosed: false
     },
-    include: {
-      collectionParticipants: {
-        where: {
-          profileId: { not: connected?.id}
-        }
-      }
-    }
+    include: { collectionParticipants: true }
   })
   //  
   return(

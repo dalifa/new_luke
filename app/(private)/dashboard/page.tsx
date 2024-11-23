@@ -102,10 +102,10 @@ const Dashboard = async () => {
             <Counters/> 
           {/* collectes en cours sur le site 
             <CollectionsInProgress/> */}
-          {/* #### DIRECT DONATION CHALLENGE #### */} 
+          {/* #### DIRECT DONATION CHALLENGE ####  */}
             <DonationChallengeStats/>
             <DdcListEnter/>
-            <MyOpenDdc/>
+            <MyOpenDdc/>  
           {/* #### FIN DDC LIST ###*/}
           {/* pour entrer dans un tripl 
             <TriplCollectionEnter/>
@@ -163,8 +163,8 @@ const Dashboard = async () => {
             }    
           </Card>  */}
 
-          {/* TOTALITY 
-          <TotalityCollectionEnter/> 
+          {/* TOTALITY * /}
+          <TotalityCollectionEnter/> */}
           {/* ******* * /}
           <Card className='bg-white shadow-slate-300 shadow-lg p-4'>
             <p className='text-center mb-3 font-semibold text-slate-800 text-md lg:text-lg'>
@@ -181,20 +181,18 @@ const Dashboard = async () => {
                 <div className='grid grid-cols-2'>
                   {
                     myAllOpenTotalities.map((myOpenTotality) => (
-                    /*  <Link key={myOpenTotality.id} href={`/dashboard/totality/${myOpenTotality.id}`}>
+                      <Link key={myOpenTotality.id} href={`/dashboard/totality/${myOpenTotality.id}`}>
                         <div className='text-md rounded-md bg-green-500 p-2 m-2 text-white text-center'>
                           <p className='font-semibold'>Totality de {myOpenTotality?.amount}€</p>
                         </div>
-                      </Link> * /
-                      <div className='text-md rounded-md bg-green-500 p-2 m-2 text-white text-center'>
-                        <p className='font-semibold'>Totality de {myOpenTotality?.amount}€</p>
-                      </div>
+                      </Link>
                     ))
                   }
                 </div>
               )
             }   
           </Card>  */}
+          
         </div> 
       </div>
     </div>
