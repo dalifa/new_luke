@@ -3,7 +3,7 @@ import { Card } from '@/components/ui/card';
 import { prismadb } from '@/lib/prismadb';
 import BackCancel from '@/components/dashboard/action-in-collection/backCancelled'; 
 import { ConfirmGiveButton } from '@/components/dashboard/action-in-collection/confirm-give-button';
-import { donationAmountAction } from '@/actions/donation/donationAmount';
+import { donationAmountAction } from '@/actions/oneofus/donationAmount';
 import { capitalize, currentUserInfos } from '@/hooks/own-current-user';
 
 const Donation = async ({

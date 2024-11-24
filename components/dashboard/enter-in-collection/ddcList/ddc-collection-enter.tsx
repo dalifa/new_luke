@@ -40,9 +40,16 @@ export async function DdcListEnter() {
           <> 
           {
             ddc?.amount > 1 && (
-              <Link key={ddc?.id} href={`/dashboard/ddc/${ddc?.id}`}>
-                <Button variant="violet" className=" w-full">{ddc?.amount}€</Button>
-              </Link>
+              <>
+              { connected && connected?.credit >= ddc?.amount ? (
+                <Link key={ddc?.id} href={`/dashboard/ddc/${ddc?.id}`}>
+                  <Button variant="violet" className=" w-full">{ddc?.amount}€</Button>
+                </Link>
+              ):(
+                <Button disabled variant="violet" className=" w-full">{ddc?.amount}€</Button>
+              )
+              }
+              </>
             )
           }
           </>

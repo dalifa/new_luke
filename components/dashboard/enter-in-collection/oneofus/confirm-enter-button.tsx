@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { useFormStatus } from 'react-dom'
  
 // on cliquant l'action qui est dans form  est déclanchée. 
-export function ConfirmEnterTripl() {
+export function ConfirmEnterOneofusButton() {
   const { pending } = useFormStatus()
  
   return (

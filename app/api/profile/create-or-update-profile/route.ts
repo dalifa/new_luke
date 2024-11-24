@@ -44,10 +44,8 @@ export async function POST(req: Request) {
     // Activity Registration
     await prismadb.activity.create({
       data: {
-        usercodepin: (profileCount + 1000),   // en prod
-        activity:  "création de profile.", // String
-        concerned: "le concerné: " + session?.user?.email, // Json?
-        action: "Profil crée: " + username + " " + phone + " " + firstname + " " + lastname + " de " + city + ". Sa monnaie: " + chosenCountry?.currency  // Json?
+        author: "Création de profil de " + username + ".",
+        activity:  session?.user?.email + " - " + phone + " - " + city + ".", // Json?
       }
     })
     //

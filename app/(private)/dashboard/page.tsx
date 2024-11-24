@@ -6,8 +6,9 @@ import { Counters } from '@/components/dashboard/counters';
 import { DdcListEnter } from '@/components/dashboard/enter-in-collection/ddcList/ddc-collection-enter';
 import { DonationChallengeStats } from '@/components/dashboard/enter-in-collection/ddcList/donation-challenge-stats';
 import { MyOpenDdc } from '@/components/dashboard/enter-in-collection/ddcList/my-open-ddc';
+import { MyOpenOneofus } from '@/components/dashboard/enter-in-collection/oneofus/my-open-oneofus';
+import { OneofusEnter } from '@/components/dashboard/enter-in-collection/oneofus/oneofus-enter';
 import { SnippetsCollectionEnter } from '@/components/dashboard/enter-in-collection/snippets/snippets-collection-enter';
-import { TotalityCollectionEnter } from '@/components/dashboard/enter-in-collection/totality/totality-collection-enter';
 import { TriplCollectionEnter } from '@/components/dashboard/enter-in-collection/tripl/tripl-collection-enter';
 
 import { Card } from '@/components/ui/card';
@@ -100,12 +101,12 @@ const Dashboard = async () => {
         <div className='w-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5'>
           {/* crédit et cagnotte */}
             <Counters/> 
-          {/* collectes en cours sur le site 
-            <CollectionsInProgress/> */}
-          {/* #### DIRECT DONATION CHALLENGE ####  */}
+          {/* collectes en cours sur le site */}
+            <CollectionsInProgress/> 
+          {/* #### DIRECT DONATION CHALLENGE #### 
             <DonationChallengeStats/>
             <DdcListEnter/>
-            <MyOpenDdc/>  
+            <MyOpenDdc/>   */}
           {/* #### FIN DDC LIST ###*/}
           {/* pour entrer dans un tripl 
             <TriplCollectionEnter/>
@@ -163,35 +164,10 @@ const Dashboard = async () => {
             }    
           </Card>  */}
 
-          {/* TOTALITY * /}
-          <TotalityCollectionEnter/> */}
-          {/* ******* * /}
-          <Card className='bg-white shadow-slate-300 shadow-lg p-4'>
-            <p className='text-center mb-3 font-semibold text-slate-800 text-md lg:text-lg'>
-              Vos Collectes Totality
-            </p>
-            {/* my collections totality * /}
-            {
-              openTotalityExist === 0 && (
-                <p className='text-slate-600 text-center mt-10'>Vous n&apos;avez pas de collecte Totality en cours.</p>
-              )
-            }
-            {
-              myAllOpenTotalities && (
-                <div className='grid grid-cols-2'>
-                  {
-                    myAllOpenTotalities.map((myOpenTotality) => (
-                      <Link key={myOpenTotality.id} href={`/dashboard/totality/${myOpenTotality.id}`}>
-                        <div className='text-md rounded-md bg-green-500 p-2 m-2 text-white text-center'>
-                          <p className='font-semibold'>Totality de {myOpenTotality?.amount}€</p>
-                        </div>
-                      </Link>
-                    ))
-                  }
-                </div>
-              )
-            }   
-          </Card>  */}
+          {/* ONE OF US */}
+          <OneofusEnter/> 
+          {/* ******* */}
+          <MyOpenOneofus/>
           
         </div> 
       </div>
