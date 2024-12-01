@@ -15,6 +15,7 @@ export const MyOpenOneofus = async () => {
   const connected = await prismadb.profile.findFirst({
     where: { usercodepin: connectedtestor?.usercodepin}
   })
+  // ### FIN 4 TEST ###
   // my open One Of Us collections
   const myOneOfUs = await prismadb.collection.findMany({
     where: {

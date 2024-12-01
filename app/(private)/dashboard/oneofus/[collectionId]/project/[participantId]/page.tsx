@@ -2,7 +2,7 @@
 import { Card } from '@/components/ui/card';
 import { prismadb } from '@/lib/prismadb';
 import { currentUserInfos } from '@/hooks/own-current-user';
-import { MyProjectForm } from '@/components/dashboard/action-in-collection/myproject-form';
+import { MyOneofusProjectForm } from '@/components/dashboard/action-in-collection/oneofus/myproject-form';
 //
 const Project = async ({
   params
@@ -10,9 +10,9 @@ const Project = async ({
   // participantId = le nom du fichier s'il est différent, ça ne marche pas  
   params: { participantId: string } 
   }) => {
-    const connected = await currentUserInfos()
+    // const connected = await currentUserInfos() 
     // on selecte la collecte selon params
-    const concernedTotality = await prismadb.collection.findFirst({
+    const concernedCollection = await prismadb.collection.findFirst({
       where: { id: params.participantId } // ceci est l'id du connecté dans collection
     })
   //
@@ -23,8 +23,8 @@ const Project = async ({
           <p className='text-blue-500 text-lg md:text-xl font-semibold'>Projet à faire financer</p>
           <div className='flex flex-col gap-y-1 text-center text-md md:text-lg mb-2 py-5 text-slate-500'>
             <p className='text-sm'>Entrez le projet que vous souhaitez faire financer</p>
-            <p className='text-sm'>dans votre collecte Totality n° {concernedTotality?.ownId} de {concernedTotality?.amount}{concernedTotality?.currency}</p>
-            <MyProjectForm collectionId={params?.participantId}/>
+            <p className='text-sm'>dans votre collecte {concernedCollection?.collectionType} de {concernedCollection?.amount}{concernedCollection?.currency}</p>
+            <MyOneofusProjectForm collectionId={params?.participantId}/>
           </div>
         </Card> 
       </div>

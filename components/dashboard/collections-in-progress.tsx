@@ -172,6 +172,12 @@ export const CollectionsInProgress = async () => {
       collectionType: "totality"
     }
   })
+  // 4 TEST
+  const currentFakeProfile= await prismadb.currentProfileForTest.findFirst()
+  // fake profile infos
+  const fakeProfile = await prismadb.profile.findFirst({
+    where: { usercodepin: currentFakeProfile?.usercodepin}
+  })
   // 
   return (
     <Card className='bg-white shadow-slate-300 shadow-lg p-4'>
@@ -180,6 +186,11 @@ export const CollectionsInProgress = async () => {
       </p>
       <hr className='w-full mb-2'/>
       <div className='bg-white z-10 flex items-center flex-col w-full text-slate-600 space-y-3'>
+      {/* 4 TEST */}  
+      <p>current fake: {fakeProfile?.username} - {fakeProfile?.usercodepin}</p>
+      <p>credit: <span className="font-semibold text-green-600">{fakeProfile?.credit}</span>{fakeProfile?.currency}</p>
+      <p>jackpot: {fakeProfile?.jackpot}{fakeProfile?.currency}</p>
+      {/* AND 4 TEST*/}  
        {/*  { triplCount === 0 && ( <p>Aucune collecte tripl en cours ...</p> )}  */}
         {/* ######## tripl ######## */}
       {

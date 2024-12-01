@@ -29,16 +29,9 @@ export async function POST(req: Request) {
     //
     if(connectedUser?.role === "ADMIN") // mettre admin en prod
     {
-      // Activity Registration
-      await prismadb.activity.create({
-        data: {
-          usercodepin: connectedUser?.usercodepin, // Int auteur de l'activité
-          activity:  "ajoût d'une somme" , // String
-          concerned: "Admin action"  , // Json?
-          action: "admin a ajouté la somme de : " + amount + currency + " de rang " + rank   // Json?
-        }
-      })
-     //
+      // TODO: Activity Registration
+      
+      //
       const addAmount = await prismadb.amount.create({
         data: {
           amount: amount,

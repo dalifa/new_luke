@@ -6,7 +6,14 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export const justDonator = async (collectionId: string) => {
-  const connected = await currentUserInfos()
+  // const connected = await currentUserInfos() // => en prod
+  // ##4 test##
+  const connectedtestor = await prismadb.currentProfileForTest.findFirst()
+  // ##4 test##
+  const connected = await prismadb.profile.findFirst({
+    where: { usercodepin: connectedtestor?.usercodepin}
+  })
+  // ### FIN 4 TEST ####
   const concernedCollection = await prismadb.collection.findFirst({
     where: { id: collectionId}
   })
@@ -38,23 +45,10 @@ export const justDonator = async (collectionId: string) => {
     });
   }
   //
-  //    
-  if(concernedCollection?.collectionType === "tripl")
+  if(concernedCollection?.collectionType === "oneofus")
   {
-    revalidatePath(`/dashboard/tripl/${collectionId}`)
-    redirect(`/dashboard/tripl/${collectionId}`)
+    revalidatePath(`/dashboard/oneofus/${collectionId}`)
+    redirect(`/dashboard/oneofus/${collectionId}`)
   }
-  //
-  if(concernedCollection?.collectionType === "snippets")
-  {
-    revalidatePath(`/dashboard/snippets/${collectionId}`)
-    redirect(`/dashboard/snippets/${collectionId}`)
-  }
-  //
-  if(concernedCollection?.collectionType === "totality")
-    {
-      revalidatePath(`/dashboard/totality/${collectionId}`)
-      redirect(`/dashboard/totality/${collectionId}`)
-    }
   //
 };

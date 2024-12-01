@@ -90,10 +90,8 @@ export async function PATCH(req: Request) {
     //
     await prismadb.activity.create({
       data: {
-        usercodepin: currentUser?.usercodepin,   // en prod
-        activity:  "update de profile.", // String
-        concerned: session.user.email, // Json?
-        action: "le connecté a updaté son profil: " + username + ", " + phone + ", " + firstname + ", " + lastname + " de " + city + ". Sa monnaie: " + chosenCountry?.currency  // Json?
+        author: "Création de profil de " + username + ".",
+        activity:  session?.user?.email + " - " + phone + " - " + city + ".", // Json?
       }
     })
     //

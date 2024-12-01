@@ -4,7 +4,7 @@ import { prismadb } from "@/lib/prismadb";
 import { currentUserInfos } from "@/hooks/own-current-user";
 import { ProfileInfosForm } from "./profile-infos-form";
 
-//  
+//   
 const CreateOrUpdateProfile = async () => {
   const session = await auth();
   const connectedUser = await currentUserInfos()

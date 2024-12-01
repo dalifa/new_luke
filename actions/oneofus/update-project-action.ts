@@ -6,10 +6,17 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export const updateProject = async (collectionId: string, formData: FormData ) => {
-  const connected = await currentUserInfos()
+  // const connected = await currentUserInfos() // => en prod
+  // ##4 test##
+  const connectedtestor = await prismadb.currentProfileForTest.findFirst()
+  // ##4 test##
+  const connected = await prismadb.profile.findFirst({
+    where: { usercodepin: connectedtestor?.usercodepin}
+  })
+  // ### FIN 4 TEST ####
   const project = formData.get('project') as string
   const concernedCollection = await prismadb.collection.findFirst({
-    where: { id: collectionId}
+    where: { id: collectionId }
   })
   //
   await prismadb.collectionParticipant.updateMany({
@@ -19,23 +26,11 @@ export const updateProject = async (collectionId: string, formData: FormData ) =
     },
     data: { project }
   });
-  //    
-  if(concernedCollection?.collectionType === "tripl")
-  {
-    revalidatePath(`/dashboard/tripl/${collectionId}`)
-    redirect(`/dashboard/tripl/${collectionId}`)
-  }
   //
-  if(concernedCollection?.collectionType === "snippets")
-  {
-    revalidatePath(`/dashboard/snippets/${collectionId}`)
-    redirect(`/dashboard/snippets/${collectionId}`)
-  }
-  //
-  if(concernedCollection?.collectionType === "totality")
+  if(concernedCollection?.collectionType === "oneofus")
     {
-      revalidatePath(`/dashboard/totality/${collectionId}`)
-      redirect(`/dashboard/totality/${collectionId}`)
+      revalidatePath(`/dashboard/oneofus/${collectionId}`)
+      redirect(`/dashboard/oneofus/${collectionId}`)
     }
   //
 };

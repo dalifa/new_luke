@@ -1,4 +1,4 @@
-import CreateOrUpdateProfile from '@/components/dashboard/profil-components/profile-infos';
+import CreateOrUpdateProfile from '@/components/dashboard/profile/profile-infos';
 import { currentUser } from '@/hooks/own-current-user';
 import { prismadb } from '@/lib/prismadb';
 import { redirect } from 'next/navigation';

@@ -1,5 +1,7 @@
 import ReactivateAccount from '@/components/admin/active-account'
 import AddCountry from '@/components/admin/add-country'
+import { AddCountryAction } from '@/components/admin/add-country-action'
+import { ToAddFakeProfile } from '@/components/admin/add-fake-profile'
 //import AddProfileForTests from '@/components/admin/add-profile-for-tests'
 import DontMakePartner from '@/components/admin/dont-make-partner'
 import EnterAmount from '@/components/admin/enter-amount'
@@ -27,25 +29,33 @@ const Admin = async () => {
                     <p className='my-2 text-center font-medium text-xl text-blue-500'>last: {last?.lastProfile}</p>
                     <ProfileForTest collectionId={''}/> 
                 </div>
-                <div className='grid grid-cols-3'>
+                <div className='grid grid-cols-3 border-2 border-orange-500'>
                     {
                         profiles.map((profile) =>(
                             <p key={profile?.id}>{profile?.username}</p>
                         ))
                     }
                 </div>
-                <ReactivateAccount/>
+                <ToAddFakeProfile/>
                 <Metric/>
                 <AddCountry/>
+                {/* TODO: with action
+                <div className='flex flex-col border-2 border-green-500'>
+                    <p className='my-4 text-center font-medium text-xl text-green-600'>current: {last?.usercodepin}</p>
+                    <p className='my-2 text-center font-medium text-xl text-blue-500'>last: {last?.lastProfile}</p>
+                    <AddCountryAction/> 
+                </div> */}
                 <EnterAmount/>
+                <ReactivateAccount/>
                 <UnactivateAccount/>
                 <MakePartner/>
                 <RateCommission/>
                 <DontMakePartner/>
                 <UpdatePartnerCredit/>
                 <MaxPartnerCredit/>
-                <EnterCents/>
                 <IncreaseCredit/>
+                <EnterCents/>
+                
                 
                 {/* TODO ICI UPDATE DE GROUP isolé du reste des metrics
                     On updatera metric.group, on updatant aussi group 

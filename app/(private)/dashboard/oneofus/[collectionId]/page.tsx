@@ -1,6 +1,6 @@
-import { DdcAlsoReceiver } from "@/components/dashboard/action-in-collection/ddc/also-receiver"
-import { DdcJustToGive } from "@/components/dashboard/action-in-collection/ddc/just-donator"
-import { MyDdcProjectForm } from "@/components/dashboard/action-in-collection/ddc/myproject-form"
+import { OneofusAlsoReceiver } from "@/components/dashboard/action-in-collection/oneofus/also-receiver"
+import { OneofusJustToGive } from "@/components/dashboard/action-in-collection/oneofus/just-donator"
+import { MyOneofusProjectForm } from "@/components/dashboard/action-in-collection/oneofus/myproject-form"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -35,16 +35,16 @@ const Collection = async ({
     where: { 
       id: params.collectionId,
       collectionType: "oneofus" // pour être sûr
-      },
-      include: {
-        collectionParticipants: {
-          include: {
+    },
+    include: {
+      collectionParticipants: {
+        include: {
           profile: true
         }
       }
     }
   })
-  // On vérifie si le connecté a déjà donné dans cette collecte
+  // On vérifie si le connecté a déjà donné dans cette collecte 
   const hasGiveCount = await prismadb.collectionResult.count({
     where: {
       donatorProfileId: connected?.id,
@@ -53,7 +53,7 @@ const Collection = async ({
   })
   //
   const maxLength = 65 // max de caractères pour le projet
-  // le nbre de ceux qui renoncer à recevoir
+  // le nbre de ceux qui ont renoncés à recevoir
   const isOnlyDonatorCount = await prismadb.collectionParticipant.count({
     where: { 
       collectionId: params.collectionId, // id de la collecte
@@ -66,7 +66,7 @@ const Collection = async ({
       {/* <div className='w-4/5 lg:w-2/5 p-3 mb-5 border rounded text-center bg-white shadow-md shadow-blue-100'> en prod */}
       <div className='w-4/5  p-3 mb-5 border rounded text-center bg-white shadow-md shadow-blue-100'>
         <p className='text-slate-600 text-center text-md lg:text-lg'>
-          Participants à cette {currentOneofus?.collectionType} de {currentOneofus?.amount}{currentOneofus?.currency}
+          Participants à cette collecte <span className="font-semibold">{currentOneofus?.collectionType}</span> de {currentOneofus?.amount}{currentOneofus?.currency}
         </p>
         <hr className='my-2'/>
         <p>current profile 4 test: &nbsp;{connected?.username}&nbsp; - &nbsp; {connected?.usercodepin}</p>
@@ -129,8 +129,17 @@ const Collection = async ({
                     </div>
                     <div className='w-full flex flex-row items-center gap-2'>
                       {  
-                        connected?.id === participant?.profileId ? (
-                          <MyDdcProjectForm collectionId={params?.collectionId}/>
+                        connected?.id === participant?.profileId ? ( 
+                          <div>
+                            {
+                              // si le group n'est pas encore plein, on peut modifier son projet 
+                              currentOneofus?.group > currentOneofus?.groupPlus ? (
+                                <MyOneofusProjectForm collectionId={params?.collectionId}/>
+                              ):(
+                                <Gift className='text-violet-600'/>
+                              )
+                            }
+                          </div>
                         ):(
                           <Gift className='text-violet-600'/>
                         )
@@ -140,9 +149,9 @@ const Collection = async ({
                       </div>
                     </div>           
                     { 
-                      participant?.profileId === connected?.id && participant?.isOnlyDonator === true && (currentOneofus && currentOneofus?.group - 1 === isOnlyDonatorCount) && (
+                      participant?.profileId === connected?.id && participant?.isOnlyDonator === true && (currentOneofus && currentOneofus?.group > isOnlyDonatorCount) && (
                         <div className='w-full flex flex-row items-center gap-2'>
-                          <DdcAlsoReceiver collectionId={params.collectionId}/>
+                          <OneofusAlsoReceiver collectionId={params.collectionId}/>
                           <p className='text-sm'>Juste donateur</p>
                         </div>
                       )
@@ -151,10 +160,10 @@ const Collection = async ({
                       participant?.profileId === connected?.id && participant?.isOnlyDonator === false && (
                         <div className='w-full flex flex-row items-center gap-2'>
                           {
-                            currentOneofus && currentOneofus?.group - 1 === isOnlyDonatorCount ? (
-                              <ToggleRight className='text-green-600'/>
+                            currentOneofus && currentOneofus?.group > isOnlyDonatorCount ? (
+                              <OneofusJustToGive collectionId={params.collectionId}/>
                             ):(
-                              <DdcJustToGive collectionId={params.collectionId}/>
+                              <ToggleRight className='text-green-600'/>
                             )
                           }
                           <p className='text-sm'>Aussi donataire</p>
@@ -192,7 +201,7 @@ const Collection = async ({
                                 <>
                                 {
                                   currentOneofus?.group === currentOneofus?.groupStatus ? (
-                                    <Link href={`/dashboard/ddc/${params.collectionId}/${participant.id}`}>
+                                    <Link href={`/dashboard/oneofus/${params.collectionId}/${participant.id}`}>
                                       <Button variant={"violet"} className='rounded-md text-white'>    
                                         Donner avec joie <GrMoney className="h-5 w-5 cursor-pointer ml-2"/>
                                       </Button>

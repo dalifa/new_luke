@@ -8,172 +8,197 @@ import { redirect } from "next/navigation";
 
  
 // à la place de params je peux mettre id (qui représente id du fichier donationId) 
-  export async function donationAmountAction(params: string) {
+  export async function donationInOneofusAction(params: string) {
   // params c'est l'id du recipient choisi (son id dans la table collecteParticipant)  
-  const connectedProfile = await currentUserInfos()
+  //const connected = await currentUserInfos()
+  // ##4 test##
+  const connectedtestor = await prismadb.currentProfileForTest.findFirst()
+  //
+  const connected = await prismadb.profile.findFirst({
+    where: { usercodepin: connectedtestor?.usercodepin}
+  })
+  // ### AND 4 TEST ####
   // recipient profile datas 
-  const recipientProfile = await prismadb.collectionParticipant.findFirst({
+  const recipient:any = await prismadb.collectionParticipant.findFirst({
     where: { id: params },
     include: { profile: true },
   })
   // collection data
-  const collectionData = await prismadb.collectionParticipant.findFirst({
-    where: { id: params },
-    include: { collection: true }
-  })
-  //
-  const amountConcerned = await prismadb.amount.findFirst({
-    where: {
-      currency: collectionData?.collection?.currency,
-      amount: collectionData?.collection?.amount
-    }
+  const collectionConcerned:any = await prismadb.collection.findFirst({
+    where: { id: recipient?.collectionId },
   })
   //
 // ######################################
   // Activity Registration
-  await prismadb.activity.create({
-    data: {
-      usercodepin: connectedProfile?.usercodepin,   // en prod
-      activity:  "don dans une collecte", // String
-      concerned: "le destinataire du don est: " + recipientProfile?.profile?.usercodepin + ".", // Json?
-      action: "don de : " + collectionData?.collection?.amount + collectionData?.collection?.currency + " dans une collecte " + collectionData?.collection?.collectionType + "."  // Json?
+  // TODO: here
+  // ## On vérifie si le connecté est dans cette collecte, et s'il n'a pas encore désigné un recipient
+  const connectedExistAndHasNotYetDesignatedCount = await prismadb.collectionParticipant.count({
+    where: { 
+      collectionId: recipient?.collectionId,
+      profileId: connected?.id,
+      hasGive: false
     }
   })
-  // on verifie si le recipient avait dejà reçu un 1er don
-  const recipientDonationExist = await prismadb.collectionResult.count({
-    where: {
-      collectionId: collectionData?.collection?.id,
-      amount : amountConcerned?.amount,
-      currency : amountConcerned?.currency,
-      collectionType: collectionData?.collection?.collectionType,
-      recipientEmail : recipientProfile?.profile?.googleEmail
-    }
-  })
-  // si le recipient ne figure pas dans la table
-  if(recipientDonationExist < 1 )
+  if(connectedExistAndHasNotYetDesignatedCount === 1)
   {
-    // on enregistre le don du connecté à recipient dans la table CollectionResult
-    await prismadb.collectionResult.create({
-      data: {
-        donatorEmail: connectedProfile?.googleEmail,
-        donatorProfileId: connectedProfile?.id,
-        collectionId: collectionData?.collection?.id,
-        amount : amountConcerned?.amount,
-        currency : amountConcerned?.currency,
-        collectionType: collectionData?.collection?.collectionType,
-        recipientEmail : recipientProfile?.profile?.googleEmail,
-        recipientProfileId: recipientProfile?.profile?.id,
-        donationReceived: 1
-      }
-    }) 
-  } // Il avait déjà reçu un premier don, alors ...
-  else{
-    // On enregistre d'abord le don
-    await prismadb.collectionResult.create({
-      data: {
-        donatorEmail: connectedProfile?.googleEmail,
-        collectionId: collectionData?.collection?.id,
-        amount : amountConcerned?.amount,
-        currency : amountConcerned?.currency,
-        collectionType: collectionData?.collection?.collectionType,
-        recipientEmail : recipientProfile?.profile?.googleEmail,
-        donationReceived: 1
-      }
-    })
-    // update de donationReceived à 2 
-    await prismadb.collectionResult.updateMany({
+    // On update collectionParticipant on met hasgive du connected à true 
+    await prismadb.collectionParticipant.updateMany({
       where: {
-        collectionId: collectionData?.collection?.id,
-        amount : amountConcerned?.amount, // mis exprès mais le connectionId aurait suffit
-        currency : amountConcerned?.currency, // mis exprès mais le connectionId aurait suffit
-        collectionType: collectionData?.collection?.collectionType, // mis exprès mais le connectionId aurait suffit
-        recipientEmail : recipientProfile?.profile?.googleEmail,
-        
-        donationReceived: 1
-      },
-      data: { donationReceived: 2 }
-    })
-  }
-  // On update collectionParticipant on met hasgive du connected à true 
-  await prismadb.collectionParticipant.updateMany({
-    where: {
-      collectionId: collectionData?.collection?.id,
-      profileId: connectedProfile?.id
-    },
-    data: {
-      hasGive: true
-    }
-  })
-  if(recipientProfile?.profile && connectedProfile)
-  {
-    // On entre le recipient dans ProfileMet comme déjà renconté par le donator
-    await prismadb.profilesMet.create({
-      data: {
-        profileId: connectedProfile?.id,
-        participantMetId: recipientProfile?.profile?.id
-      }
-    })
-  }
-  // On compte le nombre de ceux qui ont déjà donné, ou fait la désignation
-  const allHasGiveCount = await prismadb.collectionParticipant.count({
-    where: {
-      collectionId: collectionData?.collection?.id,
-      //
-      hasGive: true
-    }
-  })
-  // On vérifie si ceux qui ont donné sont == à ceux qui y participe
-  if(collectionData?.collection?.group === allHasGiveCount)
-  {
-    // on close la collecte dans collection
-    await prismadb.collection.updateMany({
-      where: {
-        id: collectionData?.collection?.id
+        collectionId: collectionConcerned?.id,
+        profileId: connected?.id
       },
       data: {
-        isCollectionClosed: true
+        hasGive: true
       }
     })
-    // ON SELECT CELUI QUI A DONATION RECEIVED == 2
-    const winner = await prismadb.collectionResult.findFirst({
+    // on verifie si le recipient avait dejà reçu une 1ere désignation
+    const recipientDesignationExist = await prismadb.collectionResult.count({
       where: {
-        collectionId : collectionData?.collection?.id,
-        donationReceived: 2
-      },
-      orderBy: { id: "asc"} // pour ne prendre que le premier
-    })
-    // ON LUI DONNE LE TRIPL
-    // ON SELECT SON CREDIT ET SON JACKPOT
-    const winnerProfile = await prismadb.profile.findFirst({
-      where: {
-        googleEmail: winner?.recipientEmail
+        collectionId: collectionConcerned?.id,
+        recipientProfileId : recipient?.profile?.id
       }
     })
-    if(winnerProfile)
+    // si le recipient ne figure pas dans la table
+    if(recipientDesignationExist < 1 )
     {
-      // On update son credit du montant initial 
-      //(On lui remet son apport initial pour ne pas y prelever une commission)
-      await prismadb.profile.updateMany({
-        where: { 
-          googleEmail: winnerProfile?.googleEmail
-        },
-        data: { credit: winnerProfile?.credit + collectionData?.collection?.amount }
+      // on enregistre la désignation du recipient par le connected dans la table CollectionResult
+      await prismadb.collectionResult.create({
+        data: {
+          donatorEmail: connected?.googleEmail,
+          donatorProfileId: connected?.id,
+          collectionId: collectionConcerned?.id,
+          amount : collectionConcerned?.amount,
+          currency : collectionConcerned?.currency,
+          collectionType: collectionConcerned?.collectionType,
+          recipientEmail : recipient?.profile?.googleEmail,
+          recipientProfileId: recipient?.profile?.id,
+          donationReceived: 1
+        }
+      }) 
+    } // Il avait déjà été désigné, alors ...
+    else{
+      // On enregistre d'abord la nouvelle désignation
+      await prismadb.collectionResult.create({
+        data: {
+          donatorEmail: connected?.googleEmail,
+          donatorProfileId: connected?.id,
+          collectionId: collectionConcerned?.id,
+          amount : collectionConcerned?.amount,
+          currency : collectionConcerned?.currency,
+          collectionType: collectionConcerned?.collectionType,
+          recipientEmail : recipient?.profile?.googleEmail,
+          recipientProfileId: recipient?.profile?.id,
+          donationReceived: 1
+        }
       })
-      // On update son jackpot du montant initial x 2
-      const jackpotReceived = collectionData?.collection?.amount + collectionData?.collection?.amount
-      //
-      await prismadb.profile.updateMany({
-        where: { 
-          googleEmail: winnerProfile?.googleEmail
-        },
-        data: { 
-          credit: winnerProfile?.credit + collectionData?.collection?.amount,
-          jackpot: winnerProfile?.jackpot + jackpotReceived,
+      // on select le donationReceived du recipient
+      const receivedDesignation = await prismadb.collectionResult.findFirst({
+        where: {
+          collectionId: collectionConcerned?.id,
+          recipientProfileId: recipient?.profile?.id,
+        }
+      })
+      // update de donationReceived de + 1
+      if( receivedDesignation )
+      {
+        await prismadb.collectionResult.updateMany({
+          where: {
+            collectionId: collectionConcerned?.id,
+            recipientProfileId : recipient?.profile?.id,
+          },
+          data: { donationReceived: receivedDesignation?.donationReceived + 1 }
+        })
+      }
+    }
+    // On les enregistre comme s'étant déjà croisé
+    if(recipient && connected)
+    {
+      // On entre le recipient dans ProfileMet comme déjà renconté par le donator
+      await prismadb.profilesMet.create({
+        data: {
+          profileId: connected?.id,
+          profilecodepin:connected?.usercodepin,
+          participantMetId: recipient?.profile?.id,
+          participantcodepin: recipient?.profile?.usercodepin
         }
       })
     }
-  } 
-    revalidatePath('/dashboard')
+    // On compte le nombre de ceux qui ont déjà fait la désignation
+    const allHasGiveCount = await prismadb.collectionParticipant.count({
+      where: {
+        collectionId: collectionConcerned?.id,
+        //
+        hasGive: true
+      }
+    })
+    // On vérifie si ceux qui ont désigné sont == à ceux qui y participe
+    if(collectionConcerned?.group === allHasGiveCount)
+    {
+      // on close la collecte dans collection
+      await prismadb.collection.updateMany({
+        where: {
+          id: collectionConcerned?.id
+        },
+        data: {
+          isCollectionClosed: true
+        }
+      })
+      // On select les nombres de désignation reçu par ordre décroissant
+      const receivers = await prismadb.collectionResult.findMany({
+        where: { collectionId: collectionConcerned?.id },
+        orderBy: {
+          donationReceived: 'desc',
+        },
+      });
+      // on isole le plus grand nombre de désignation reçu
+      const maxDesignation = receivers[0]?.donationReceived;
+      // on select tout participant qui a reçu le plus gran nombre de désignation
+      const receiversWithMaxDesignation = receivers.filter((receiver) => receiver.donationReceived === maxDesignation);
+
+      // on compte combien de participant ont réçu le plus grand nombre de désignation 
+      const winnercount = receiversWithMaxDesignation.length;
+      // CECI c'est la cagnotte que le ou les participants ayant le plus grand nombre
+      // de désignation vont se partager
+      const jackpotToGive = collectionConcerned?.amount * collectionConcerned?.group
+      // la part que chacun recevra de la cagnotte
+      const jackpotPerWinner = jackpotToGive / winnercount
+
+      /*  TODO: LORSQU'IL Y A PLUSIEURS WINNER
+      // on donne a chaque winner (celui ou ceux qui ont été le plus désigné) sa part
+      receiversWithMaxDesignation.map(async (receiver) => {
+        // on isole les entiers et les centimes
+        const jackpotCentsPerWinner = Math.round((jackpotPerWinner - Math.floor(jackpotPerWinner)) * 100);
+        
+        TODO: il faut d'abord select le jackpot et le jackpotCent de chacun
+        pour y additionner  jackpotPerWinner et jackpotCentsPerWinner
+        //
+        await prisma.profile.update({
+          where: { id: user.id },
+            data: {
+              jackpot: Math.floor(jackpotPerWinner), // La partie entière en dollars
+              jackpotCents: jackpotCentsPerWinner, // La partie centimes
+            },
+          });
+        
+        
+      }) */
+
+    } 
+  }else{
     redirect("/dashboard")
+  }
+  revalidatePath(`/dashboard/${collectionConcerned?.id}`)
+  redirect(`/dashboard/${collectionConcerned?.id}`)
 } // donation registered 
 //
+//
+/*
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        gift: Math.floor(giftPerUser), // La partie entière en dollars
+        giftCents: giftCents, // La partie centimes
+      },
+    });
+
+ */
