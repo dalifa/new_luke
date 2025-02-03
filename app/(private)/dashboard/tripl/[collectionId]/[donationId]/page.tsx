@@ -2,9 +2,9 @@
 import { Card } from '@/components/ui/card';
 import { prismadb } from '@/lib/prismadb';
 import BackCancel from '@/components/dashboard/action-in-collection/backCancelled'; 
-import { ConfirmGiveButton } from '@/components/dashboard/action-in-collection/confirm-give-button';
-import { donationAmountAction } from '@/actions/donation/tripl/donationAmount';
-import { capitalize, currentUserInfos } from '@/hooks/own-current-user';
+import { capitalize, CurrentProfile, } from '@/hooks/own-current-user';
+import { donationAmountAction } from '@/actions/tripl/donationAmount';
+import { ConfirmTriplGiveButton } from '@/components/dashboard/action-in-collection/tripl/confirm-give-button';
 
 const Donation = async ({
   params
@@ -12,7 +12,7 @@ const Donation = async ({
   // donationId = le nom du fichier s'il est différent, ça ne marche pas  
   params: { donationId: string } 
   }) => {
-    const connectedProfile = await currentUserInfos()
+    const connected = await CurrentProfile()
     // On selecte la collect selon params (params c'est id du recipient dans collectionParticipant)
     const myRecipientInCollection = await prismadb.collectionParticipant.findFirst({
       where: {
@@ -25,7 +25,7 @@ const Donation = async ({
     const inSameCollectionCount = await prismadb.collectionParticipant.count({
       where: {
         collectionId: myRecipientInCollection?.collectionId,
-        profileId: connectedProfile?.id,
+        profileId: connected?.id,
         hasGive: false
       }
     })
@@ -38,13 +38,13 @@ const Donation = async ({
     const myRecipientId = params.donationId;
     const donationToRecipientId = donationAmountAction.bind(null, myRecipientId);
     // ## ---------------- ##
-    const one = 1
+    //const one = 1
 
   return (
     <div className='w-full flex items-center justify-center flex-col'>
       <div className='flex w-full p-4 md:w-3/5 lg:w-2/5 items-center justify-center flex-col'>
-        <Card className='flex flex-col w-full mt-[20%] p-8 bg-white text-center items-center shadow-md shadow-red-200'>
-          <p className='text-red-800 text-lg md:text-xl font-semibold'>Confirmation de don</p>
+        <Card className='flex flex-col w-full mt-[20%] p-8 bg-white text-center items-center shadow-md shadow-blue-300'>
+          <p className='text-blue-500 text-lg md:text-xl font-semibold'>Confirmation de don</p>
           <div className='flex flex-col gap-y-1 text-center text-md md:text-lg mb-2 py-5 text-slate-500'>
             <p>Vous shouhaitez que</p> 
             {
@@ -62,7 +62,7 @@ const Donation = async ({
             <form action={donationToRecipientId}>  
             {
               inSameCollectionCount === 1 && amountToGive?.collection?.isGroupComplete === true && amountToGive?.collection?.isCollectionClosed === false && (
-                <ConfirmGiveButton/>
+                <ConfirmTriplGiveButton/>
               )
             }
             </form>

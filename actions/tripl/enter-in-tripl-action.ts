@@ -1,11 +1,11 @@
 "use server";
 
-import { currentUserInfos } from "@/hooks/own-current-user";
+import { CurrentProfile } from "@/hooks/own-current-user";
 import { prismadb } from "@/lib/prismadb";
 import { revalidatePath } from "next/cache";  
 import { redirect } from "next/navigation"; 
 
-// AMOUNT 1€ COLLECTION ENTER
+// COLLECTION ENTER
 export const enterInTriplAction = async (params:string) => {
   try 
   {
@@ -13,34 +13,36 @@ export const enterInTriplAction = async (params:string) => {
     const concernedAmount = await prismadb.amount.findFirst({
       where: { id: params }
     })
-    // Le next ownId
-    const metrics = await prismadb.metric.findFirst() // en prod
     //
     const ctype = "tripl"
     // Le profile du connecté
-    const connected = await currentUserInfos() // en prod
+    const connected = await CurrentProfile() // en prod
     // 1- ON VERIFIE SON CREDIT
     if( connected?.credit && concernedAmount && connected.credit >= concernedAmount?.amount )
     {
       // ON DIMINU SON CREDIT DE concernedAmount.amount
       const newCredit = ( connected?.credit - concernedAmount?.amount )
-      // 
+      // ON UTILISE L'EMAIL HASHED POUR FAIRE LA COMPARAISON
       await prismadb.profile.updateMany({
         where: { 
-          googleEmail: connected?.googleEmail 
+          hashedEmail: connected?.hashedEmail 
         },
         data: { credit: newCredit }
       })
-      // ON COMPTE COMBIEN Y'A DE COLLECTE D'OUVERT
+      // ON COMPTE COMBIEN Y'A DE TRIPL DU MONTANT CHOISI D'OUVERT
       const openCollectionCount = await prismadb.collection.count({
         where: {
           amount: concernedAmount?.amount,
+          currency: concernedAmount?.currency,
           isGroupComplete: false,
           collectionType: ctype,
         },
       })
       //
-      // 2- S'IL Y A ZÉRO COLLECTION D'OUVERT DE CE MONTANT
+      //############### ZERO TRIPL ############
+      //#######################################
+      //
+      // 2- S'IL Y A ZÉRO TRIPL D'OUVERT DU MONTANT CHOISI
       if(openCollectionCount === 0)
       {
         // ON CRÉE UNE COLLECTE ET ON L'ENTRE COMME PREMIER PARTICIPANT
@@ -48,13 +50,16 @@ export const enterInTriplAction = async (params:string) => {
           data: {
             amount: concernedAmount?.amount,
             collectionType: ctype,
-            groupStatus: 1
+            currency: concernedAmount?.currency,
+            groupStatus: 1,
+            group: 3
           }
         })
         // on select id de la collecte juste créée
         const justCreatedCollection = await prismadb.collection.findFirst({
           where: {
             amount: concernedAmount?.amount,
+            currency: concernedAmount?.currency,
             collectionType: ctype,
             groupStatus: 1,
             isGroupComplete: false //
@@ -63,6 +68,7 @@ export const enterInTriplAction = async (params:string) => {
         //
         if(justCreatedCollection)
         {
+          // On entre le connecté comme participant à ce TRIPL
           await prismadb.collectionParticipant.create({
             data: {
               collectionId: justCreatedCollection?.id,
@@ -73,13 +79,17 @@ export const enterInTriplAction = async (params:string) => {
         }
       }
       //
-      // 3- S'IL Y A 1 TRIPL D'OUVERT
+      //############### ONE OPEN TRIPL ########
+      //#######################################
+      //
+      // 3- S'IL Y A 1 TRIPL D'OUVERT DU MONTANT CHOISI
       if( openCollectionCount === 1 )
       {
         // on select la collecte existante
         const existingOneCollection = await prismadb.collection.findFirst({
           where: {
             amount: concernedAmount?.amount,
+            currency: concernedAmount?.currency,
             collectionType: ctype,
             isGroupComplete: false //
           }
@@ -91,7 +101,7 @@ export const enterInTriplAction = async (params:string) => {
             profileId: connected?.id
           }
         })
-        // LE CONNECTE N'EST PAS DÉJÀ DANS LA COLLECTE OUVERTE
+        // SI LE CONNECTÉ N'EST PAS DÉJÀ DANS LA COLLECTE OUVERTE
         if(alreadyInsideCount < 1)
         {
           // select le connected et ses participantsMet
@@ -121,21 +131,24 @@ export const enterInTriplAction = async (params:string) => {
             })
             // vérifie si un des anciens profilesMet du connecté est dans cette collecte
             const hasProfilesMetInCollection = currentCollectionParticipants.some(participant => profilesMetsIds.includes(participant.profileId))
-            // SI UN ANCIEN PARTICIPANT RENCONTRÉ EST DANS CETTE COLLECTE 
+            // SI UN PARTICIPANT QU'IL AVAIT DÉJÀ DÉSIGNÉ EST DANS CET TRIPL 
             if(hasProfilesMetInCollection)
             {
-              // ON CRÉE UNE COLLECTE ET ON L'ENTRE COMME PREMIER PARTICIPANT
+              // ON CRÉE UN NOUVEAU TRIPL ET ON L'ENTRE COMME PREMIER PARTICIPANT
               await prismadb.collection.create({
                 data: {
                   amount: concernedAmount?.amount,
+                  currency: concernedAmount?.currency,
                   collectionType: ctype,
-                  groupStatus: 1
+                  groupStatus: 1,
+                  group: 3,
                 }
               })
               // on select id de la collecte juste créée
               const justCreatedCollection = await prismadb.collection.findFirst({
                 where: {
                   amount: concernedAmount?.amount,
+                  currency: concernedAmount?.currency,
                   collectionType: ctype,
                   groupStatus: 1,
                   isGroupComplete: false //
@@ -154,7 +167,7 @@ export const enterInTriplAction = async (params:string) => {
                 })
               }
             }
-            else{
+            else{ // S'IL N'Y A PAS DE PARTICIPANT QU'IL AVAIT DÉJÀ DÉSIGNÉ
               if(existingOneCollection)
               {
                 // On l'entre dans la collecte en cours
@@ -191,19 +204,23 @@ export const enterInTriplAction = async (params:string) => {
               }
             }
           }
-        } // IL EST DEJÀ DANS LA COLLECTE OUVERTE, ON CRÉE UNE COLLECTE ET ON L'ENTRE COMME PREMIER PARTICIPANT
+        } // SI LE CONNECTÉ EST DEJÀ DANS LA COLLECTE OUVERTE, 
         else{
+          // ON CRÉE UNE NOUVELLE COLLECTE ET ON L'ENTRE COMME PREMIER PARTICIPANT
           await prismadb.collection.create({
             data: {
               amount: concernedAmount?.amount,
+              currency: concernedAmount?.currency,
               collectionType: ctype,
-              groupStatus: 1
+              groupStatus: 1,
+              group: 3
             }
           })
           // on select id de la collecte juste créée
           const justCreatedCollection = await prismadb.collection.findFirst({
             where: {
               amount: concernedAmount?.amount,
+              currency: concernedAmount?.currency,
               collectionType: ctype,
               groupStatus: 1,
               isGroupComplete: false //
@@ -224,8 +241,10 @@ export const enterInTriplAction = async (params:string) => {
         }
       }    
       //
+      //############### MANY OPEN TRIPL #######
+      //#######################################
       // 
-      //## 4- S'IL Y A PLUS DE 1 TRIPL D'OUVERT ########################
+      //## 4- S'IL Y A PLUS DE 1 TRIPL D'OUVERT DU MONTANT CHOISI
       if( openCollectionCount > 1 )
       { 
         // select le connected et ses participantsMet
@@ -248,14 +267,16 @@ export const enterInTriplAction = async (params:string) => {
             ...currentProfile.profilesMets.map((p) => p.participantMetId),
             ...currentProfile.profilesOf.map((p) => p.profileId)
           ]
-          // recupérer toutes les collectes ouvertes
+          // ON RÉCUPÈRE TOUS LES TRIPL DU MONTANT CHOISI D'OUVERTS
           const openCollections = await prismadb.collection.findMany({
             where: {
               amount: concernedAmount?.amount,
+              currency: concernedAmount?.currency,
               collectionType: ctype,
               isGroupComplete: false
             },
-            include: { collectionParticipants: true } // participants à cette collecte
+            // AINSI QUE LES PARTICIPANTS QUI Y SONT
+            include: { collectionParticipants: true }
           })
           // parcourrir chaque collectes et vérifier les anciens participants déjà rencontré
           for (const collection of openCollections){
@@ -275,7 +296,7 @@ export const enterInTriplAction = async (params:string) => {
                 data: {
                   collectionId: collection?.id, // vient d'ici: for (const collection of openCollections)
                   profileId: connected?.id,
-                  rank: collection?.groupStatus + 1
+                  rank: collection?.groupStatus + 1,
                 }
               })
               //
@@ -284,7 +305,6 @@ export const enterInTriplAction = async (params:string) => {
                   id: collection?.id
                 },
                 data: { 
-                  isGroupComplete: true,
                   groupStatus: collection?.groupStatus + 1
                 }
               })
@@ -305,8 +325,10 @@ export const enterInTriplAction = async (params:string) => {
           const newCollection = await prismadb.collection.create({
             data: {
               amount: concernedAmount?.amount,
+              currency: concernedAmount?.currency,
               collectionType: ctype,
-              groupStatus: 1
+              groupStatus: 1,
+              group: 3
             }
           })
           // On entre le connecté

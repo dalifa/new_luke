@@ -1,99 +1,28 @@
-
-
+//
 import { auth } from '@/auth';
 import { CollectionsInProgress } from '@/components/dashboard/collections-in-progress';
 import { Counters } from '@/components/dashboard/counters';
-import { DdcListEnter } from '@/components/dashboard/enter-in-collection/ddcList/ddc-collection-enter';
-import { DonationChallengeStats } from '@/components/dashboard/enter-in-collection/ddcList/donation-challenge-stats';
-import { MyOpenDdc } from '@/components/dashboard/enter-in-collection/ddcList/my-open-ddc';
-import { MyOpenOneofus } from '@/components/dashboard/enter-in-collection/oneofus/my-open-oneofus';
-import { OneofusEnter } from '@/components/dashboard/enter-in-collection/oneofus/oneofus-enter';
-import { SnippetsCollectionEnter } from '@/components/dashboard/enter-in-collection/snippets/snippets-collection-enter';
+import { MyOpenTripl } from '@/components/dashboard/enter-in-collection/tripl/my-open-tripl';
 import { TriplCollectionEnter } from '@/components/dashboard/enter-in-collection/tripl/tripl-collection-enter';
-
-import { Card } from '@/components/ui/card';
+//
 import { prismadb } from '@/lib/prismadb';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 //
 const Dashboard = async () => {
+  const session = await auth();
+  const sessionEmail = await prismadb.user.findFirst({
+    where: { email: session?.user?.email}
+  })
   // la redirection pour les non connectés est faite depuis le fichier middleware
-  const session = await auth()
-  // s'il n'a pas encore renseigné son profil, on l'y redirect
-  const profilExist = await prismadb.profile.count({
-    where:{
-      googleEmail: session?.user?.email
-    }
+  const connectedCount = await prismadb.profile.count({
+    where: { hashedEmail: sessionEmail?.hashedEmail }
   })
-  //  
-  if(profilExist === 0)
+  // Si le mail hashé du connecté n'est pas dans la table Profile
+  if(connectedCount === 0)
   {
-    return redirect("/dashboard/profil")
+    redirect("/dashboard/profile")
   }
-  // le connecté
-  const connected = await prismadb.profile.findFirst({
-    where: { googleEmail: session?.user?.email }
-  })
-  // y a t-il une collecte tripl d'ouverte ?
-  const openTriplExist = await prismadb.collection.count({
-    where: { 
-      isCollectionClosed: false,
-      collectionType: "tripl",
-      collectionParticipants: {
-        some: {profileId: connected?.id}
-      }
-    }
-  })
-  // y a t-il une collecte snippets d'ouverte ?
-  const openSnippetsExist = await prismadb.collection.count({
-    where: { 
-      isCollectionClosed: false,
-      collectionType: "snippets",
-      collectionParticipants: {
-        some: {profileId: connected?.id}
-      }
-    }
-  })
-  // y a t-il une collecte totality d'ouverte ?
-  const openTotalityExist = await prismadb.collection.count({
-    where: { 
-      isCollectionClosed: false,
-      collectionType: "totality",
-      collectionParticipants: {
-        some: {profileId: connected?.id}
-      }
-    }
-  })
-  // myAllOpenTripl
-  const myAllOpenTripl = await prismadb.collection.findMany({
-    where: {
-      isCollectionClosed: false,
-      collectionType: "tripl",
-      collectionParticipants: {
-        some: {profileId: connected?.id}
-      }
-    },
-  })
-  // my All Open snippets
-  const myAllOpenSnippets = await prismadb.collection.findMany({
-    where: {
-      isCollectionClosed: false,
-      collectionType: "snippets",
-      collectionParticipants: {
-        some: {profileId: connected?.id}
-      }
-    },
-  })
-  // my All Open totality
-  const myAllOpenTotalities = await prismadb.collection.findMany({
-    where: {
-      isCollectionClosed: false,
-      collectionType: "totality",
-      collectionParticipants: {
-        some: { profileId: connected?.id }
-      }
-    },
-  })
+  //
   //
   return (
     <div className='lg:pt-5 h-ull flex items-center flex-col bg-white'>
@@ -103,76 +32,14 @@ const Dashboard = async () => {
             <Counters/> 
           {/* collectes en cours sur le site */}
             <CollectionsInProgress/> 
-          {/* #### DIRECT DONATION CHALLENGE #### 
-            <DonationChallengeStats/>
-            <DdcListEnter/>
-            <MyOpenDdc/>   */}
-          {/* #### FIN DDC LIST ###*/}
-          {/* pour entrer dans un tripl 
+          {/* pour entrer dans un tripl */}
             <TriplCollectionEnter/>
-          <Card className='bg-white shadow-slate-300 shadow-lg p-4'>
-            <p className='text-center mb-3 font-semibold text-slate-800 text-md lg:text-lg'>
-              Vos Tripl
-            </p>
-            {
-              openTriplExist === 0 && (
-                <p className='text-slate-600 text-center'>Vous n&apos;avez pas de tripl en cours.</p>
-              )
-            }
-            {
-              myAllOpenTripl && (
-                <div className='grid grid-cols-2'>
-                  {
-                    myAllOpenTripl.map((myOpenTripl) => (
-                      <Link key={myOpenTripl.id} href={`/dashboard/tripl/${myOpenTripl.id}`}>
-                        <div className='text-md rounded-md bg-green-500 p-2 m-2 text-white text-center'>
-                          <p className='font-semibold'>Tripl de {myOpenTripl?.amount}€</p>
-                        </div>
-                      </Link>
-                    ))
-                  }
-                </div>
-              )
-            }    
-          </Card> */}
-
-          {/* SNIPPETS 
-          <SnippetsCollectionEnter/> 
-          <Card className='bg-white shadow-slate-300 shadow-lg p-4'>
-            <p className='text-center mb-3 font-semibold text-slate-800 text-md lg:text-lg'>
-              Vos Collectes Snippets
-            </p>
-            {
-              openSnippetsExist === 0 && (
-                <p className='text-slate-600 text-center mt-10'>Vous n&apos;avez pas de collecte Snippets en cours.</p>
-              )
-            }
-            {
-              myAllOpenSnippets && (
-                <div className='grid grid-cols-2'>
-                  {
-                    myAllOpenSnippets.map((myOpenSnippet) => (
-                      <Link key={myOpenSnippet.id} href={`/dashboard/snippets/${myOpenSnippet.id}`}>
-                        <div className='text-md rounded-md bg-green-500 p-2 m-2 text-white text-center'>
-                          <p className='font-semibold'>Snippets de {myOpenSnippet?.amount}€</p>
-                        </div>
-                      </Link>
-                    ))
-                  }
-                </div>
-              )
-            }    
-          </Card>  */}
-
-          {/* ONE OF US */}
-          <OneofusEnter/> 
-          {/* ******* */}
-          <MyOpenOneofus/>
-          
+          {/* my open tripl */}  
+            <MyOpenTripl/>       
         </div> 
       </div>
     </div>
   )
 }
-
+//
 export default Dashboard

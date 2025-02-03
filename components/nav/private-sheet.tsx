@@ -6,11 +6,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { Archive, ArrowLeftRight, BarChart4, Handshake, LayoutDashboard, LogOutIcon, MenuIcon, UserRound } from "lucide-react"
+import { Archive, ArrowLeftRight, BarChart4, LayoutDashboard, MenuIcon, UserRound } from "lucide-react"
 import { Separator } from "../ui/separator"
 import Link from "next/link"
+import { CurrentProfile } from "@/hooks/own-current-user"
 
-export function PrivateSheet() {
+export async function PrivateSheet() {
+  const connected = await CurrentProfile()
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -30,8 +32,8 @@ export function PrivateSheet() {
             </Link>
           </SheetClose>
           <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-blue-400">
-            <Link href={"/dashboard/profil"} className="text-slate-600">
-              <div className="flex flex-row gap-5 ">
+            <Link href={`/dashboard/profile/${connected?.id}`} className="text-slate-600">
+              <div className="flex flex-row gap-5">
                 <UserRound/> Profile
               </div>
             </Link>

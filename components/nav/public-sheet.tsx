@@ -3,10 +3,10 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
+  SheetTitle,
 } from "@/components/ui/sheet"
 import { BarChart4, FileText, Handshake, Home, Info, MenuIcon, Settings, ShieldBan, ShieldQuestion } from "lucide-react"
 import Link from "next/link"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 import { useMobileSidebar } from "@/hooks/use-mobile-sidebar"
 import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
@@ -38,6 +38,7 @@ export function PublicSheet() {
     
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent className="pt-14">
+        <SheetTitle className="hidden"></SheetTitle>
         <div className="h-full flex flex-col items-start gap-3 px-2 py-4 bg-neutral-100 rounded-sm">
           <SheetClose className="bg-neutral-100 hover:bg-blue-300 hover:text-black hover:font-medium rounded-md text-neutral-500 w-full p-2">
             <Link href={"/home"}>
@@ -53,14 +54,7 @@ export function PublicSheet() {
                 <Settings/>
                 <p className="hidden lg:flex">Comment ça marche</p>
                 <p className="flex lg:hidden">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger>Cçm</TooltipTrigger>
-                      <TooltipContent>
-                        <p>Comment ça marche</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
+                  Cçm
                 </p>
               </div>
             </Link>
@@ -71,14 +65,7 @@ export function PublicSheet() {
                 <ShieldQuestion/>
                 <p className="hidden lg:flex">Questions fréquemment posées</p>
                 <p className="flex lg:hidden">
-                <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger>Faq</TooltipTrigger>
-                      <TooltipContent>
-                        <p>Questions fréquemment posées</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
+                  Faq
                 </p>
               </div>
             </Link>
@@ -97,14 +84,7 @@ export function PublicSheet() {
                 <FileText/>
                 <p className="hidden lg:flex">Conditions générales d&apos;utilisation</p>
                 <p className="flex lg:hidden">
-                <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger>Cgu</TooltipTrigger>
-                      <TooltipContent>
-                        <p>Conditions générales d&apos;utilisations</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
+                  Cgu
                 </p>
               </div>
             </Link>

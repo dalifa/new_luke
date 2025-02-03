@@ -1,12 +1,11 @@
 //
-import { auth } from "@/auth";
 import { MetricForm } from "./metric-form";
 import { prismadb } from "@/lib/prismadb";
-import { currentUserInfos } from "@/hooks/own-current-user";
+import { CurrentProfile } from "@/hooks/own-current-user";
 
 //  
 const Metric = async () => {
-  const connectedUser = await currentUserInfos()
+  const connected = await CurrentProfile()
   //
   const metrics = await prismadb.metric.findFirst();
 

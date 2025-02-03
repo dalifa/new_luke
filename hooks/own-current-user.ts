@@ -1,30 +1,45 @@
 import { auth } from "@/auth";
 import { prismadb } from "@/lib/prismadb";
-
+//
 export const currentUser = async () => {
   const session = await auth();
   //
   return session?.user;
 };
 //
-export const currentUserInfos = async () => {
+export const CurrentProfile = async () => {
+  //
   const session = await auth();
+  // on select selon session
+  const sessionInfos = await prismadb.user.findFirst({
+    where: { email: session?.user?.email } 
+  })
   //
   const profile = await prismadb.profile.findFirst({
-    where: { googleEmail: session?.user.email }
+    where: { hashedEmail: sessionInfos?.hashedEmail }
   })
   return profile
 } 
 //
 // on select les amounts. la currency étant par defaut l'euro €
-  export const amountOne = async () => {
-    const AmountOne = await prismadb.amount.findFirst({
+  export const AmountOne = async () => {
+    const session = await auth();
+    // on select selon session
+    const sessionInfos = await prismadb.user.findFirst({
+      where: { email: session?.user?.email } 
+    })
+    //
+    const profile = await prismadb.profile.findFirst({
+      where: { hashedEmail: sessionInfos?.hashedEmail }
+    })
+    const amountOne = await prismadb.amount.findFirst({
       where: { 
-        rank: "one"
+        rank: "one",
+        currency: profile?.currency
      }
     })
     //
-    return AmountOne;
+    return amountOne;
   };
   //
   export const amountTwo = async () => {

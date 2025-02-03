@@ -33,18 +33,18 @@ const Showroom = () => {
       <div className='min-w-96'>
         <div className="overflow-hidden whitespace-nowrap">
           <div className="mt-5 transition-opacity duration-1000 opacity-0" id="slogan1">
-            <p className="scrolling-text text-5xl font-black">LUKE 6:38</p>
+            <p className="scrolling-text text-3xl md:text-5xl font-black">WE BLESS YOU</p>
             {/* &nbsp; pour mettre l'espace entre 2 mots */}
           </div>
         </div>
         <div className='grid grid-cols-1 mt-14'>
-          <span className="text-2xl">
+          <span className="text-xl md:text-2xl">
             <TypewriterComponent
               options={{
               strings: [
               "Donnez aux autres",
               "et Dieu vous donnera",
-              "( à travers les autres )"
+              "( à travers les autres ) Luc 6:38"
             ],
             autoStart: true,
             loop: true,
@@ -58,7 +58,7 @@ const Showroom = () => {
           <div className='px-10'>
             <Link href={"/ccm"}>
             <Button size="lg"
-              className="w-full border-2 text-blue-500 bg-white hover:bg-blue-500 hover:text-white hover:border-white" 
+              className="w-full border-2 text-blue-500 bg-white hover:bg-blue-300 hover:text-white hover:border-white" 
             >
               <Telescope className="h-5 w-5"/>
               <span className="ml-5 text-lg">Découvrir</span>

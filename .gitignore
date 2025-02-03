@@ -28,10 +28,9 @@ yarn-error.log*
 # local env files
 .env*.local
 .env
-luke2024comment.txt
-middleware_copy.ts
+triplComment.txt
 process.txt
-collectionsComment.txt
+codeComment.txt
 
 
 # vercel

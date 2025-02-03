@@ -4,25 +4,26 @@
 generator client {
   provider = "prisma-client-js"
 }
-
+//
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 //
-
+//
 model User{
-  id             String     @id @default(auto()) @map("_id") @db.ObjectId
-  name           String?
-  email          String?    @unique
-  emailVerified  DateTime?
-  image          String?
-  password       String?
+  id                String     @id @default(auto()) @map("_id") @db.ObjectId
+  name              String?
+  email             String?    @unique
+  emailVerified     DateTime?
+  image             String?
+  password          String?
+  hashedEmail       String?
   //
-  accounts       Account[]
+  accounts          Account[]
   //
-  createdAt      DateTime   @default(now())
-  updatedAt      DateTime   @updatedAt
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
 }
 // selon Auth.JS site officiel au 03/01/2024
 model Account {
@@ -43,46 +44,30 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 //
-// code de parrainage
-model referralCode{
-  id               String   @id @default(auto()) @map("_id") @db.ObjectId
-  // godFather = parrain godMother = marraine
-  godFatherEmail   String?
-  godFatherCodepin Int      
-  // godSon = filleul godDaughter = filleule
-  godSonEmail      String?
-  godSonPhone      Int
-  secretCode       String
-  isUsed           Boolean @default(false)
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-}
 //
 model Profile {
   id                   String   @id @default(auto()) @map("_id") @db.ObjectId
-  googleEmail          String?
-  googleImage          String?   
-  usercodepin          Int      @unique @default(1000)
+  isActiveAccount      Boolean  @default(true)
+  role                 String   @default("USER")
+  codepin              Int      @unique @default(1000)
+  userId               String?
+  //
   credit               Int      @default(0)
   jackpot              Int      @default(0)
-  jackpotCents         Int      @default(0) // en cents x 100
-  //
-  username             String 
-  phone                String   @unique
-  firstname            String    
-  lastname             String    
-  city                 String    
-  countryId            String   @db.ObjectId
-  country              Country? @relation(fields: [countryId], references: [id], onDelete: Cascade)    
-  bio                  String    
   // lorsqu'il choisira son pays, on lui mettra ici son currency correspondant
-  currency             String   @default("nothing")
-  // total de ddc donné
-  ddcGiven             Int      @default(0)
-  ddcReceived          Int      @default(0)
-  // 
-  //
-  role                 UserRole @default(USER)
+  currency             String   @default("not informed")
+  googleImage          String? 
+  encryptedEmail       String?
+  hashedEmail          String?
+  username             String   @default("pseudo")
+  encryptedPhone       String?  @unique
+  hashedPhone          String?  @unique // pour vérification 
+  firstname            String   @default("prénom")
+  encryptedLastname    String   @default("nom") 
+  city                 String   @default("ville") 
+  country              String   @default("pays")
+  bio                  String   @default("présentez-vous") 
+  //  
   isPartner            Boolean  @default(false)
   // le maximum qu'il peut recevoir des user approvisionnant leur compte
   maxPartnerCredit     Int      @default(0)
@@ -90,9 +75,6 @@ model Profile {
   partnerCredit        Int      @default(0)
   // ce que le partenaire peut remettre à un user qui recupère sa cagnotte
   partnerCreditToRemit Int      @default(0)
-  //
-  validatorId          String   @default("aucun")
-  isActiveAccount      Boolean  @default(true)
   //
   collectionParticipants    CollectionParticipant[]
   profilesMets              ProfilesMet[]  @relation("profilesMet")
@@ -102,10 +84,6 @@ model Profile {
   updatedAt            DateTime @updatedAt
 }
 //
-enum UserRole {
-  ADMIN
-  USER
-}
 // la collecte
 model Collection {
   id                 String     @id @default(auto()) @map("_id") @db.ObjectId
@@ -154,19 +132,15 @@ model CollectionParticipant {
 model CollectionResult {
   id                 String  @id @default(auto()) @map("_id") @db.ObjectId
   // email du donateur
-  donatorEmail       String?
-  donatorProfileId   String?
+  donatorProfileId   String  @default("")
   // id de la collecte
-  collectionId       String?
+  collectionId       String  @default("")
   // montant à donner dans la collecte
   amount             Int?
   // la monnaie concerné de la collecte
   currency           String @default("nothing")
-  // le type de collecte
-  collectionType     String @default("")
   //
-  recipientEmail     String?
-  recipientProfileId String?
+  recipientProfileId String @default("")
   //number of donations received = concerne toujours le recipient
   donationReceived   Int  @default(0)
   //
@@ -177,12 +151,8 @@ model ProfilesMet {
   id                  String  @id @default(auto()) @map("_id") @db.ObjectId
   profileId           String  @db.ObjectId
   profile             Profile @relation("profilesMet", fields: [profileId], references: [id])
-  // 4 test
-  profilecodepin      Int
   participantMetId    String  @db.ObjectId
-  participantMet      Profile @relation("metProfiles", fields: [participantMetId], references: [id])
-  // 4 test
-  participantcodepin  Int     
+  participantMet      Profile @relation("metProfiles", fields: [participantMetId], references: [id])    
   @@unique([profileId, participantMetId])
 }
 //
@@ -218,24 +188,8 @@ model Country {
   name             String
   currency         String
   usezone          String 
-  profile          Profile[]
 }
-// Enregistrer ici les commissions que touche l'e/se
-model Commission {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  userEmail         String?
-  usercodepin       Int
-  transferCode      Int?
-  userJackpot       Int?
-  amountToTransfer  Int?
-  commission        Int?    @default(0)
-  // cents x 100
-  commissionCents   Int     @default(0)
-  currency          String  @default("nothing")
-  origin            String? 
-  //
-  createdAt      DateTime   @default(now())
-}
+//
 // taux de commission en %npx prisma generate
 model CommissionRate {
   id             String  @id @default(auto()) @map("_id") @db.ObjectId
@@ -243,18 +197,6 @@ model CommissionRate {
   //
   createdAt      DateTime   @default(now())
   updatedAt      DateTime   @updatedAt
-}
-//
-model Cents {
-  id             String  @id @default(auto()) @map("_id") @db.ObjectId
-  // ex: 0,57
-  amount         String
-  // 5
-  cent1          Int     @default(0)
-  // 7
-  cent2          Int     @default(0)
-  // multiplié par 100 = 0,57 x 100 = 57
-  byten          Int
 }
 // ####  
 // TRÈS IMPORTANT

@@ -13,8 +13,8 @@ export function AlsoReceiver({ collectionId }: { collectionId: string }) {
   return (
     <form action={alsoReceiverId} className="flex flex-col gap-y-5 p-2">
       <Input name="project" type={"hidden"} placeholder="Ex: achat de billet de train" className="h-12 bg-blue-200 rounded" />
-      <Button variant={"outline"} className='text-green-600 flex gap-x-4'>
-        Recevoir<HandCoins className='w-5 h-5'/>
+      <Button variant={"outline"} className='text-green-600 flex gap-x-4 hover:text-blue-500'>
+        Devenir désignable<HandCoins className='w-5 h-5'/>
       </Button>
     </form>
   )

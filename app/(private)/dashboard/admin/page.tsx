@@ -1,7 +1,7 @@
 import ReactivateAccount from '@/components/admin/active-account'
 import AddCountry from '@/components/admin/add-country'
 import { AddCountryAction } from '@/components/admin/add-country-action'
-import { ToAddFakeProfile } from '@/components/admin/add-fake-profile'
+//import { ToAddFakeProfile } from '@/components/admin/add-fake-profile'
 //import AddProfileForTests from '@/components/admin/add-profile-for-tests'
 import DontMakePartner from '@/components/admin/dont-make-partner'
 import EnterAmount from '@/components/admin/enter-amount'
@@ -22,23 +22,23 @@ const Admin = async () => {
     const last = await prismadb.currentProfileForTest.findFirst()
     const profiles = await prismadb.profile.findMany()
     return (
-        <div className='pt-14 flex w-full h-full flex-col'>
-            <div className='grid grid-cols-1 md:grid-cols-3 gap-3 m-4'>
-                <div className='flex flex-col border-2 border-green-500'>
-                    <p className='my-4 text-center font-medium text-xl text-green-600'>current: {last?.usercodepin}</p>
-                    <p className='my-2 text-center font-medium text-xl text-blue-500'>last: {last?.lastProfile}</p>
-                    <ProfileForTest collectionId={''}/> 
-                </div>
-                <div className='grid grid-cols-3 border-2 border-orange-500'>
-                    {
-                        profiles.map((profile) =>(
-                            <p key={profile?.id}>{profile?.username}</p>
-                        ))
-                    }
-                </div>
-                <ToAddFakeProfile/>
-                <Metric/>
-                <AddCountry/>
+      <div className='pt-14 flex w-full h-full flex-col'>
+        <div className='grid grid-cols-1 md:grid-cols-3 gap-3 m-4'>
+          <div className='flex flex-col border-2 border-green-500'>
+            <p className='my-4 text-center font-medium text-xl text-green-600'>current: {last?.usercodepin}</p>
+            <p className='my-2 text-center font-medium text-xl text-blue-500'>last: {last?.lastProfile}</p>
+            <ProfileForTest collectionId={''}/> 
+          </div>
+          <div className='grid grid-cols-3 border-2 border-orange-500'>
+          {
+            profiles.map((profile) =>(
+              <p key={profile?.id}>{profile?.username}</p>
+            ))
+          }
+        </div>
+        {/* <ToAddFakeProfile/> */}
+        <Metric/>
+        <AddCountry/>
                 {/* TODO: with action
                 <div className='flex flex-col border-2 border-green-500'>
                     <p className='my-4 text-center font-medium text-xl text-green-600'>current: {last?.usercodepin}</p>

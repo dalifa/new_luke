@@ -9,9 +9,9 @@ export function ConfirmEnterTripl() {
  
   return (
     <Button type="submit" aria-disabled={pending} 
-      variant={"primary"}
+      variant={"blue"}
     >
-        Confirmer 
+      Confirmer 
     </Button>
   )
 }

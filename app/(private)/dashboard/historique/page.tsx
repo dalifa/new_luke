@@ -1,6 +1,6 @@
 import { auth } from '@/auth';
 import { Card } from '@/components/ui/card';
-import { capitalize, currentUserInfos } from '@/hooks/own-current-user';
+import { capitalize, CurrentProfile } from '@/hooks/own-current-user';
 import { prismadb } from '@/lib/prismadb';
 import Link from 'next/link';
 // pour forma date
@@ -9,7 +9,7 @@ import { format } from "date-fns"
 const DATE_FORMAT = "d MMM yyyy"
 
 const History = async () => {
-    const connectedProfile = await currentUserInfos()
+    const connectedProfile = await CurrentProfile()
     const myClosedCollections = await prismadb.collectionParticipant.findMany({
         take: 20, // 50
         where: { 
@@ -33,30 +33,14 @@ const History = async () => {
               <>
               {
                 myClosedCollection?.collection?.isCollectionClosed === true && (
-                  <Link href={`/dashboard/historique/${myClosedCollection.id}`} key={myClosedCollection.id}>
+                  <Link href={`/dashboard/historique/${myClosedCollection?.collection?.id}`} key={myClosedCollection?.collection?.id}>
                     <Card className='flex items-center flex-col shadow-lg shadow-blue-100 p-4 text-center gap-y-2'>
                       {myClosedCollection?.collection?.collectionType === "tripl" && (
-                        <p className='text-sm lg:text-md font-medium text-red-600'>{capitalize(myClosedCollection?.collection?.collectionType)}</p>
-                      )}
-                      {myClosedCollection?.collection?.collectionType === "snippets" && (
-                        <p className='text-sm lg:text-md font-medium text-violet-600'>{capitalize(myClosedCollection?.collection?.collectionType)}</p>
-                      )}
-                      {myClosedCollection?.collection?.collectionType === "totality" && (
-                        <p className='text-sm lg:text-md font-medium text-blue-600'>{capitalize(myClosedCollection?.collection?.collectionType)}</p>
+                        <p className='text-sm lg:text-md font-medium text-blue-500'>{capitalize(myClosedCollection?.collection?.collectionType)}</p>
                       )}
                       {/* le montant */}
                       {myClosedCollection?.collection?.collectionType === "tripl" && (
-                        <p className='text-sm lg:text-md font-medium text-red-600'>
-                          De: {myClosedCollection?.collection?.amount}{myClosedCollection?.collection?.currency}
-                        </p>
-                      )}
-                      {myClosedCollection?.collection?.collectionType === "snippets" && (
-                        <p className='text-sm lg:text-md font-medium text-violet-600'>
-                          De: {myClosedCollection?.collection?.amount}{myClosedCollection?.collection?.currency}
-                        </p>
-                      )}
-                      {myClosedCollection?.collection?.collectionType === "totality" && (
-                        <p className='text-sm lg:text-md font-medium text-blue-600'>
+                        <p className='text-sm lg:text-md font-medium text-blue-500'> 
                           De: {myClosedCollection?.collection?.amount}{myClosedCollection?.collection?.currency}
                         </p>
                       )}
