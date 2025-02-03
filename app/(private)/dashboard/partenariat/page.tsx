@@ -1,15 +1,15 @@
-import { auth } from '@/auth';
+//
 import PartnerCreditForm from '@/components/partner/partner-credit';
 import PartnerTransferForm from '@/components/partner/partner-transfer';
 import TransferDemandList from '@/components/partner/transferDemandList';
 import { Card } from '@/components/ui/card';
-import { currentUserInfos } from '@/hooks/own-current-user';
+import { CurrentProfile } from '@/hooks/own-current-user';
 import { prismadb } from '@/lib/prismadb';
 
 // 
 const Partner = async () => {
     // la redirection pour les non connectés est faite depuis le fichier middleware
-    const connectedUser = await currentUserInfos()
+    const connectedUser = await CurrentProfile()
     //
     const metrics = await prismadb.metric.findFirst()
     //

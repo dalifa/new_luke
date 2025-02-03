@@ -56,7 +56,7 @@ const ReactivateAccount = () => {
     } catch (error) {
       toast.error('Something went wrong.');
     }
-    //
+    // 
   }
 
   if (!isMounted) {

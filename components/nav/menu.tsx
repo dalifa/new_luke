@@ -5,23 +5,15 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Archive, ArrowRightLeft, Group, LayoutDashboard, LineChart, MenuIcon, Shield, ShieldCheck, ShieldPlus, UserCircle, UserCircle2 } from "lucide-react"
-import SignOut from "@/components/auth/sign-out"
-import { auth, signOut } from "@/auth"
-import { prismadb } from "@/lib/prismadb"
+import { Archive, LayoutDashboard, LineChart, MenuIcon, ShieldCheck, ShieldPlus, UserCircle2 } from "lucide-react"
 import Link from "next/link"
-import { currentUserInfos, } from "@/hooks/own-current-user"
+import { CurrentProfile } from "@/hooks/own-current-user"
 
 export async function Menu() {
-  const connectedUser = await currentUserInfos()
+  const connectedUser = await CurrentProfile()
   //
   //
   return (

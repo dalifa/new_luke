@@ -219,7 +219,7 @@ const Collection = async ({ params }:{
                             participant.isOnlyDonator === true && (
                               <div className='flex items-end justify-center mt-5'>
                                 <Button variant={"outline"} className='text-red-500 flex gap-x-4'>
-                                  A choisi d'être non désignable <Ban className='w-5 h-5'/>
+                                  A choisi d&apos;être non désignable <Ban className='w-5 h-5'/>
                                 </Button>
                               </div>
                             )

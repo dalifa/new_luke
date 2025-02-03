@@ -34,7 +34,6 @@ const HistoryDetails = async ({
     const profiles = await prismadb.profile.findMany()
     // on select tous les profiles de la table User
     const users = await prismadb.user.findMany()
-    
 
     return (
         <div className='pt-14 h-ull flex items-center flex-col'>

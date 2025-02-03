@@ -1,10 +1,10 @@
 
 import { Card } from '@/components/ui/card';
 import { prismadb } from '@/lib/prismadb';
-import BackCancel from '@/components/dashboard/action-in-collection/backCancelled'; 
 import { capitalize, CurrentProfile, } from '@/hooks/own-current-user';
 import { donationAmountAction } from '@/actions/tripl/donationAmount';
 import { ConfirmTriplGiveButton } from '@/components/dashboard/action-in-collection/tripl/confirm-give-button';
+import BackButton from '@/components/dashboard/enter-in-collection/tripl/backButton';
 
 const Donation = async ({
   params
@@ -57,7 +57,7 @@ const Donation = async ({
           </div>
           <div className='grid grid-cols-2 gap-x-4'>
             <div className='w-full'>
-              <BackCancel/>
+              <BackButton/>
             </div>
             <form action={donationToRecipientId}>  
             {

@@ -69,59 +69,7 @@ const PartnerCreditForm = () => {
 
     return (
       <div>
-        <div className="bg-transparent text-indigo-900 p-5 rounded w-full">    
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <div className="space-y-2 px-4">
-                {/* lukecode du membre */} 
-                <FormField
-                  control={form.control}
-                  name="usercodepin"
-                  render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-slate-400 text-sm">Code PIN</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        disabled={isLoading}
-                        className="bg-blue-300 h-12 border-0 focus-visible:ring-0 text-slate-700 font-semibold  text-lg focus-visible:ring-offset-0"
-                        placeholder="Le Code PIN"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {/* somme à créditer */} 
-                <FormField
-                  control={form.control}
-                  name="amountToCredit"
-                  render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-slate-400 text-sm">Montant à Créditer</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        disabled={isLoading}
-                        className="bg-blue-300 h-12 border-0 focus-visible:ring-0 text-slate-700 font-semibold text-lg focus-visible:ring-offset-0"
-                        placeholder="Montant à créditer"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="px-3 py-3 border-8 border-transparent">
-                <Button variant="blue" disabled={isLoading} className="w-full h-14 text-lg font-semibold text-white">
-                  Créditer
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </div>
+        formulaire pour créditer le compte d&apos;un membre par un partenaire
       </div>
     )
 }
