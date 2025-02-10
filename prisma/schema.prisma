@@ -9,7 +9,7 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
-//
+// 
 //
 model User{
   id                String     @id @default(auto()) @map("_id") @db.ObjectId
@@ -60,8 +60,8 @@ model Profile {
   encryptedEmail       String?
   hashedEmail          String?
   username             String   @default("pseudo")
-  encryptedPhone       String?  @unique
-  hashedPhone          String?  @unique // pour vérification 
+  encryptedPhone       String?  
+  hashedPhone          String?  // pour vérification 
   firstname            String   @default("prénom")
   encryptedLastname    String   @default("nom") 
   city                 String   @default("ville") 

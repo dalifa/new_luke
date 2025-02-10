@@ -46,7 +46,7 @@ const HistoryDetails = async ({
                     {/*<ScrollArea className='h-80'>*/}
                     {
                         results.map((result) => (
-                            <Card key={result.id} className='grid grid-cols-3 p-2 gap-1 shadow-lg shadow-blue-100'>
+                            <Card key={result.id} className='grid grid-cols-3 p-2 gap-1 shadow-md shadow-blue-100'>
                               <div className=''>
                               {
                                 profiles.map((profile) => (

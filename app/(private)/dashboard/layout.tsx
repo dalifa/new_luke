@@ -8,13 +8,13 @@ export default async function PublicLayout({
 }) {
   const connected = await currentUser();
   return (
-    <div className="h-full bg-white">
+    <div className="h-full bg-white/90"> 
       {
         connected && (
           <PrivateTopbar/>
         )
       }
-      <main className="pt-14 pb-20 bg-white">
+      <main className="pt-14 pb-20 bg-white/90">
         {children}
       </main>
     </div>

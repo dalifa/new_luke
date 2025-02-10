@@ -20,7 +20,9 @@ export function UpdatePhone({ profileId }: { profileId: string }) {
           <p className='text-blue-500 text-center text-xl font-medium'>Modifier le Portable</p>
           <Input name="phone" className='w-52 text-center items-center text-lg' placeholder="ex: 0600000000"/>
           <PopoverClose className='text-white rounded-md  h-10 text-xl w-52 bg-blue-500 hover:bg-blue-400'>
+            <Button variant={"blue"} className='w-full hover:bg-blue-600'>
               Valider
+            </Button>
           </PopoverClose>
         </form>
       </PopoverContent>

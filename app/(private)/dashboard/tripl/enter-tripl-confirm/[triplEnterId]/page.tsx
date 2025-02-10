@@ -15,7 +15,7 @@ const ConfirmEnterInTripl = async ({params}:{params: {triplEnterId:string}}) => 
   const amountId = params.triplEnterId;
     const enterInAtriplAmountId = enterInTriplAction.bind(null, amountId);
   return (
-    <div className="flex flex-col w-full h-full pt-10 lg:pt-14 items-center justify-center">
+    <div className="flex flex-col w-full h-full pt-10 lg:pt-14 items-center justify-center bg-white/90">
       <div className="flex flex-col w-full h-screen pt-[20%] lg:pt-[10%] items-center">
         <Card className="w-4/5 lg:w-2/5 p-5 lg:py-10 border-2 shadow-md shadow-blue-100">
           <div className="flex flex-row items-center justify-center">

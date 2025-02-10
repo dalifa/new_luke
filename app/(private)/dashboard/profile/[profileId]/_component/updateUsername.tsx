@@ -20,7 +20,9 @@ export function UpdateUsername({ profileId }: { profileId: string }) {
           <p className='text-blue-500 text-center text-xl font-medium'>Modifier le Pseudo</p>
           <Input name="username" className='w-52 text-center items-center' placeholder="ex: 007"/>
           <PopoverClose className='w-full text-xl text-white h-10 font-medium rounded-md bg-blue-500 hover:bg-blue-400'>
+            <Button variant={"blue"} className='w-full hover:bg-blue-600'>
               Valider
+            </Button>
           </PopoverClose>
         </form>
       </PopoverContent>

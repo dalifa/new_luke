@@ -41,15 +41,15 @@ const Donation = async ({
     //const one = 1
 
   return (
-    <div className='w-full flex items-center justify-center flex-col'>
+    <div className='w-full flex items-center justify-center flex-col bg-white/90'>
       <div className='flex w-full p-4 md:w-3/5 lg:w-2/5 items-center justify-center flex-col'>
-        <Card className='flex flex-col w-full mt-[20%] p-8 bg-white text-center items-center shadow-md shadow-blue-300'>
+        <Card className='flex flex-col w-full mt-[20%] p-8 bg-white text-center items-center shadow-md shadow-blue-100'>
           <p className='text-blue-500 text-lg md:text-xl font-semibold'>Confirmation de don</p>
           <div className='flex flex-col gap-y-1 text-center text-md md:text-lg mb-2 py-5 text-slate-500'>
             <p>Vous shouhaitez que</p> 
             {
               myRecipientInCollection?.profile &&(
-              <p className='font-semibold'>
+              <p className='font-semibold'> 
                 {capitalize(myRecipientInCollection?.profile?.username)}
               </p>)
             }

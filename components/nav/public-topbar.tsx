@@ -13,7 +13,7 @@ const PublicTopbar = () => {
         </div>
         <div>
           <Link href={"/"}>
-          <h1 className="font-semibold">WE BLESS YOU</h1>
+            <h1 className="font-semibold">WE BLESS YOU</h1>
           </Link>
         </div>
         <div className="flex flex-row items-center gap-x-2">

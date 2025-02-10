@@ -72,8 +72,8 @@ const Collection = async ({ params }:{
   })
   //
   return (
-    <div className='h-full flex items-center justify-center flex-col pt-5 gap-5 bg-white'>
-      <div className='w-4/5 lg:w-2/5 p-3 mb-5 border rounded text-center bg-white shadow-md shadow-blue-100'>
+    <div className='h-full flex items-center justify-center flex-col pt-5 gap-5 bg-white/90'>
+      <div className='w-4/5 lg:w-2/5 p-3 mb-5 border rounded text-center bg-white shadow'>
         <p className='text-slate-600 font-medium text-center text-lg lg:text-xl'>
           Participants à votre collecte {collectionParams?.collectionType} de {collectionParams?.amount}{collectionParams?.currency}
         </p>
@@ -81,7 +81,7 @@ const Collection = async ({ params }:{
           designationCount !== 0 && designationCount !== 3 && (
             <p className='text-lg mt-5 font-medium text-green-600'>{designationCount} / 3 
             {designationCount === 1 ? (
-              <span> &nbsp;a déjà fait sa désignation</span>
+              <span> &nbsp;a déjà fait sa désignation</span> 
             ):(<span> &nbsp;ont déjà fait leur désignation</span>)} </p>
           )
         }
@@ -94,7 +94,7 @@ const Collection = async ({ params }:{
                 <>
                 {
                   participant?.profile?.id === connected?.id && (
-                    <Card key={participant.id} className='p-4 bg-white text-slate-600 shadow-lg shadow-blue-200'>
+                    <Card key={participant.id} className='p-4 bg-white text-slate-600 shadow-md shadow-blue-100'>
                       {/* ON AFFICHE EN PREMIER CELUI QUI EST CONNECTÉ */}
                       <div className='grid grid-cols-1 gap-y-2'>
                         <div className='grid grid-cols-1 gap-y-2'>
@@ -176,7 +176,7 @@ const Collection = async ({ params }:{
                 <>
                 {
                   participant?.profile?.id !== connected?.id && (
-                    <Card key={participant.id} className='p-4 bg-white text-slate-600 shadow-lg shadow-blue-200'>
+                    <Card key={participant.id} className='p-4 bg-white text-slate-600 shadow-md shadow-blue-100'>
                     {
                       <>
                       <div className='grid grid-cols-1 gap-y-2'>

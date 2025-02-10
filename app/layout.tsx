@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter, Montserrat } from 'next/font/google'
 import './globals.css'
+import ActivityTracker from '@/components/auth/activity-tracker'
 //
 const inter = Inter({ subsets: ['latin'] })
 const mont = Montserrat({ subsets: ['latin'] })
@@ -18,10 +19,24 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={mont.className}>
+        {/* <ActivityTracker> */}
+          <div className="h-full bg-white">
+            {children}
+          </div>
+        {/* </ActivityTracker> */}
+      </body>
+    </html>
+  )
+}
+
+
+{/*
+  avant le 03/02/25
+  <html lang="en">
+      <body className={mont.className}>
         <div className="h-full bg-white">
           {children}
         </div>
       </body>
     </html>
-  )
-}
+*/}

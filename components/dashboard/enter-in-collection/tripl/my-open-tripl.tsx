@@ -28,7 +28,7 @@ export async function MyOpenTripl() {
   })
   //
     return(
-      <Card className='bg-white shadow-slate-300 shadow-lg p-4'>
+      <Card className='bg-white shadow-blue-100 shadow-md p-4'>
         <p className='text-center mb-3 font-semibold text-slate-600 text-xl lg:text-lg'>
           Vos Tripl
         </p> 

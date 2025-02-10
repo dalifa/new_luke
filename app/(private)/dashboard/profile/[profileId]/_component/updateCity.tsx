@@ -20,7 +20,9 @@ export function UpdateCity({ profileId }: { profileId: string }) {
           <p className='text-blue-500 text-center text-xl font-medium'>Changer la Ville</p>
           <Input name="city" className='w-52 text-center items-center' placeholder="ex: Paris"/>
           <PopoverClose className='h-10 font-medium text-xl rounded-md text-white bg-blue-500 w-52 hover:bg-blue-400'>
+            <Button variant={"blue"} className='w-full hover:bg-blue-600'>
               Valider
+            </Button>
           </PopoverClose>
         </form>
       </PopoverContent>

@@ -1,4 +1,4 @@
-import { auth } from '@/auth';
+
 import { Card } from '@/components/ui/card';
 import { capitalize, CurrentProfile } from '@/hooks/own-current-user';
 import { prismadb } from '@/lib/prismadb';
@@ -34,7 +34,7 @@ const History = async () => {
               {
                 myClosedCollection?.collection?.isCollectionClosed === true && (
                   <Link href={`/dashboard/historique/${myClosedCollection?.collection?.id}`} key={myClosedCollection?.collection?.id}>
-                    <Card className='flex items-center flex-col shadow-lg shadow-blue-100 p-4 text-center gap-y-2'>
+                    <Card className='flex items-center flex-col shadow-md shadow-blue-100 p-4 text-center gap-y-2'>
                       {myClosedCollection?.collection?.collectionType === "tripl" && (
                         <p className='text-sm lg:text-md font-medium text-blue-500'>{capitalize(myClosedCollection?.collection?.collectionType)}</p>
                       )}

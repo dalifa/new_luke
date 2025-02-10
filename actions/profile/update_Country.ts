@@ -15,7 +15,7 @@ export const fetchCountries = async () => {
 // 
 // ################### 
 // 
-export const updateTheCountry = async (profileId: string, country: string) => {
+export const changeCountry = async (profileId: string, country: string) => {
   const session = await auth()
   //
   const useSession = await prismadb.user.findFirst({
@@ -30,13 +30,17 @@ export const updateTheCountry = async (profileId: string, country: string) => {
     })
     // le nom du pays choisi
     const chosenCountry = await prismadb.country.findFirst({
-      where: { name: country }
+      where: { id: country }
     })
     // 
     await prismadb.profile.updateMany({
       where: { id: concerned?.id },
-      data: { country: chosenCountry?.name }, //
+      data: { 
+        country: chosenCountry?.name,
+        currency: chosenCountry?.currency 
+      }, //
     });
+    console.log("pays choisi: " + chosenCountry?.name)
     // TODO: ACTIVITY
     await prismadb.activity.create({
     data: { 
