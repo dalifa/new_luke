@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 // 
 export const increasePartnerMaxCredit = async (memberManagedId: string, formData:any) => {
-  const amountToAdd = formData.get("amount");
+  const amountToAdd = Number(formData.get("amount"));
   const connected = await CurrentProfile();
   if (!connected) {
     return redirect ("/")
@@ -28,8 +28,9 @@ export const increasePartnerMaxCredit = async (memberManagedId: string, formData
     return redirect(`/dashboard/admin/${concerned.id}`)
   }
   // 
+  const concernedMaxPartnerCredit = concerned?.maxPartnerCredit
   // ON AUGMENT SON MAX PARTNER CREDIT DE AMOUNT
-    const newMaxPartnerCredit = concerned?.maxPartnerCredit + amountToAdd
+    const newMaxPartnerCredit = concernedMaxPartnerCredit + amountToAdd
     //
     await prismadb.profile.updateMany({
       where: { id: concerned?.id },

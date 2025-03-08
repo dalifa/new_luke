@@ -1,11 +1,13 @@
 //
 import { Counters } from '@/components/dashboard/counters';
+import { JackpotToCredit } from '@/components/dashboard/transfert/jackpotToCredit';
+import { LevelToRecovery } from '@/components/dashboard/transfert/levelToRecovery';
 import { Card } from '@/components/ui/card';
 import { CurrentProfile } from '@/hooks/own-current-user';
 //
-const Transfer = async () => {
+const Transfer = async ({ profileId }: { profileId: string }) => {
   // la redirection pour les non connectés est faite depuis le fichier middleware
-  const connectedUser = await CurrentProfile()
+  const connected = await CurrentProfile()
   // s'il a déjà 2 demande de transfert en court
   return ( 
     <div className='h-ull flex items-center flex-col'>
@@ -16,17 +18,19 @@ const Transfer = async () => {
           </div>
           <div className='w-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5'>
             <Card className='bg-white p-4 shadow-lg shadow-blue-200'>
-              <div className='mb-10'>
+              <div className='space-y-5'>
                 <p className='text-center text-slate-500 text-md md:text-lg font-semibold'>
-                  Transférer votre cagnotte vers votre crédit
+                  Transférer la cagnotte vers le crédit
                 </p>
-              </div>
+                {connected && (<JackpotToCredit profileId={connected?.id}/>)}
+              </div> 
             </Card>
             <Card className='bg-white p-4 shadow-lg shadow-blue-200'>
-              <div className='mb-10'>
+              <div className='space-y-5'>
                 <p className='text-center text-slate-500 text-md md:text-lg font-semibold'>
-                  Obtenir un code de retrait de cagnotte
+                  Définir un seuil de retrait de cagnotte
                 </p>
+                {connected && (<LevelToRecovery profileId={connected?.id}/>)}
               </div>
             </Card>
           </div>

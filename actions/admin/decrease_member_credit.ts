@@ -27,25 +27,28 @@ export const decreaseMemberCredit = async (memberManagedId: string, formData:any
   if (isNaN(amountToRemove) || amountToRemove <= 0) {
     return redirect(`/dashboard/admin/${concerned.id}`)
   }
-
+  const concernedCredit = Number(concerned?.credit)
   // Calcul du nouveau crédit
-  const newCredit = concerned.credit - amountToRemove;
+  if(concernedCredit >= amountToRemove)
+  {  
+    const newCredit = concernedCredit - amountToRemove;
 
-  // Mise à jour du crédit
-  await prismadb.profile.update({
-    where: { id: concerned.id },
-    data: { credit: newCredit },
-  });
+    // Mise à jour du crédit
+    await prismadb.profile.update({
+      where: { id: concerned.id },
+      data: { credit: newCredit },
+    });
    
-  // Enregistrement de l'activité
-  await prismadb.activity.create({
-    data: {
-      author: connected.firstname,
-      activity: `L'ADMIN ${connected.firstname} (codepin: ${connected.codepin}) a diminué le crédit de ${concerned.firstname} (codepin: ${concerned.codepin}) de ${amountToRemove}, nouveau crédit total: ${newCredit}.`,
-    },
-  });
+    // Enregistrement de l'activité
+    await prismadb.activity.create({
+      data: {
+        author: connected.firstname,
+        activity: `L'ADMIN ${connected.firstname} (codepin: ${connected.codepin}) a diminué le crédit de ${concerned.firstname} (codepin: ${concerned.codepin}) de ${amountToRemove}, nouveau crédit total: ${newCredit}.`,
+      },
+    }); 
 
-  // Revalidation du cache pour actualiser les données
-  revalidatePath(`/dashboard/admin/${concerned.id}`);
+    // Revalidation du cache pour actualiser les données
+    revalidatePath(`/dashboard/admin/${concerned.id}`);
+  }
 
 };

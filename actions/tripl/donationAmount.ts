@@ -170,6 +170,18 @@ import { redirect } from "next/navigation";
             jackpot: winnerProfile?.jackpot + jackpotReceived,
           }
         })
+        // ON VERIFIE SI SON NOUVEAU JACKPOT A ATTEINT SON SEUIL DE RETRAIT
+        const newJackpot = await prismadb.profile.findFirst({
+          where: {id: winnerProfile?.id}
+        })
+        //
+        if(newJackpot && newJackpot?.jackpot >= newJackpot?.recoveryLevel)
+        {
+          await prismadb.profile.updateMany({
+            where: {id: winnerProfile?.id},
+            data: {awaitingRecovery: true}
+          })
+        }
       }
     } // SI PERSONNE N'A REÇU DEUX DÉSIGNATIONS
     else{

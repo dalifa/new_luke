@@ -11,6 +11,7 @@ import { UpdatePhone } from "./_component/updatePhone"
 import { UpdateCity } from "./_component/updateCity"
 import { UpdateCountry } from "./_component/updateCountry"
 import { UpdateBio } from "./_component/updateBio"
+import { UpdateChurch } from "./_component/updateChurch"
 //  
 const Profile = async ({ params }: { params: { profileId: string } }) => {
   // la redirection pour les non connectés est faite depuis le fichier middleware 
@@ -22,66 +23,109 @@ const Profile = async ({ params }: { params: { profileId: string } }) => {
   // Membre concerné
   const concerned = await prismadb.profile.findFirst({
     where: { 
-      hashedEmail: userSession?.hashedEmail,
+      googleEmail: userSession?.email,
       id: params?.profileId
     } 
   })
   //
   // tous les pays
   const allCountries = await fetchCountries();
-  //
+  // 
   return (
     <div className='h-ull flex items-center justify-center flex-col'> 
       <div className="flex w-full md:w-3/5 mt-5 md:mt-20">
         <div className="grid grid-cols-1 text-slate-600 bg-white rounded p-2 gap-y-10 md:p-5 w-full shadow-md mx-4 shadow-blue-300">
-          <div className="mt-5">
-            <p className="text-center text-blue-500 text-xl font-medium">Vos informations de profil</p>
-            
+          <div>
+            <p className="text-center text-blue-500 text-xl font-medium">
+              { concerned?.firstname === "prénom" || concerned?.firstname === "nom" || concerned?.lastname === "pseudo" 
+                || concerned?.church === "église" || concerned?.city === "ville" || concerned?.country === "pays" ? (
+                  <span>Modifier vos&nbsp;</span>
+                ):(<span>Vos&nbsp;</span>)  }
+              informations de profil
+            </p>
           </div>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-10 mb-5'>
+          <div className='grid grid-cols-1 px-4 gap-y-2 mb-5'>
             { concerned && (
               <>
-            <div className="flex flex-row items-center gap-x-4">
-              <UpdateFirstname profileId={concerned?.id}/>
-              <p className='leading-relaxed text-lg font-medium'>
-                {capitalize(concerned?.firstname)}
-              </p>
+            <div className="grid grid-cols-2 bg-gray-100 p-4 rounded-md">
+              <div className="flex items-center">
+                <p className='leading-relaxed text-lg font-medium'>
+                  {capitalize(concerned?.firstname)}
+                </p>
+              </div>
+              <div className="flex items-center justify-end">
+                <UpdateFirstname profileId={concerned?.id}/>
+              </div>
             </div>
-            <div className="flex flex-row items-center gap-x-4">
-              <UpdateLastname profileId={concerned?.id}/>
-              <p className='leading-relaxed text-lg font-medium'>
-                {capitalize(decrypt(concerned?.encryptedLastname))}
-              </p>
+            <div className="grid grid-cols-2 bg-gray-100 p-4 rounded-md">
+              <div className="flex items-center">
+                <p className='leading-relaxed text-lg font-medium'>
+                  {capitalize(decrypt(concerned?.lastname))} 
+                </p>
+              </div>
+              <div className="flex items-center justify-end">
+                <UpdateLastname profileId={concerned?.id}/>
+              </div>
             </div>
-            <div className="flex flex-row items-center gap-x-4">
-              <UpdateUsername profileId={concerned?.id}/>
-              <p className='leading-relaxed text-lg font-medium'>
-                {capitalize(concerned?.username)}
-              </p>
+            <div className="grid grid-cols-2 bg-gray-100 p-4 rounded-md">
+              <div className="flex items-center">
+                <p className='leading-relaxed text-lg font-medium'>
+                  {capitalize(concerned?.username)}
+                </p>
+              </div>
+              <div className="flex items-center justify-end">
+                <UpdateUsername profileId={concerned?.id}/>
+              </div>
             </div>
-            <div className="flex flex-row items-center gap-x-4">
-              <UpdatePhone profileId={concerned?.id}/>
-              <p className='leading-relaxed text-lg font-medium'>
-                {decrypt(concerned?.encryptedPhone)}
-              </p>
+            <div className="grid grid-cols-2 bg-gray-100 p-4 rounded-md">
+              <div className="flex items-center">
+                <p className='leading-relaxed text-lg font-medium'>
+                  {decrypt(concerned?.encryptedPhone)}
+                </p>
+              </div>
+              <div className="flex items-center justify-end">
+                <UpdatePhone profileId={concerned?.id}/>
+              </div>
             </div>
-            <div className="flex flex-row items-center gap-x-4">
-              <UpdateCity profileId={concerned?.id}/>
-              <p className='leading-relaxed text-lg font-medium'>
-                {capitalize(concerned?.city)}
-              </p>
+            <div className="grid grid-cols-2 bg-gray-100 p-4 rounded-md">
+              <div className="flex items-center">
+                <p className='leading-relaxed text-lg font-medium'>
+                  {capitalize(concerned?.church)}
+                </p>
+              </div>
+              <div className="flex items-center justify-end">
+                <UpdateChurch profileId={concerned?.id}/>
+              </div>
             </div>
-            <div className="flex flex-row items-center gap-x-4">
-              <UpdateCountry profileId={concerned?.id} allCountries={allCountries}/>
-              <p className='leading-relaxed text-lg font-medium'>
-                {capitalize(concerned?.country)}
-              </p>
+            <div className="grid grid-cols-2 bg-gray-100 p-4 rounded-md">
+              <div className="flex items-center">
+                <p className='leading-relaxed text-lg font-medium'>
+                  {capitalize(concerned?.city)}
+                </p>
+              </div>
+              <div className="flex items-center justify-end">
+                <UpdateCity profileId={concerned?.id}/>
+              </div>
             </div>
-            <div className="flex flex-row items-center gap-x-4">
-              <UpdateBio profileId={concerned?.id}/>
-              <p className='leading-relaxed text-lg font-medium'>
-                {capitalize(concerned?.bio)}
-              </p>
+            <div className="grid grid-cols-2 bg-gray-100 p-4 rounded-md">
+              <div className="flex items-center">
+                <p className='leading-relaxed text-lg font-medium'>
+                  {capitalize(concerned?.country)}
+                </p>
+              </div>
+              <div className="flex items-center justify-end">
+                <UpdateCountry profileId={concerned?.id} allCountries={allCountries}/>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 bg-gray-100 p-4 rounded-md">
+              <div className="flex items-center">
+                <p className='leading-relaxed text-lg font-medium'>
+                  {capitalize(concerned?.bio)}
+                </p>
+              </div>
+              <div className="flex items-center justify-end">
+                <UpdateBio profileId={concerned?.id}/>
+              </div>
             </div>
             </>
             )}

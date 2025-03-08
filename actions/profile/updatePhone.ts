@@ -6,9 +6,9 @@ import { encrypt } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 //
 export const updatePhone = async (profileId: string, formData:any) => {
-  const newPhone = formData.get("phone"); 
+  const newPhone = formData.get("value"); 
   const session = await auth()
-  //
+  // 
   const useSession = await prismadb.user.findFirst({
     where: { email: session?.user?.email }
   })
@@ -16,7 +16,7 @@ export const updatePhone = async (profileId: string, formData:any) => {
   const concerned = await prismadb.profile.findFirst({
     where: { 
       id: profileId,
-      hashedEmail: useSession?.hashedEmail
+      googleEmail: useSession?.email
     } 
   })
   // on crypte le phone

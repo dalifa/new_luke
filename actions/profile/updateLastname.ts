@@ -6,9 +6,9 @@ import { encrypt } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 //
 export const updateLastname = async (profileId: string, formData:any) => {
-  const memberLastname = formData.get("lastname");
+  const memberLastname = formData.get("value");
   const session = await auth()
-  //
+  // 
   const useSession = await prismadb.user.findFirst({
     where: { email: session?.user?.email }
   })
@@ -16,7 +16,7 @@ export const updateLastname = async (profileId: string, formData:any) => {
   const concerned = await prismadb.profile.findFirst({
     where: { 
       id: profileId,
-      hashedEmail: useSession?.hashedEmail
+      googleEmail: useSession?.email
     } 
   })
   //
@@ -24,7 +24,7 @@ export const updateLastname = async (profileId: string, formData:any) => {
   //
   await prismadb.profile.updateMany({
     where: { id: concerned?.id },
-    data: { encryptedLastname: lastnameCrypted }
+    data: { lastname: lastnameCrypted } // cryptage du nom en cas de pyratage
   })
   //
   // TODO: ACTIVITY

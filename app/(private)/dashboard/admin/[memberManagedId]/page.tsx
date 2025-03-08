@@ -1,4 +1,4 @@
-"use client"
+
 //
 import { auth } from "@/auth"
 import { DecreaseMemberCredit } from "./_component/decreaseMemberCredit"
@@ -11,7 +11,6 @@ import { IncreaseMemberJackpot } from "./_component/increaseMemberJackpot"
 import { DecreaseMemberJackpot } from "./_component/decreaseMemberJackpot"
 import { MakePartner } from "./_component/makePartner"
 import { ActiverInactiveAccount } from "./_component/activeInactiveAccount"
-import { Separator } from "@radix-ui/react-separator"
 
 const MemberManaged = async ({ params }: { params: { memberManagedId: string } }) => {
   // la redirection pour les non connectés est faite depuis le fichier middleware 
@@ -25,6 +24,7 @@ const MemberManaged = async ({ params }: { params: { memberManagedId: string } }
     <div className='h-full flex items-center justify-center flex-col space-y-10 px-6 lg:px-0'>
       <div className="w-full text-xl fond-medium lg:w-4/5 p-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 bg-slate-100 rounded-md shadow-sm gap-y-5 mb-4 border-2 border-slate-200">
         <p>Code PIN: <span className="text-blue-500 font-semibold">{memberConcerned?.codepin}</span></p>
+        <p>Prénom: <span className="text-blue-500 font-semibold">{memberConcerned?.firstname}</span></p>
         <p>Account: { memberConcerned?.isActiveAccount === true ? (<span className="text-green-500 font-semibold">ACTIF</span>):(<span className="text-rose-500 font-semibold">INACTIF</span>)}</p>
         <p>Is Partner: { memberConcerned?.isPartner === true ? (<span className="text-green-500 font-semibold">YES</span>):(<span className="text-rose-500 font-semibold">NOT</span>)}</p>
         <p>Pays: <span className="text-blue-500 font-semibold">{memberConcerned?.country}</span></p>
@@ -35,8 +35,8 @@ const MemberManaged = async ({ params }: { params: { memberManagedId: string } }
         <p>Crédit actuel: <span className="text-blue-500 font-semibold">{memberConcerned?.credit}</span>&nbsp;{memberConcerned?.currency}</p>
         <p>Cagnotte actuelle: <span className="text-blue-500 font-semibold">{memberConcerned?.jackpot}</span>&nbsp;{memberConcerned?.currency}</p>
         
-        <p>Partner Credit: <span className="text-blue-500 font-semibold">{memberConcerned?.jackpot}</span>&nbsp;{memberConcerned?.currency}</p>
-        <p>Partner Max Credit: <span className="text-blue-500 font-semibold">{memberConcerned?.jackpot}</span>&nbsp;{memberConcerned?.currency}</p>
+        <p>Partner Credit: <span className="text-blue-500 font-semibold">{memberConcerned?.partnerCredit}</span>&nbsp;{memberConcerned?.currency}</p>
+        <p>Partner Max Credit: <span className="text-blue-500 font-semibold">{memberConcerned?.maxPartnerCredit}</span>&nbsp;{memberConcerned?.currency}</p>
       </div> 
       <div className="w-full lg:w-4/5 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10">
         <div>

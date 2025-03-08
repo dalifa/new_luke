@@ -1,31 +1,22 @@
 'use client'
 import { updateUsername } from '@/actions/profile/updateUsername';
-//
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { PopoverClose } from '@radix-ui/react-popover';
-import { RefreshCcw } from 'lucide-react';
+import { UserRound } from 'lucide-react';
+import { UpdateFieldDialog } from './updateFieldDialog';
 //
 export function UpdateUsername({ profileId }: { profileId: string }) {
-  const update = updateUsername.bind(null, profileId)
+  const handleUpdate = updateUsername.bind(null, profileId)
   //   
+  // Définition des valeurs des props
+  const label = "Modifier votre Pseudo";
+  const placeholder = "ex: 007";
+  const icon = UserRound;
+
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <RefreshCcw className='w-5 h-5 text-sm text-blue-500 cursor-pointer'/>
-      </PopoverTrigger>
-      <PopoverContent className="w-70 px-10 ml-10 md:ml-0">
-        <form action={update} className="flex flex-col gap-y-4">
-          <p className='text-blue-500 text-center text-xl font-medium'>Modifier le Pseudo</p>
-          <Input name="username" className='w-52 text-center items-center' placeholder="ex: 007"/>
-          <PopoverClose className='w-full text-xl text-white h-10 font-medium rounded-md bg-blue-500 hover:bg-blue-400'>
-            <Button variant={"blue"} className='w-full hover:bg-blue-600'>
-              Valider
-            </Button>
-          </PopoverClose>
-        </form>
-      </PopoverContent>
-    </Popover>
-  )
+    <UpdateFieldDialog
+      label={label}
+      placeholder={placeholder}
+      onSubmit={handleUpdate}
+      icon={icon}
+    />
+  );
 }

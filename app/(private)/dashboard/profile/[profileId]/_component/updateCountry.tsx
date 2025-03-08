@@ -25,13 +25,13 @@ export function UpdateCountry({ allCountries, profileId }: {
   };
   //
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Globe className="text-blue-500 cursor-pointer"/>
+    <Dialog> 
+      <DialogTrigger asChild className="w-7 h-7 p-1 bg-gray-200 rounded-md hover:w-8 hover:h-8">
+        <Globe className="text-blue-500 w-5 h-5 cursor-pointer"/>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[400px]">
+      <DialogContent className="w-80 md:w-96 px-10 rounded-md">
         <DialogHeader>
-          <DialogTitle className="text-center">Pays d&apos;habitation</DialogTitle>
+          <DialogTitle className="text-center text-blue-500 text-lg">Modifier votre Pays</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="flex flex-col gap-y-2 mt-4">
           <select
@@ -47,11 +47,11 @@ export function UpdateCountry({ allCountries, profileId }: {
               </option>
             ))}
           </select>
-          <DialogClose className="w-full">
-          <button type="submit" className="mt-2 p-2 bg-blue-500 hover:bg-blue-600 text-white rounded">
-            Choisir
-          </button>
-          </DialogClose>
+          <DialogClose className='w-full text-white mt-2 h-10 font-medium rounded-md bg-blue-500 hover:bg-blue-400'>
+            <Button variant={"blue"} className='w-full text-xl font-medium hover:bg-blue-600'>
+              Valider
+            </Button>
+          </DialogClose> 
         </form>
       </DialogContent>
     </Dialog>

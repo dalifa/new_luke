@@ -5,9 +5,9 @@ import { prismadb } from "@/lib/prismadb";
 import { revalidatePath } from "next/cache";
 //
 export const updateFirstname = async (profileId: string, formData:any) => {
-  const memberFirstname = formData.get("firstname");
+  const memberFirstname = formData.get("value");
   const session = await auth()
-  // 
+  //  
   const userSession = await prismadb.user.findFirst({
     where: { email: session?.user?.email }
   })
@@ -15,7 +15,7 @@ export const updateFirstname = async (profileId: string, formData:any) => {
   const concerned = await prismadb.profile.findFirst({
     where: { 
       id: profileId,
-      hashedEmail: userSession?.hashedEmail
+      googleEmail: userSession?.email
     } 
   })
   //
@@ -26,7 +26,7 @@ export const updateFirstname = async (profileId: string, formData:any) => {
       googleImage: userSession?.image
     }
   })
-  //
+  // 
   // ACTIVITY
   await prismadb.activity.create({
     data: {

@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 // 
 export const increaseMemberJackpot = async (memberManagedId: string, formData:any) => {
-  const amountToAdd = formData.get("amount");
+  const amountToAdd = Number(formData.get("amount"));
   const connected = await CurrentProfile();
   if (!connected) {
     return redirect ("/")
@@ -28,9 +28,12 @@ export const increaseMemberJackpot = async (memberManagedId: string, formData:an
     return redirect(`/dashboard/admin/${concerned.id}`)
   }
   // 
+  const concernedJackpot = Number(concerned?.jackpot)
   // ON AUGMENT SON JACKPOT DE AMOUNT
-    const newJackpot = concerned?.jackpot + amountToAdd
-    //
+  const newJackpot = concernedJackpot + amountToAdd
+
+  console.log("jackpot c'est: " + newJackpot)
+  //
     await prismadb.profile.updateMany({
       where: { id: concerned?.id },
       data: { jackpot: newJackpot }

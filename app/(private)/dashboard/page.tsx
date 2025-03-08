@@ -18,7 +18,7 @@ const Dashboard = async () => {
   // Si le mail hashé du connecté n'est pas dans la table Profile
   // Vérifie si le profil existe dans la table profile
    const profile = await prismadb.profile.findFirst({
-    where: { hashedEmail: currentUser?.hashedEmail },
+    where: { googleEmail: currentUser?.email },
   });
   // nbre de profile présent dans la table profile pour produire son CODEPIN
   const profileNbr = await prismadb.profile.count()
@@ -29,41 +29,39 @@ const Dashboard = async () => {
   async function create() {
     "use server";
     //
-    if(session?.user?.email)
+    if(session?.user?.email && session?.user?.name)
     {
-      // le vrai email hashé
-      const emailHashed = hashed(session?.user?.email)
-      // le vrai email crypté
-      const emailEncrypted = encrypt(session?.user?.email)
-      //
-      // provisoirement on crypt le faux n° profileNbr + 1000 
+      // le vrai nom venu de google hashé
+      const nameEncrypted = encrypt(session?.user?.name) // on encrypt le name en cas de pyratage
+      // provisoirement on crypt le faux n° 0600000000 
       const fakePhoneEncrypted = encrypt("0600000000")
       // provisoirement on hash le faux n° 0600000000
-      const fakePhoneHased = hashed("0600000000")
-      // provisoirement on hash le mot NOM
-      const fakeLastnameEncrypted = encrypt("nom")
-      //
+      const fakePhoneHashed = hashed("0600000000")
       // on entre l'email hashé dans la table USER
       await prismadb.user.updateMany({
         where: { email: session?.user?.email },
-        data: { hashedEmail: emailHashed }
+        data: { 
+          name: nameEncrypted,
+          hashedPhone: fakePhoneHashed
+        }
       })
+      // nom encrypted
+      const lastnameEncrypted = encrypt("nom") 
       // ON CRÉE SON PROFIL À MINIMA QU'IL UPDATERA ENSUITE
       await prismadb.profile.create({
         data: { 
           codepin: profileNbr + 1000,
           googleImage: currentUser?.image,
-          hashedEmail: emailHashed,
-          encryptedEmail: emailEncrypted,
-          hashedPhone: fakePhoneHased,
+          googleEmail: session?.user?.email,
+          lastname: lastnameEncrypted,
+          hashedPhone: fakePhoneHashed,
           encryptedPhone: fakePhoneEncrypted,
-          encryptedLastname: fakeLastnameEncrypted
         },
       });
     }
   }
   // Appelle la Server Action pour créer le profil
-  if(!currentUser?.hashedEmail) // ou if (!profile)
+  if(!currentUser?.hashedPhone) // ou if (!profile)
   {
     await create(); 
   }
@@ -75,11 +73,11 @@ const Dashboard = async () => {
   const justCreated = await prismadb.profile.findFirst({
     where: { 
       codepin: profileNbr + 1000,
-      hashedEmail: connectedUser?.hashedEmail 
+      googleEmail: connectedUser?.email 
     }
   })
   // si son pseudo === pseudo donc il n'a pas encore updaté son profile
-  if(justCreated?.username === "pseudo" || justCreated?.firstname === "prénom" || justCreated?.city === "ville" || justCreated?.country === "pays")
+  if(justCreated && justCreated?.username === "pseudo" || justCreated?.firstname === "prénom" || justCreated?.church === "église" || justCreated?.city === "ville" || justCreated?.country === "pays")
   {
     redirect (`/dashboard/profile/${justCreated?.id}`)
   }

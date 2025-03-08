@@ -4,9 +4,9 @@ import { currentUser } from "@/hooks/own-current-user";
 import { prismadb } from "@/lib/prismadb";
 import { revalidatePath } from "next/cache";
 //  
-export const updateCity = async (profileId: string, formData:any) => {
+export const updateChurch = async (profileId: string, formData:any) => {
   //const newCity = formData.get("city");  avant
-  const newCity = formData.get("value");
+  const newChurch = formData.get("value");
   const session = await currentUser()
   // l'abonné concerné  
   const concerned = await prismadb.profile.findFirst({
@@ -18,7 +18,7 @@ export const updateCity = async (profileId: string, formData:any) => {
   // update de la ville du membre
   await prismadb.profile.updateMany({
     where: { id: concerned?.id },
-    data: { city: newCity }
+    data: { church: newChurch }
   })
   //
   /* // ACTIVITY

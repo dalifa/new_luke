@@ -61,7 +61,11 @@ export async function Counters() {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <p className="text-blue-800 font-semibold text-xl">{connected?.codepin}</p>
+          <p className="text-blue-700 font-semibold text-xl">{connected?.codepin}</p>
+        </div>
+        <div className="flex flex-row items-center justify-between text-slate-500">
+          <p className="text-slate-500 text-md md:text-lg">Seuil de transfert</p>
+          <p className="text-blue-700 font-semibold text-xl">{connected?.recoveryLevel}{connected?.currency}</p>
         </div>
         <div className="w-full flex flex-row items-center justify-between text-slate-500 text-sm font-medium">
           <p className="text-slate-500 text-md md:text-lg">Crédit:  

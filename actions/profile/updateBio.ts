@@ -5,9 +5,9 @@ import { CurrentProfile } from "@/hooks/own-current-user";
 //
 import { prismadb } from "@/lib/prismadb";
 import { revalidatePath } from "next/cache";
-//  
+//   
 export const updateBio = async (profileId: string, formData:any) => {
-  const newBio = formData.get("bio");
+  const newBio = formData.get("value");
   //
   const session = await auth()
   const userSession = await prismadb.user.findFirst({
@@ -20,10 +20,12 @@ export const updateBio = async (profileId: string, formData:any) => {
   {
     // update de la présentation du membre
     await prismadb.profile.updateMany({
-      where: { id: profileId },
+      where: { 
+        id: profileId,
+        googleEmail: userSession?.email
+       },
       data: { 
         bio: newBio,
-        googleImage: userSession?.image
       }
     })
     //
