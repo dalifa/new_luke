@@ -51,14 +51,14 @@ const HistoryDetails = async ({
                               {
                                 profiles.map((profile) => (
                                   <div key={profile.id}>
-                                    { result.donatorProfileId === profile.id && (
+                                    { result?.donatorProfileId === profile?.id && (
                                       <div className='grid grid-cols-1 gap-y-1'>
                                         {
                                           users.map((user) => (
                                             <div key={user.id} className='flex flex-col items-center'>
-                                              { profile.hashedEmail === user.hashedEmail && (
+                                              { profile?.googleEmail === user?.email && (
                                                   <Avatar className='h-10 w-10 border-white border-2'>
-                                                    <AvatarImage src={user.image || ""} />
+                                                    <AvatarImage src={user?.image || ""} />
                                                   </Avatar>
                                                 )
                                               }
@@ -81,14 +81,14 @@ const HistoryDetails = async ({
                               {
                               profiles.map((profile) => (
                                 <div key={profile.id}>
-                                  { result.recipientProfileId === profile.id && (
+                                  { result?.recipientProfileId === profile?.id && (
                                     <div className=' flex items-center justify-center flex-col'>
                                       {
                                         users.map((user) => (
                                           <div key={user.id}>
-                                            { profile.hashedEmail === user.hashedEmail && (
+                                            { profile?.googleEmail === user?.email && (
                                               <Avatar className='h-10 w-10 border-white border-2'>
-                                                <AvatarImage src={user.image || ""} />
+                                                <AvatarImage src={user?.image || ""} />
                                               </Avatar>
                                             )}
                                           </div>

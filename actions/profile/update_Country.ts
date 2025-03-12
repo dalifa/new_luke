@@ -25,7 +25,7 @@ export const changeCountry = async (profileId: string, country: string) => {
     const concerned = await prismadb.profile.findFirst({
       where:{ 
         id: profileId,
-        hashedEmail: useSession?.hashedEmail 
+        googleEmail: useSession?.email 
       }
     })
     // le nom du pays choisi

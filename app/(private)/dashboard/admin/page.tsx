@@ -29,8 +29,8 @@ const Admin = async () => {
         </div>
         <div className='border-2 border-slate-200 rounded-md'>abonnement à jour dans le mois</div>
         
-        <div className='border-2 border-slate-200 rounded-md'>nombre d'inscrit au total</div>
-        <div className='border-2 border-slate-200 rounded-md'>nombre d'inscrit dans le mois</div>
+        <div className='border-2 border-slate-200 rounded-md'>nombre d&apos;inscrit au total</div>
+        <div className='border-2 border-slate-200 rounded-md'>nombre d&apos;inscrit dans le mois</div>
 
         <div className='border-2 border-slate-200 rounded-md'>montant total donné depuis le début</div>
         <div className='border-2 border-slate-200 rounded-md'>montant total donné dans le mois</div>

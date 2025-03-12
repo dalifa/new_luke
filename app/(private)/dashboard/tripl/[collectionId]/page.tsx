@@ -6,10 +6,7 @@ import { prismadb } from '@/lib/prismadb';
 import { GrMoney } from "react-icons/gr";
 import Link from 'next/link';
 import { capitalize, CurrentProfile, } from '@/hooks/own-current-user';
-import { Ban, Building2, CircleUserRound, Gift, MessageSquareText } from 'lucide-react';
-import { MyProjectForm } from '@/components/dashboard/action-in-collection/tripl/myproject-form';
-import { JustToGive } from '@/components/dashboard/action-in-collection/tripl/just-donator';
-import { AlsoReceiver } from '@/components/dashboard/action-in-collection/tripl/also-receiver';
+import { Building2, CircleUserRound, MessageSquareText } from 'lucide-react';
 //
 const Collection = async ({ params }:{
   // collectionId = le nom du fichier s'il est différent, ça ne marche pas 

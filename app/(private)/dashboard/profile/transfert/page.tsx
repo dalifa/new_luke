@@ -5,7 +5,7 @@ import { LevelToRecovery } from '@/components/dashboard/transfert/levelToRecover
 import { Card } from '@/components/ui/card';
 import { CurrentProfile } from '@/hooks/own-current-user';
 //
-const Transfer = async ({ profileId }: { profileId: string }) => {
+const Transfer = async () => {
   // la redirection pour les non connectés est faite depuis le fichier middleware
   const connected = await CurrentProfile()
   // s'il a déjà 2 demande de transfert en court
