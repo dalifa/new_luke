@@ -18,17 +18,17 @@ export function UpdateFieldDialog({
   return (
     <Dialog>
       <DialogTrigger asChild className='w-7 h-7 p-1 bg-gray-200 rounded-md hover:w-8 hover:h-8'>
-        <Icon className='w-5 h-5 text-sm text-blue-500 cursor-pointer'/>
+        <Icon className='w-5 h-5 text-sm text-red-800 cursor-pointer'/>
       </DialogTrigger>
       <DialogContent className="w-80 md:w-96 px-10 rounded-md">
         <DialogHeader>
-          <DialogTitle className='text-lg text-blue-500'>{label}</DialogTitle>
+          <DialogTitle className='text-lg text-red-800'>{label}</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <form action={onSubmit} className="flex flex-col gap-y-4">
           <Input name="value" className='w-full text-lg text-center items-center' placeholder={placeholder}/>
-          <DialogClose className='w-full text-white h-10 font-medium rounded-md bg-blue-500 hover:bg-blue-400'>
-            <Button variant={"blue"} className='w-full text-xl font-medium hover:bg-blue-600'>
+          <DialogClose className='w-full text-white h-10 font-medium rounded-md bg-red-800 hover:bg-red-900'>
+            <Button variant={"primary"} className='w-full text-xl font-medium hover:bg-red-800'>
               Valider
             </Button>
           </DialogClose> 

@@ -9,8 +9,8 @@ export async function TriplCollectionEnter() {
   // on select tous les montants de la même monnaie que celle du connecté
   const amounts:any = await prismadb.amount.findMany({
     where: {currency: connected?.currency}
-  })
-  // 
+  }) 
+  //  
   return(
     <Card className='bg-white shadow-blue-100 shadow-md p-4'>
       <p className='text-center mb-4 font-semibold text-slate-600 text-xl lg:text-lg'>
@@ -25,10 +25,10 @@ export async function TriplCollectionEnter() {
             // si le credi exist et s'il est >= au montant choisi
             connected && connected?.credit >= amount?.amount ? (
               <Link href={`/dashboard/tripl/enter-tripl-confirm/${amount?.id}`}>
-                <Button variant="blue" className=" w-full">{amount?.amount}€</Button>
+                <Button variant="primary" className=" w-full">{amount?.amount}€</Button>
               </Link>
             ):(
-                <Button disabled variant="blue">{amount?.amount}€</Button>
+                <Button disabled variant="primary">{amount?.amount}€</Button>
               )
           }        
           </>

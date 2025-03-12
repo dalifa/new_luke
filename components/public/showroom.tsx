@@ -29,11 +29,11 @@ const Showroom = () => {
   }, []);
 
   return (
-    <div className="flex-col bg-blue-500 flex items-center justify-center min-h-screen text-white text-center">
+    <div className="flex-col bg-red-800 flex items-center justify-center min-h-screen text-white text-center">
       <div className='min-w-96'>
         <div className="overflow-hidden whitespace-nowrap">
           <div className="mt-5 transition-opacity duration-1000 opacity-0" id="slogan1">
-            <p className="scrolling-text text-3xl md:text-5xl font-black">WE BLESS YOU</p>
+            <p className="scrolling-text text-3xl md:text-5xl font-black">Tripl</p>
             {/* &nbsp; pour mettre l'espace entre 2 mots */}
           </div>
         </div>
@@ -42,9 +42,8 @@ const Showroom = () => {
             <TypewriterComponent
               options={{
               strings: [
-              "Donnez aux autres",
-              "et Dieu vous donnera",
-              "( à travers les autres ) Luc 6:38"
+              "Give One",
+              "To get Three",
             ],
             autoStart: true,
             loop: true,
@@ -58,7 +57,7 @@ const Showroom = () => {
           <div className='px-10'>
             <Link href={"/ccm"}>
             <Button size="lg"
-              className="w-full border-2 text-blue-500 bg-white hover:bg-blue-300 hover:text-white hover:border-white" 
+              className="w-full text-white hover:bg-white bg-red-900 hover:text-red-800" 
             >
               <Telescope className="h-5 w-5"/>
               <span className="ml-5 text-lg">Découvrir</span>

@@ -18,7 +18,7 @@ export async function Menu() {
   //
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild className="hover:bg-blue-600">
+      <DropdownMenuTrigger asChild className="hover:bg-red-900">
         <div className="p-1 rounded">
             <MenuIcon className="cursor-pointer"/>
         </div>
@@ -30,7 +30,7 @@ export async function Menu() {
           <DropdownMenuItem>
             <Link href={"/dashboard"} 
             className="flex items-center flex-row gap-x-2
-            text-slate-500 hover:text-blue-600"
+            text-slate-500 hover:text-red-900"
             >
                 <LayoutDashboard className="w-5 h-5"/>
                 <span>Dashboard</span>
@@ -39,7 +39,7 @@ export async function Menu() {
           <DropdownMenuItem>
             <Link href={"/dashboard/profil"} 
             className="flex items-center flex-row gap-x-2
-            text-slate-500 hover:text-blue-600"
+            text-slate-500 hover:text-red-900"
             >
                 <UserCircle2 className="w-5 h-5"/>
                 <span>Profil</span>
@@ -66,7 +66,7 @@ export async function Menu() {
           <DropdownMenuItem>
             <Link href={"/dashboard/historique"} 
                 className="flex items-center flex-row gap-x-2
-                text-slate-500 hover:text-blue-600"
+                text-slate-500 hover:text-red-900"
                 >
                 <Archive className="w-5 h-5"/>
                 <span>Historique</span>
@@ -76,19 +76,19 @@ export async function Menu() {
         
         <div>
             {
-                connectedUser?.role !== "USER" && (
-                    <>
-                    <DropdownMenuSeparator className="bg-slate-300"/>
-                    <DropdownMenuItem></DropdownMenuItem>
-                    </>
-                )
+              connectedUser?.role !== "USER" && (
+              <>
+                <DropdownMenuSeparator className="bg-slate-300"/>
+                <DropdownMenuItem></DropdownMenuItem>
+              </>
+              )
             }
             {
                 connectedUser?.isPartner === true && (
                     <DropdownMenuItem>
                         <Link href={"/dashboard/partenariat"} 
                             className="flex items-center flex-row gap-x-2
-                           text-slate-500 hover:text-blue-600"
+                           text-slate-500 hover:text-red-900"
                         >
                             <ShieldCheck className="w-5 h-5"/>
                             <span>Partenariat</span>
@@ -102,7 +102,7 @@ export async function Menu() {
                     <DropdownMenuItem>
                         <Link href={"/dashboard/admin"} 
                             className="flex items-center flex-row gap-x-2
-                          text-slate-500 hover:text-blue-600"
+                          text-slate-500 hover:text-red-900"
                         >
                             <ShieldPlus className="w-5 h-5"/>
                             <span>Admin</span>
@@ -111,7 +111,7 @@ export async function Menu() {
                     <DropdownMenuItem>
                         <Link href={"/dashboard/stats"} 
                             className="flex items-center flex-row gap-x-2
-                            text-slate-500 hover:text-blue-600"
+                            text-slate-500 hover:text-red-900"
                         >
                             <LineChart className="w-5 h-5"/>
                             <span>Admin Stats</span>

@@ -24,7 +24,7 @@ const History = async () => {
       <div className='h-full flex items-center justify-center flex-col pt-10 px-5  gap-5 bg-white'>
         <div className='w-4/5 lg:w-2/5 p-3 border rounded text-center bg-white shadow-md shadow-blue-100'>
           <p className='text-slate-700 text-center text-md lg:text-lg'>
-            Toutes vos collectes clôturées
+            Tous vos Tripl clôturés
           </p>
         </div>
         <div className='w-full grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4'>

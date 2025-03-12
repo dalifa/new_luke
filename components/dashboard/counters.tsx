@@ -25,7 +25,6 @@ export async function Counters() {
   // last jackpot
   const lastjackpot = await prismadb.collectionResult.findFirst({
     where: { 
-      recipientProfileId: connected?.id,
       donationReceived: 2
      },
     orderBy:{ id: "desc" }
@@ -35,12 +34,7 @@ export async function Counters() {
     where: {id: lastjackpot?.collectionId }
   })
   // codes de demande de transfert
-  const transferCodes = await prismadb.transferDemand.findMany({
-    where: { 
-      usercodepin: connected?.codepin,
-      isUsed: false
-    }
-  }) 
+ 
   //
   return (
     <Card className='bg-white shadow-blue-100 shadow-md p-4'>
@@ -49,7 +43,7 @@ export async function Counters() {
       </p>
       <hr className='w-full mb-2'/>
       {/* PIN = Personal Indentification Number */}
-      <div className=' grid grid-cols-1 gap-4 bg-white'>
+      <div className=' grid grid-cols-1 gap-2 bg-white'>
         <div className="flex flex-row items-center justify-between text-slate-500">
           <TooltipProvider>
             <Tooltip>
@@ -61,14 +55,11 @@ export async function Counters() {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <p className="text-blue-700 font-semibold text-xl">{connected?.codepin}</p>
+          <p className="text-red-800 font-semibold text-xl">{connected?.codepin}</p>
         </div>
-        <div className="flex flex-row items-center justify-between text-slate-500">
-          <p className="text-slate-500 text-md md:text-lg">Seuil de transfert</p>
-          <p className="text-blue-700 font-semibold text-xl">{connected?.recoveryLevel}{connected?.currency}</p>
-        </div>
-        <div className="w-full flex flex-row items-center justify-between text-slate-500 text-sm font-medium">
-          <p className="text-slate-500 text-md md:text-lg">Crédit:  
+        <div className="w-full flex flex-row text-slate-500 text-md md:text-lg items-center justify-between font-medium">
+          <p>Crédit:</p>
+          <p>  
             {
               connected && connected?.credit > 0 ? (
                 <span className="text-green-800 font-semibold"> {connected?.credit}{connected?.currency}</span>
@@ -77,69 +68,20 @@ export async function Counters() {
                 )
             }
           </p>
-            <p className="text-slate-500 text-md md:text-lg">Cagnotte:  
-              {/* cagnotte > 0 */}
-              {
-                connected && connected?.jackpot > 0 ? (
-                  <span className="text-green-800 font-semibold">&nbsp;{connected?.jackpot}{connected?.currency}</span>
-                ):(
+        </div>
+        <div className="w-full flex flex-row text-slate-500 text-md md:text-lg items-center justify-between font-medium">
+          <p>Cagnotte:</p>
+          <p>  
+            {
+              connected && connected?.jackpot > 0 ? (
+                <span className="text-green-800 font-semibold"> {connected?.jackpot}{connected?.currency}</span>
+              ):(
                   <span className="text-slate-500"> 00{connected?.currency}</span>
                 )
-              }
-            </p>
-          </div>
-          {/* dernier don fait et dernière cagnotte reçu */}
-            <div className='w-full flex flex-col text-slate-500 text-sm font-medium mb-4 gap-y-2'> 
-              {
-                lastDonation && (
-                  <div className="flex flex-row justify-between w-full">
-                    <p>
-                      Dernier don: <br/>
-                      <span className="text-[10px]">{format(new Date(lastDonation.createdAt), DATE_FORMAT)}</span>
-                    </p> 
-                    <p>
-                      <span className="font-semibold"> 
-                        { lastDonation.amount}{lastDonation?.currency}
-                      </span> 
-                    </p>
-                  </div>
-                )
-              }
-              {
-                lastjackpot && lastAmount && (
-                  <div className="flex flex-row justify-between w-full">
-                    <p>
-                      Dernière cagnotte: <br/>
-                        <span className="text-[10px]">{format(new Date(lastjackpot.createdAt), DATE_FORMAT)}</span>
-                    </p>
-                    <p>
-                      <span className="font-semibold"> 
-                        { lastAmount?.amount * 3 }{lastjackpot?.currency}
-                      </span>
-                    </p>
-                  </div>
-                )
-              }
-            </div>
-            {/* code de demande de transfert */}
-            <div className="w-full flex flex-col text-slate-500 text-sm font-medium">
-              {
-                transferCodes.map((transferCode) => (
-                  <div key={transferCode.id} className="flex flex-col w-full mb-2">
-                    <Separator className="bg-slate-100 mb-1"/>
-                    <div className="flex w-full items-center justify-between mb-1">
-                      <p>Code de retrait:</p>
-                      <p><span className="text-blue-800 font-semibold">{ transferCode.transferCode}</span></p> 
-                    </div>
-                    <div className="flex w-full items-center justify-between">
-                      <p>Montant:</p>
-                      <p><span className="text-green-800 font-semibold">{ transferCode.amountToTransfer}{connected?.currency}</span></p>
-                    </div>
-                  </div>
-                ))
-              }
-            </div>
+            }
+          </p>
         </div>
-      </Card>
-    )
+      </div>
+    </Card>
+  )
 }

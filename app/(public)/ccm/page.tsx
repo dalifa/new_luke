@@ -1,17 +1,14 @@
 import { Card } from '@/components/ui/card'
-import Image from 'next/image'
-import wallpaper1 from '@/public/assets/images/wallpaper1.jpg'
 import BackButton from '@/components/nav/backButton'
 
-const luke = "Luke 6:38" 
 
 const Ccm = () => {
     return ( 
         <div className='relative flex w-full items-center flex-col pb-20 px-2'>
             
             <Card className='flex flex-col w-full lg:w-4/5 gap-y-5 overflow-auto mt-48 p-5 lg:p-10 pb-10 lg:pb-24 bg-white leading-relaxed text-justify'>
-            <div className='flex flex-row items-start justify-between gap-x-5 text-blue-500'>
-                <div className='border-[1px] rounded-md border-blue-500 hover:text-white hover:bg-blue-500'>
+            <div className='flex flex-row items-start justify-between gap-x-5 text-red-800'>
+                <div className='border-[1px] rounded-md border-red-800 hover:text-white hover:bg-red-900'>
                   <BackButton/>
                 </div>
                 <div className=''>
@@ -21,11 +18,11 @@ const Ccm = () => {
                 </div>
               </div>
                 <div>
-                    <h1 className='text-xl lg:text-2xl font-semibold my-3 text-blue-800'>
+                    <h1 className='text-xl lg:text-2xl font-semibold my-3 text-red-800'>
                         Le Concept
                     </h1>
                     <p className='text-md lg:text-lg font-normal'>
-                        <span className='font-medium'>{luke}</span> est une plateforme de financement participatif par le don,
+                        <span className='font-medium'>Tripl</span> est une plateforme de financement participatif par le don,
                         basée sur les principes de générosité et de réciprocité.
                         <br/>
                         Elle propose la participation à des <span className='font-meduim'>Collectes</span> de deux types, 
@@ -50,7 +47,7 @@ const Ccm = () => {
                         Pour s&apos;inscrire
                     </h2>
                     <p className='text-md lg:text-lg font-normal'>
-                        Il faut exclusivement avoir un compte <span className='font-medium'>Google</span> pour prétendre s&apos;inscrire sur <span className='font-medium'>{luke}</span>.
+                        Il faut exclusivement avoir un compte <span className='font-medium'>Google</span> pour prétendre s&apos;inscrire sur <span className='font-medium'>Tripl</span>.
                     </p>
                     <h2 className='text-slate-500 text-lg lg:text-xl mt-3'>
                         Pour créditer son compte
@@ -101,7 +98,7 @@ const Ccm = () => {
                         Continuité et amélioration du service
                     </h2>
                     <p className='text-md lg:text-lg font-normal'>
-                        <span className='font-medium'>{luke}</span> prélèvera 5% sur votre cagnotte au moment de vous la transférer.<br/>
+                        <span className='font-medium'>Tripl</span> prélèvera 5% sur votre cagnotte au moment de vous la transférer.<br/>
                     </p>
                 </div>
             </Card>

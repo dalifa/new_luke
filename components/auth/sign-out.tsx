@@ -10,6 +10,6 @@ export default function SignOut() {
   }}
   className="w-full"
   > 
-   <Button className=" bg-blue-100 text-slate-500 hover:bg-blue-600 hover:text-white h-8 w-full">Déconnexion</Button>
+   <Button className=" bg-blue-100 text-slate-500 hover:bg-red-900 hover:text-white h-8 w-full">Déconnexion</Button>
   </form>
 )}

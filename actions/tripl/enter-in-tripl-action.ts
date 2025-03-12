@@ -1,5 +1,5 @@
 "use server";
-
+//
 import { CurrentProfile } from "@/hooks/own-current-user";
 import { prismadb } from "@/lib/prismadb";
 import { revalidatePath } from "next/cache";  
@@ -22,10 +22,10 @@ export const enterInTriplAction = async (params:string) => {
     {
       // ON DIMINU SON CREDIT DE concernedAmount.amount
       const newCredit = ( connected?.credit - concernedAmount?.amount )
-      // ON UTILISE L'EMAIL HASHED POUR FAIRE LA COMPARAISON
+      // ON UTILISE L'EMAIL POUR FAIRE LA COMPARAISON
       await prismadb.profile.updateMany({
         where: { 
-          hashedEmail: connected?.hashedEmail 
+          googleEmail: connected?.googleEmail
         },
         data: { credit: newCredit }
       })
@@ -57,13 +57,15 @@ export const enterInTriplAction = async (params:string) => {
         })
         // on select id de la collecte juste créée
         const justCreatedCollection = await prismadb.collection.findFirst({
+          take:1,
           where: {
             amount: concernedAmount?.amount,
             currency: concernedAmount?.currency,
             collectionType: ctype,
             groupStatus: 1,
             isGroupComplete: false //
-          }
+          },
+          orderBy: {id:"desc"}
         })
         //
         if(justCreatedCollection)
@@ -146,6 +148,7 @@ export const enterInTriplAction = async (params:string) => {
               })
               // on select id de la collecte juste créée
               const justCreatedCollection = await prismadb.collection.findFirst({
+                take:1,
                 where: {
                   amount: concernedAmount?.amount,
                   currency: concernedAmount?.currency,
@@ -218,6 +221,7 @@ export const enterInTriplAction = async (params:string) => {
           })
           // on select id de la collecte juste créée
           const justCreatedCollection = await prismadb.collection.findFirst({
+            take:1,
             where: {
               amount: concernedAmount?.amount,
               currency: concernedAmount?.currency,

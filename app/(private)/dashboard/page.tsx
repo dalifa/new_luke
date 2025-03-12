@@ -16,14 +16,8 @@ const Dashboard = async () => {
     where: { email: session?.user?.email}
   })
   // Si le mail hashé du connecté n'est pas dans la table Profile
-  // Vérifie si le profil existe dans la table profile
-   const profile = await prismadb.profile.findFirst({
-    where: { googleEmail: currentUser?.email },
-  });
   // nbre de profile présent dans la table profile pour produire son CODEPIN
   const profileNbr = await prismadb.profile.count()
-  // fakePhone = on prend le nbre de profile + 1000 afin qu'il soit unique
-  const fakePhone = profileNbr + 1000 
   //
   // SERVER ACTION POUR CRÉER LE PROFIL
   async function create() {
@@ -53,7 +47,7 @@ const Dashboard = async () => {
           codepin: profileNbr + 1000,
           googleImage: currentUser?.image,
           googleEmail: session?.user?.email,
-          lastname: lastnameEncrypted,
+          encryptedLastname: lastnameEncrypted,
           hashedPhone: fakePhoneHashed,
           encryptedPhone: fakePhoneEncrypted,
         },
@@ -65,23 +59,17 @@ const Dashboard = async () => {
   {
     await create(); 
   }
-  // on reselect les infos du connecté (maintenant qu'on a updaté le hashedEmail)
-  const connectedUser = await prismadb.user.findFirst({
-    where:{ email: currentUser?.email }
-  })
-  // On select l'id du profile juste créer 
-  const justCreated = await prismadb.profile.findFirst({
-    where: { 
-      codepin: profileNbr + 1000,
-      googleEmail: connectedUser?.email 
-    }
-  })
-  // si son pseudo === pseudo donc il n'a pas encore updaté son profile
-  if(justCreated && justCreated?.username === "pseudo" || justCreated?.firstname === "prénom" || justCreated?.church === "église" || justCreated?.city === "ville" || justCreated?.country === "pays")
-  {
-    redirect (`/dashboard/profile/${justCreated?.id}`)
-  }
   //
+  // Vérifie si le profil existe dans la table profile
+  const profile = await prismadb.profile.findFirst({
+    where: { googleEmail: currentUser?.email },
+  });
+  // si son pseudo === pseudo donc il n'a pas encore updaté son profile
+  if(profile && profile?.username === "pseudo" || profile?.firstname === "prénom" || profile?.city === "ville" || profile?.country === "pays")
+  {
+    return redirect(`/dashboard/profile/${profile?.id}`)
+  }
+  // 
   return (
     <div className='lg:pt-5 h-ull flex items-center flex-col bg-white/90'>
       <div className='w-full md:w-4/5 flex flex-col items-center m-4 gap-y-4 px-5 lg:pb-20'>

@@ -1,6 +1,6 @@
 'use client'
 //
-import { Building2, Church } from 'lucide-react';
+import { Church } from 'lucide-react';
 import { UpdateFieldDialog } from './updateFieldDialog';
 import { updateChurch } from '@/actions/profile/updateChurch';
 //

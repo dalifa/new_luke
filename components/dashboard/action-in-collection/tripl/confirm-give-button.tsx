@@ -9,8 +9,8 @@ export function ConfirmTriplGiveButton() {
  
   return (
     <Button type="submit" aria-disabled={pending} 
-      className="w-full h-full cursor-pointer bg-blue-500
-       text-white hover:bg-blue-600"
+      className="w-full h-full cursor-pointer bg-red-800
+       text-white hover:bg-red-900"
     >
       Donner  
     </Button>

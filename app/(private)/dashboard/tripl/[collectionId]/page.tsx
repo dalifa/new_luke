@@ -56,13 +56,6 @@ const Collection = async ({ params }:{
       hasGive: true
      }
   })
-  // le nombre de ceux qui ont décidé de ne pas recevoir
-  const justGiveCount = await prismadb.collectionParticipant.count({
-    where: { 
-      collectionId: params?.collectionId, // id de la collecte
-      isOnlyDonator: true
-    }
-  })
   // Combien ont déjà fait la désignation
   const designationCount = await prismadb.collectionParticipant.count({
     where: {
@@ -94,7 +87,7 @@ const Collection = async ({ params }:{
                 <>
                 {
                   participant?.profile?.id === connected?.id && (
-                    <Card key={participant.id} className='p-4 bg-white text-slate-600 shadow-md shadow-blue-100'>
+                    <Card key={participant.id} className='p-4 bg-white text-slate-600 shadow-md shadow-gray-300'>
                       {/* ON AFFICHE EN PREMIER CELUI QUI EST CONNECTÉ */}
                       <div className='grid grid-cols-1 gap-y-2'>
                         <div className='grid grid-cols-1 gap-y-2'>
@@ -103,66 +96,40 @@ const Collection = async ({ params }:{
                               <Avatar className='h-16 w-16 md:h-24 md:w-24 border-white border-2'>
                                 <AvatarImage src={participant?.profile.googleImage || ""} />
                                   <AvatarFallback className="bg-slate-100">
-                                    <CircleUserRound className="text-blue-500 h-16 w-16 lg:h-24 lg:w-24" />
+                                    <CircleUserRound className="text-red-800 h-16 w-16 lg:h-24 lg:w-24" />
                                   </AvatarFallback>
                               </Avatar>
                             </div>
                             <p className='text-lg lg:text-xl font-semibold'> {capitalize(participant?.profile?.username)} </p>
-                          </div>
+                          </div> 
                         </div>
-                        <div className='flex flex-col items-start gap-y-2 pt-1'>
+                        <div className='flex flex-col items-start gap-y-4 pt-4'>
                           <div className='flex flex-row items-baseline gap-x-2'>
-                            <Building2 className='text-blue-500'/>
-                            <p className='text-sm text-slate-500 mb-1'> {capitalize(participant?.profile.city)}</p>
+                            <div>
+                              <Building2 className='text-red-800'/>
+                            </div>
+                            <div>
+                              <p className='text-sm text-slate-500 mb-1'> {capitalize(participant?.profile.city)}</p>
+                            </div>
                           </div>
                           <div className='flex flex-row gap-x-2'>
-                            <MessageSquareText className='text-blue-500'/>
-                            <p className='text-sm text-slate-500'> {capitalize(participant?.profile.bio)}</p>
-                          </div>
-                          <div className='w-full flex flex-row items-center gap-2'>
-                            {
-                              // si le group n'est pas encore plein, on peut modifier son projet 
-                              collectionParams?.groupStatus < collectionParams?.group ? (
-                                <MyProjectForm collectionId={params?.collectionId}/>
-                              ):(
-                                <Gift className='text-blue-500 h-7 w-7'/>
-                              )
-                            }
-                            <div className='w-full'>
-                              <p className='text-sm text-slate-500'>{capitalize(participant?.project.length > maxLength ? participant?.project.substring(0, maxLength) + '...' : participant?.project)}</p>
+                            <div>
+                              <MessageSquareText className='text-red-800'/>
+                            </div>
+                            <div>
+                              <p className='text-sm text-slate-500'>{capitalize(participant?.profile.bio.length > maxLength ? participant?.profile.bio.substring(0, maxLength) + '...' : participant?.profile.bio)}</p>
                             </div>
                           </div> 
                         </div> 
-                      </div>
+                      </div> 
 
                       <div className='flex items-end justify-center mt-4'>
                       { 
-                        participant?.hasGive === true ? (
+                        participant?.hasGive === true && (
                           <div className='flex flex-col items-center justify-center mt-1'>
                             <p className='pb-1'>Vous avez désignez &nbsp; <span className='font-medium'>{ recipientProfile?.username }</span></p>
                           </div> 
-                        ):(
-                            <>
-                            {
-                              // UN SEUL PARTICIPANT SU 3 PEU CHOISIR DE DEVENIR NON DÉSIGNABLE
-                              participant?.isOnlyDonator === false && hasGiveCount < 1 && (justGiveCount < 1) ? (
-                                <div className='flex items-end justify-center mt-5'>
-                                  <JustToGive collectionId={params?.collectionId}/>
-                                </div>
-                              ):(
-                                <>
-                                  {
-                                    participant?.isOnlyDonator === true && hasGiveCount < 1 && (justGiveCount < 1) && (
-                                      <div className='flex items-end justify-center mt-5'>
-                                        <AlsoReceiver collectionId={params?.collectionId}/>
-                                      </div>
-                                    )
-                                  }
-                                </>
-                              )
-                            } 
-                            </>
-                          )
+                        )
                       }
                       </div>
                     </Card> )
@@ -173,7 +140,7 @@ const Collection = async ({ params }:{
             {/*  ON AFFICHE LES AUTRES PARTICIPANTS */}
             {
               collectionParams?.collectionParticipants?.map((participant:any) => (
-                <>
+                <> 
                 {
                   participant?.profile?.id !== connected?.id && (
                     <Card key={participant.id} className='p-4 bg-white text-slate-600 shadow-md shadow-blue-100'>
@@ -193,51 +160,27 @@ const Collection = async ({ params }:{
                             <p className='text-md lg:text-xl font-semibold'> {capitalize(participant?.profile?.username)} </p>
                           </div>
                         </div>
-                        <div className='flex flex-col items-start gap-y-2 pt-1'>
+                        <div className='flex flex-col items-start gap-y-4 pt-4'>
                           <div className='flex flex-row items-baseline gap-x-2'>
-                            <Building2 className='text-blue-500'/>
-                            <p className='text-sm text-slate-500 mb-1'> {capitalize(participant?.profile.city)}</p>
+                            <div>
+                              <Building2 className='text-red-800'/>
+                            </div>
+                            <div>
+                              <p className='text-sm text-slate-500 mb-1'> {capitalize(participant?.profile.city)}</p>
+                            </div>
                           </div>
                           <div className='flex flex-row gap-x-2'>
-                            <MessageSquareText className=' text-blue-500'/>
-                            <p className='text-sm text-slate-500'> {capitalize(participant?.profile.bio)}</p>
-                          </div>
-                          <div className='w-full flex flex-row gap-x-2'>
-                            <Gift className='text-blue-500 w-7 h-7'/>
-                            <p className='text-sm text-slate-500'>{capitalize(participant?.project.length > maxLength ? participant?.project.substring(0, maxLength) + '...' : participant?.project)}</p>
+                            <div>
+                              <MessageSquareText className=' text-red-800'/>
+                            </div>
+                            <div>
+                              <p className='text-sm text-slate-500'>{capitalize(participant?.profile.bio.length > maxLength ? participant?.profile.bio.substring(0, maxLength) + '...' : participant?.profile.bio)}</p>
+                            </div>
                           </div>
                         </div> 
-                      </div>
+                      </div> 
 
                       <div className='flex items-end justify-center mt-4'>
-                      {
-                        // est ce que le group est complet
-                        collectionParams?.group === collectionParams?.groupStatus && connectedCollectionData?.hasGive === false ? (
-                          <>
-                          {
-                            // le participant ne veut être que donateur ?
-                            participant.isOnlyDonator === true && (
-                              <div className='flex items-end justify-center mt-5'>
-                                <Button variant={"outline"} className='text-red-500 flex gap-x-4'>
-                                  A choisi d&apos;être non désignable <Ban className='w-5 h-5'/>
-                                </Button>
-                              </div>
-                            )
-                          }
-                          </>
-                        ):(
-                            <> 
-                            {
-                              hasGiveCount < 1 && (
-                                <p className='mt-6 text-md'>
-                                  <span className='text-green-700'>{collectionParams?.groupStatus} &nbsp;</span>
-                                    participants / {collectionParams?.group}
-                                </p>
-                              )
-                            }
-                            </> 
-                          )        
-                      }
                       {
                           connectedCollectionData?.profileId === connected?.id && connectedCollectionData?.hasGive === true ? (
                             <Link href={"/dashboard/historique"}>
@@ -248,9 +191,9 @@ const Collection = async ({ params }:{
                           ):(
                             <>
                             {
-                              collectionParams?.group === collectionParams?.groupStatus && participant && participant?.isOnlyDonator === false && (
+                              collectionParams?.group === collectionParams?.groupStatus && participant && (
                                 <Link href={`/dashboard/tripl/${params.collectionId}/${participant.id}`}>
-                                  <Button variant={"blue"} className='rounded-md text-white'>    
+                                  <Button variant={"primary"} className='rounded-md text-white'>    
                                     Désigner <GrMoney className="h-5 w-5 cursor-pointer ml-2"/>
                                   </Button>
                                 </Link>

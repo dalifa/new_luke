@@ -11,7 +11,6 @@ import { UpdatePhone } from "./_component/updatePhone"
 import { UpdateCity } from "./_component/updateCity"
 import { UpdateCountry } from "./_component/updateCountry"
 import { UpdateBio } from "./_component/updateBio"
-import { UpdateChurch } from "./_component/updateChurch"
 //  
 const Profile = async ({ params }: { params: { profileId: string } }) => {
   // la redirection pour les non connectés est faite depuis le fichier middleware 
@@ -24,7 +23,7 @@ const Profile = async ({ params }: { params: { profileId: string } }) => {
   const concerned = await prismadb.profile.findFirst({
     where: { 
       googleEmail: userSession?.email,
-      id: params?.profileId
+      //id: params?.profileId
     } 
   })
   //
@@ -34,15 +33,22 @@ const Profile = async ({ params }: { params: { profileId: string } }) => {
   return (
     <div className='h-ull flex items-center justify-center flex-col'> 
       <div className="flex w-full md:w-3/5 mt-5 md:mt-20">
-        <div className="grid grid-cols-1 text-slate-600 bg-white rounded p-2 gap-y-10 md:p-5 w-full shadow-md mx-4 shadow-blue-300">
-          <div>
-            <p className="text-center text-blue-500 text-xl font-medium">
-              { concerned?.firstname === "prénom" || concerned?.firstname === "nom" || concerned?.lastname === "pseudo" 
-                || concerned?.church === "église" || concerned?.city === "ville" || concerned?.country === "pays" ? (
+        <div className="grid grid-cols-1 text-slate-600 bg-white rounded p-2 gap-y-10 md:p-5 w-full shadow-md mx-4 shadow-gray-300">
+          <div className="flex flex-col">
+            <p className="text-center text-red-800 text-xl font-medium">
+              { concerned?.firstname === "prénom" || concerned?.firstname === "nom" || concerned?.username === "pseudo" 
+                || concerned?.city === "ville" || concerned?.country === "pays" ? (
                   <span>Modifier vos&nbsp;</span>
                 ):(<span>Vos&nbsp;</span>)  }
               informations de profil
             </p>
+            <div className="px-4 pt-6 text-red-800">
+              {concerned?.firstname === "prénom" && (<span>Prénom,&nbsp;</span>)}
+              {decrypt(concerned?.encryptedLastname) === "nom" && (<span>Nom,&nbsp;</span>)}
+              {concerned?.username === "pseudo" && (<span>Pseudo,&nbsp;</span>)}
+              {concerned?.city === "ville" && (<span>Ville,&nbsp;</span>)}
+              {concerned?.country === "pays" && (<span>Pays</span>)}
+            </div> 
           </div>
           <div className='grid grid-cols-1 px-4 gap-y-2 mb-5'>
             { concerned && (
@@ -60,7 +66,7 @@ const Profile = async ({ params }: { params: { profileId: string } }) => {
             <div className="grid grid-cols-2 bg-gray-100 p-4 rounded-md">
               <div className="flex items-center">
                 <p className='leading-relaxed text-lg font-medium'>
-                  {capitalize(decrypt(concerned?.lastname))} 
+                  {capitalize(decrypt(concerned?.encryptedLastname))} 
                 </p>
               </div>
               <div className="flex items-center justify-end">
@@ -85,16 +91,6 @@ const Profile = async ({ params }: { params: { profileId: string } }) => {
               </div>
               <div className="flex items-center justify-end">
                 <UpdatePhone profileId={concerned?.id}/>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 bg-gray-100 p-4 rounded-md">
-              <div className="flex items-center">
-                <p className='leading-relaxed text-lg font-medium'>
-                  {capitalize(concerned?.church)}
-                </p>
-              </div>
-              <div className="flex items-center justify-end">
-                <UpdateChurch profileId={concerned?.id}/>
               </div>
             </div>
             <div className="grid grid-cols-2 bg-gray-100 p-4 rounded-md">

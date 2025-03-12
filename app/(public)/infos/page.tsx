@@ -7,7 +7,7 @@ import wallpaper3 from '@/public/assets/images/wallpaper3.jpg'
 const Infos = () => { 
   return ( 
     <div className="flex flex-col items-center">
-      <div className="border-2 border-blue-500 rounded-md">
+      <div className="border-2 border-red-800 rounded-md">
         infos légales
       </div>
     </div>

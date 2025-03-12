@@ -40,18 +40,18 @@ export function PublicSheet() {
       <SheetContent className="pt-14">
         <SheetTitle className="hidden"></SheetTitle>
         <div className="h-full flex flex-col items-start gap-3 px-2 py-4 bg-neutral-100 rounded-sm">
-          <SheetClose className="bg-neutral-100 hover:bg-blue-300 hover:text-black hover:font-medium rounded-md text-neutral-500 w-full p-2">
+          <SheetClose className="bg-neutral-100 hover:bg-red-900 hover:text-white hover:font-medium rounded-md text-neutral-500 w-full p-2">
             <Link href={"/home"}>
               <div className="flex flex-row items-center gap-2">
-                <Home/>
+                <Home className="text-red-800"/>
                 <p>Accueil</p>
               </div>
             </Link>
           </SheetClose>  
-          <SheetClose className="bg-neutral-100 hover:bg-blue-300 hover:text-black hover:font-medium rounded-md text-neutral-500 w-full p-2">
+          <SheetClose className="bg-neutral-100 hover:bg-red-900 hover:text-white hover:font-medium rounded-md text-neutral-500 w-full p-2">
             <Link href={"/ccm"}>
               <div className="flex flex-row items-center gap-2">
-                <Settings/>
+                <Settings className="text-red-800"/>
                 <p className="hidden lg:flex">Comment ça marche</p>
                 <p className="flex lg:hidden">
                   Cçm
@@ -59,10 +59,10 @@ export function PublicSheet() {
               </div>
             </Link>
           </SheetClose>  
-          <SheetClose className="bg-neutral-100 hover:bg-blue-300 hover:text-black hover:font-medium rounded-md text-neutral-500 w-full p-2">
+          <SheetClose className="bg-neutral-100 hover:bg-red-900 hover:text-white hover:font-medium rounded-md text-neutral-500 w-full p-2">
             <Link href={"/faq"}>
               <div className="flex flex-row items-center gap-2">
-                <ShieldQuestion/>
+                <ShieldQuestion className="text-red-800"/>
                 <p className="hidden lg:flex">Questions fréquemment posées</p>
                 <p className="flex lg:hidden">
                   Faq
@@ -70,18 +70,18 @@ export function PublicSheet() {
               </div>
             </Link>
           </SheetClose>
-          <SheetClose className="bg-neutral-100 hover:bg-blue-300 hover:text-black hover:font-medium rounded-md text-neutral-500 w-full p-2">
+          <SheetClose className="bg-neutral-100 hover:bg-red-900 hover:text-white hover:font-medium rounded-md text-neutral-500 w-full p-2">
             <Link href={"/infos"}>
               <div className="flex flex-row items-center gap-2">
-                <Info/>
+                <Info className="text-red-800"/>
                 <p>Infos légales</p>
               </div>
             </Link>
           </SheetClose>
-          <SheetClose className="bg-neutral-100 hover:bg-blue-300 hover:text-black hover:font-medium rounded-md text-neutral-500 w-full p-2">
+          <SheetClose className="bg-neutral-100 hover:bg-red-900 hover:text-white hover:font-medium rounded-md text-neutral-500 w-full p-2">
             <Link href={"/cgu"}>
             <div className="flex flex-row items-center gap-2">
-                <FileText/>
+                <FileText className="text-red-800"/>
                 <p className="hidden lg:flex">Conditions générales d&apos;utilisation</p>
                 <p className="flex lg:hidden">
                   Cgu
@@ -89,18 +89,18 @@ export function PublicSheet() {
               </div>
             </Link>
           </SheetClose>
-          <SheetClose className="bg-neutral-100 hover:bg-blue-300 hover:text-black hover:font-medium rounded-md text-neutral-500 w-full p-2">
+          <SheetClose className="bg-neutral-100 hover:bg-red-900 hover:text-white hover:font-medium rounded-md text-neutral-500 w-full p-2">
             <Link href={"/partenariat"}>
               <div className="flex flex-row items-center gap-2">
-                <Handshake/>
+                <Handshake className="text-red-800"/>
                 <p>Partenariat</p>
               </div>
             </Link>
           </SheetClose>
-          <SheetClose className="bg-neutral-100 hover:bg-blue-300 hover:text-black hover:font-medium rounded-md text-neutral-500 w-full p-2">
+          <SheetClose className="bg-neutral-100 hover:bg-red-900 hover:text-white hover:font-medium rounded-md text-neutral-500 w-full p-2">
             <Link href={"/securite"}>
             <div className="flex flex-row items-center gap-2">
-                <ShieldBan/>
+                <ShieldBan className="text-red-800"/>
                 <p>
                   <span className=" flex lg:hidden">Confidentialité</span>
                   <span className="hidden lg:flex">sécurité et confidentialité</span>
@@ -108,10 +108,10 @@ export function PublicSheet() {
               </div>
             </Link>
           </SheetClose>
-          <SheetClose className="bg-neutral-100 hover:bg-blue-300 hover:text-black hover:font-medium rounded-md text-neutral-500 w-full p-2">
+          <SheetClose className="bg-neutral-100 hover:bg-red-900 hover:text-white hover:font-medium rounded-md text-neutral-500 w-full p-2">
             <Link href={"/stats"}>
               <div className="flex flex-row items-center gap-2">
-                <BarChart4/>
+                <BarChart4 className="text-red-800"/>
                 <p>Stats</p>
               </div>
             </Link>

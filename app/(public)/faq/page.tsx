@@ -5,16 +5,14 @@ import {
     AccordionItem,
     AccordionTrigger,
   } from "@/components/ui/accordion"
-import Image from 'next/image'
-import wallpaper13 from '@/public/assets/images/wallpaper13.jpg'
 import BackButton from '@/components/nav/backButton'
 
 const Faq = () => {
   return (
     <div className='relative flex w-full items-center flex-col pb-20 px-2'>
             <Card className='flex flex-col w-full lg:w-4/5 gap-y-5 overflow-auto mt-48 p-5 lg:p-10 pb-10 lg:pb-24 bg-white leading-relaxed text-justify shadow-lg shadow-slate-300'>
-              <div className='flex flex-row items-start justify-between gap-x-5 text-blue-500'>
-                <div className='border-[1px] rounded-md border-blue-500 hover:text-white hover:bg-blue-500'>
+              <div className='flex flex-row items-start justify-between gap-x-5 text-red-800'>
+                <div className='border-[1px] rounded-md border-red-800 hover:text-white hover:bg-red-900'>
                   <BackButton/>
                 </div>
                 <div className=''>

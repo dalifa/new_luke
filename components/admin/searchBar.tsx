@@ -29,7 +29,7 @@ export function SearchBar() {
   }, [query]);
 
   return (
-    <div className="relative w-full max-w-md border-2 rounded-md border-blue-500">
+    <div className="relative w-full max-w-md border-2 rounded-md border-red-800">
       <Input
         type="number"
         value={query}

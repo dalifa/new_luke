@@ -24,7 +24,7 @@ export const updateLastname = async (profileId: string, formData:any) => {
   //
   await prismadb.profile.updateMany({
     where: { id: concerned?.id },
-    data: { lastname: lastnameCrypted } // cryptage du nom en cas de pyratage
+    data: { encryptedLastname: lastnameCrypted } // cryptage du nom en cas de pyratage
   })
   //
   // TODO: ACTIVITY

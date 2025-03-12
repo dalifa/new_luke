@@ -1,5 +1,5 @@
 "use server";
-
+//
 import { CurrentProfile } from "@/hooks/own-current-user";
 import { prismadb } from "@/lib/prismadb";
 import { revalidatePath } from "next/cache";  
@@ -99,6 +99,15 @@ import { redirect } from "next/navigation";
   })
   if(recipientProfile?.profile && connected)
   {
+    // on compte si profile et recepient sont déjà dans la table comme s'étant déjà croisé
+    const alreadyMeetCount = await prismadb.profilesMet.count({
+      where: {
+        profileId: connected?.id,
+        participantMetId: recipientProfile?.profile?.id
+      }
+    })
+    if(alreadyMeetCount === 0)
+    { 
     // On entre le recipient dans ProfileMet comme déjà renconté par le donator
     await prismadb.profilesMet.create({
       data: {
@@ -106,6 +115,7 @@ import { redirect } from "next/navigation";
         participantMetId: recipientProfile?.profile?.id
       }
     })
+    }
   }
   //
   // ##########################
@@ -256,7 +266,14 @@ import { redirect } from "next/navigation";
       }
     }
   }
+
+  if(allHasGiveCount === 2)
+  {
+    revalidatePath(`/dashboard/tripl/${collectionData?.collection?.id}`)
+    redirect(`/dashboard/tripl/${collectionData?.collection?.id}`)
+  }else{
     revalidatePath('/dashboard')
     redirect("/dashboard")
+  }
 } // donation registered 
 //

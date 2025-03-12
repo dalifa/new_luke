@@ -20,46 +20,46 @@ export async function PrivateSheet() {
       </SheetTrigger>
       <SheetContent>
         <SheetHeader className="mt-4">
-          <SheetTitle className="text-center text-blue-500">Menu</SheetTitle>
+          <SheetTitle className="text-center text-red-800">Menu</SheetTitle>
         </SheetHeader>
         <Separator/>
         <div className="grid gap-2 py-4">
-          <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-blue-400">
+          <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-red-900">
             <Link href={"/dashboard"} className="text-slate-600">
               <div className="flex flex-row gap-5 ">
                 <LayoutDashboard/> Dashboard
               </div>
             </Link>
           </SheetClose>
-          <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-blue-400">
+          <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-red-900">
             <Link href={`/dashboard/profile/${connected?.id}`} className="text-slate-600">
               <div className="flex flex-row gap-5">
                 <UserRound/> Profile
               </div>
             </Link>
           </SheetClose>
-          <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-blue-400">
+          <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-red-900">
             <Link href={"/dashboard/historique"} className="text-slate-600">
               <div className="flex flex-row gap-5 ">
                 <Archive/> Historique
               </div>
             </Link>
           </SheetClose>
-          <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-blue-400">
+          <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-red-900">
             <Link href={"/dashboard/transfert"} className="text-slate-600">
               <div className="flex flex-row gap-5 ">
                 <ArrowLeftRight/> Transfert
               </div>
             </Link>
           </SheetClose>
-          <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-blue-400">
+          <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-red-900">
             <Link href={"/dashboard/stats"} className="text-slate-600">
               <div className="flex flex-row gap-5 ">
-                <BarChart4/> Stats
+                <BarChart4 className="text-red-800"/> Stats
               </div>
             </Link>
           </SheetClose>
-          <SheetClose asChild className="mt-10 bg-blue-500 rounded-md hover:bg-blue-400 p-2">
+          <SheetClose asChild className="mt-10 bg-red-800 rounded-md hover:bg-red-900 p-2">
             <Link href={"/logout"} className="text-center text-white ">
               <p>Déconnexion</p>
             </Link>
