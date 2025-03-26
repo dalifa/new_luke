@@ -1,3 +1,5 @@
+
+
 "use server";
 
 import { CurrentProfile } from "@/hooks/own-current-user";
@@ -7,7 +9,7 @@ import { revalidatePath } from "next/cache";
 export const increaseMemberCredit = async (memberManagedId: string, formData: FormData) => {
   const amountToAdd = Number(formData.get("amount"));
 
-  // Vérification des valeurs invalides
+  // Vérification des valeurs invalides 
   if (isNaN(amountToAdd) || amountToAdd <= 0) {
     throw new Error("Montant invalide !");
   }
@@ -30,9 +32,8 @@ export const increaseMemberCredit = async (memberManagedId: string, formData: Fo
   if (connected.role !== "ADMIN") {
     throw new Error("Accès refusé !");
   }
-
   // Calcul du nouveau crédit
-  const newCredit = concerned.credit + amountToAdd;
+  const newCredit = Number(concerned.credit + amountToAdd)
 
   // Mise à jour du crédit
   await prismadb.profile.update({
@@ -47,13 +48,8 @@ export const increaseMemberCredit = async (memberManagedId: string, formData: Fo
       activity: `L'ADMIN ${connected.firstname} (codepin: ${connected.codepin}) a augmenté le crédit de ${concerned.firstname} (codepin: ${concerned.codepin}) de ${amountToAdd}, crédit total: ${newCredit}.`,
     },
   });
-
+ 
   // Revalidation du cache pour actualiser les données
   revalidatePath(`/dashboard/admin/${concerned.id}`);
 };
 
-
-
-/* 
-
-*/

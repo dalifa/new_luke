@@ -1,19 +1,19 @@
-
-"use client";
-
-import { useState, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { increaseMemberCredit } from "@/actions/admin/increase_member_credit";
-
-export function IncreaseMemberCredit({ memberManagedId }: { memberManagedId: string }) {
+'use client'
+import { jackpotToCredit } from '@/actions/tripl/jackpot_to_credit';
+import { levelToRecovery } from '@/actions/tripl/level_to_recovery';
+//
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useRef, useState } from 'react';
+//
+export function LevelToRecovery({ profileId }: { profileId: string }) {
   const [amount, setAmount] = useState("");
   const [error, setError] = useState<string | null>(null); // État pour stocker l'erreur
   const [success, setSuccess] = useState<string | null>(null); // État pour afficher un succès
-  const formRef = useRef<HTMLFormElement>(null); 
+  const formRef = useRef<HTMLFormElement>(null);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault(); 
+    event.preventDefault();
     setError(null); // Réinitialiser l'erreur avant chaque soumission
     setSuccess(null); // Réinitialiser le succès aussi
 
@@ -24,16 +24,15 @@ export function IncreaseMemberCredit({ memberManagedId }: { memberManagedId: str
       setError("Veuillez entrer un montant valide !");
       return;
     }
-    console.log(amountValue)
-    //
+    // 
     try {
-      await increaseMemberCredit(memberManagedId, formData);
-      setSuccess(`Crédit augmenté de ${amountValue} `);
+      await levelToRecovery(profileId, formData);
+      setSuccess(`cagnotte transférable dès: ${amountValue}.`);
       setAmount("");
       formRef.current?.reset();
 
-      // Efface le message de succès après 3 secondes
-      setTimeout(() => setSuccess(null), 3000);
+      // Efface le message de succès après 2 secondes
+      setTimeout(() => setSuccess(null), 2000);
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message); // Prend le message si c'est une instance d'Error
@@ -50,8 +49,6 @@ export function IncreaseMemberCredit({ memberManagedId }: { memberManagedId: str
       ref={formRef} 
       className="flex flex-col items-center justify-center gap-y-4 bg-blue-500 rounded-md py-4"
     >
-      <p className="text-white text-center text-xl font-medium">Member Credit</p>
-
       <Input
         type="number"
         name="amount"
@@ -62,15 +59,15 @@ export function IncreaseMemberCredit({ memberManagedId }: { memberManagedId: str
         //required
       />
 
-      
+      {/* Affichage de l'erreur si elle existe */}
       {error && <div className="text-red-500 text-sm p-2 rounded-md bg-white w-4/5">{error}</div>}
 
-      
+      {/* Affichage du succès si tout va bien */}
       {success && <div className="text-green-500 text-sm p-2 rounded-md bg-white">{success}</div>}
 
       <Button type="submit" className="w-4/5 text-xl bg-blue-600 text-white hover:bg-green-600 hover:border-white hover:border-2">
-        Increase
+        Définir
       </Button>
     </form>
-  );
+  ) 
 }

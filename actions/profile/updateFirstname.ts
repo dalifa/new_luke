@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 export const updateFirstname = async (profileId: string, formData:any) => {
   const memberFirstname = formData.get("firstname");
   const session = await auth()
-  // 
+  //  
   const userSession = await prismadb.user.findFirst({
     where: { email: session?.user?.email }
   })

@@ -27,23 +27,26 @@ export const decreasePartnerCredit = async (memberManagedId: string, formData:an
   if (isNaN(amountToRemove) || amountToRemove <= 0) {
     return redirect(`/dashboard/admin/${concerned.id}`)
   }
+  const concernedPartnerCredit = Number(concerned?.partnerCredit)
+  if(concernedPartnerCredit >= amountToRemove)
+  {  
+    // Calcul du nouveau crédit partner
+    const newPartnerCredit = concernedPartnerCredit - amountToRemove;
+    // Mise à jour du partner crédit
+    await prismadb.profile.update({
+      where: { id: concerned.id },
+      data: { partnerCredit: newPartnerCredit },
+    });
 
-  // Calcul du nouveau crédit partner
-  const newPartnerCredit = concerned.partnerCredit - amountToRemove;
-  // Mise à jour du partner crédit
-  await prismadb.profile.update({
-    where: { id: concerned.id },
-    data: { partnerCredit: newPartnerCredit },
-  });
+    // Enregistrement de l'activité
+    await prismadb.activity.create({
+      data: {
+        author: connected.firstname,
+        activity: `L'ADMIN ${connected.firstname} (codepin: ${connected.codepin}) a diminué le partner crédit de ${concerned.firstname} (codepin: ${concerned.codepin}) de ${amountToRemove}, nouveau partner crédit total: ${newPartnerCredit}.`,
+      },
+    });
 
-  // Enregistrement de l'activité
-  await prismadb.activity.create({
-    data: {
-      author: connected.firstname,
-      activity: `L'ADMIN ${connected.firstname} (codepin: ${connected.codepin}) a diminué le partner crédit de ${concerned.firstname} (codepin: ${concerned.codepin}) de ${amountToRemove}, nouveau partner crédit total: ${newPartnerCredit}.`,
-    },
-  });
-
-  // Revalidation du cache pour actualiser les données
-  revalidatePath(`/dashboard/admin/${concerned.id}`);
+    // Revalidation du cache pour actualiser les données
+    revalidatePath(`/dashboard/admin/${concerned.id}`);
+  }
 };

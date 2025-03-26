@@ -30,7 +30,6 @@ yarn-error.log*
 .env
 triplComment.txt
 process.txt
-codeComment.txt
 reserve_auth.txt
 
 

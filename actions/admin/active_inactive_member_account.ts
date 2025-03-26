@@ -55,3 +55,9 @@ export const activeInactiveAccount = async (memberManagedId: string) => {
       revalidatePath(`/dashboard/admin/${concerned?.id}`)
   } 
 };
+
+
+
+export const getConnectedProfile = async () => {
+  return await CurrentProfile();
+};

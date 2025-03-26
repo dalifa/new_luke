@@ -53,7 +53,11 @@ model Profile {
   userId               String?
   //
   credit               Int      @default(0)
+  given                Int      @default(0) 
   jackpot              Int      @default(0)
+  received             Int      @default(0)
+  recoveryLevel        Int      @default(0)
+  awaitingRecovery     Boolean  @default(false)
   // lorsqu'il choisira son pays, on lui mettra ici son currency correspondant
   currency             String   @default("not informed")
   googleImage          String? 
@@ -80,10 +84,75 @@ model Profile {
   profilesMets              ProfilesMet[]  @relation("profilesMet")
   profilesOf                ProfilesMet[]  @relation("metProfiles")
   //
+  // Relations
+  canBeBlessed          CanBeBlessed[]
+  potentialRecipients   MyPotentialRecipient[]
+  donationsMade         MyListToBless[] @relation("donations")
+  donationsReceived     MyListToBless[] @relation("receivedDonations")
+  metProfiles           AlreadyMet[]  @relation("metProfiles")
+  metByProfiles         AlreadyMet[]  @relation("metByProfiles")
+  //
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
 }
 //
+model CanBeBlessed {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  profileId        String   @db.ObjectId
+  profile          Profile  @relation(fields: [profileId], references: [id])
+  amountId         String   @db.ObjectId
+  amount           Amount   @relation(fields: [amountId], references: [id])
+  currency         String   @default("not")
+  nbrOfDisplays    Int      @default(0)   
+  canBeDisplayed   Boolean  @default(false)
+  maxDisplays      Int      @default(1)
+
+  @@index([canBeDisplayed, nbrOfDisplays])
+}
+
+//
+model MyListToBless {
+  id                     String     @id @default(auto()) @map("_id") @db.ObjectId
+  donorId                String     @db.ObjectId
+  donor                  Profile    @relation("donations", fields: [donorId], references: [id])
+  chosenRecipient        String?    @db.ObjectId
+  recipient              Profile?   @relation("receivedDonations", fields: [chosenRecipient], references: [id])
+  amountId               String 
+  donationNumber         String?    @unique
+  donatorValidation      Boolean    @default(false)
+  recipientValidation    Boolean    @default(false)
+  donorConfirmedAt       DateTime?
+  recipientConfirmedAt   DateTime?
+  createdAt              DateTime   @default(now())
+  
+  potentialRecipients    MyPotentialRecipient[]
+
+  @@index([donorId, chosenRecipient])
+}
+
+model MyPotentialRecipient {
+  id                     String        @id @default(auto()) @map("_id") @db.ObjectId
+  listToBlessId          String        @db.ObjectId
+  list                   MyListToBless @relation(fields: [listToBlessId], references: [id])
+  amount                 Int // pour l'afficher dans le dialog
+  potentialRecipientId   String        @db.ObjectId
+  recipient              Profile       @relation(fields: [potentialRecipientId], references: [id])
+  listStatus             Boolean       @default(false)   
+  //
+  createdAt              DateTime  @default(now())
+}
+//
+model AlreadyMet {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  profileId         String   @db.ObjectId
+  profile          Profile  @relation("metProfiles", fields: [profileId], references: [id])
+  profileMetId     String   @db.ObjectId
+  profileMet       Profile  @relation("metByProfiles", fields: [profileMetId], references: [id])    
+  @@unique([profileId, profileMetId]) // Un utilisateur ne peut rencontrer un autre qu'une seule fois
+  
+  createdAt       DateTime @default(now())
+}
+
 // la collecte
 model Collection {
   id                 String     @id @default(auto()) @map("_id") @db.ObjectId
@@ -181,6 +250,7 @@ model Amount {
   currency   String  @default("nothing")
   rank       String  @default("nothing")
   //
+  canBeBlessed   CanBeBlessed[]
 }
 //
 model Country {
@@ -202,21 +272,9 @@ model CommissionRate {
 // TRÈS IMPORTANT
 model Metric {
   id                   String  @id @default(auto()) @map("_id") @db.ObjectId
-  currentgroup         Int  @default(3)
-  currentNbrOfTripl    Int  @default(1)
-  nextOwnIdToEnter     Int  @default(1)
+  // maximum de personnes dans la liste
+  maxDisplays          Int  @default(1)
   //
-  cgt                  Int  @default(3) // Current Group Totality
-  noit                 Int  @default(2) // Next Own Id Totality
-  noot                 Int  @default(1) // Number Of Open Totality
-  //
-  cgs                  Int  @default(3) // Current Group Snippets
-  nois                 Int  @default(1) // Next Own Id Snippets
-  noos                 Int  @default(1) // Number Of Open Snippets
-  // Direct donation challenge
-  currentDdcGroup      Int  @default(1)
-  // total of ddc on site
-  totalDdcGiven        Int  @default(0)
 }
 // Only For Tests
 model CurrentProfileForTest {

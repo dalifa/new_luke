@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 // 
 export const decreasePartnerMaxCredit = async (memberManagedId: string, formData:any) => {
-  const amountToRemove = formData.get("amount");
+  const amountToRemove = Number(formData.get("amount"));
   const connected = await CurrentProfile();
   if (!connected) {
     return redirect ("/")
@@ -27,23 +27,26 @@ export const decreasePartnerMaxCredit = async (memberManagedId: string, formData
   if (isNaN(amountToRemove) || amountToRemove <= 0) {
     return redirect(`/dashboard/admin/${concerned.id}`)
   }
+  const concernedMaxPartnerCredit = Number(concerned?.maxPartnerCredit)
+  if(concernedMaxPartnerCredit >= amountToRemove)
+  {
+    // Calcul du nouveau max crédit partner
+    const newMaxPartnerCredit = concernedMaxPartnerCredit - amountToRemove;
+    // Mise à jour du max partner crédit
+    await prismadb.profile.update({
+      where: { id: concerned.id },
+      data: { maxPartnerCredit: newMaxPartnerCredit },
+    });
 
-  // Calcul du nouveau max crédit partner
-  const newMaxPartnerCredit = concerned.maxPartnerCredit - amountToRemove;
-  // Mise à jour du max partner crédit
-  await prismadb.profile.update({
-    where: { id: concerned.id },
-    data: { maxPartnerCredit: newMaxPartnerCredit },
-  });
+    // Enregistrement de l'activité
+    await prismadb.activity.create({
+      data: {
+        author: connected.firstname,
+        activity: `L'ADMIN ${connected.firstname} (codepin: ${connected.codepin}) a diminué le max partner crédit de ${concerned.firstname} (codepin: ${concerned.codepin}) de ${amountToRemove}, nouveau partner crédit total: ${newMaxPartnerCredit}.`,
+      }, 
+    });
 
-  // Enregistrement de l'activité
-  await prismadb.activity.create({
-    data: {
-      author: connected.firstname,
-      activity: `L'ADMIN ${connected.firstname} (codepin: ${connected.codepin}) a diminué le max partner crédit de ${concerned.firstname} (codepin: ${concerned.codepin}) de ${amountToRemove}, nouveau partner crédit total: ${newMaxPartnerCredit}.`,
-    },
-  });
-
-  // Revalidation du cache pour actualiser les données
-  revalidatePath(`/dashboard/admin/${concerned.id}`);
+    // Revalidation du cache pour actualiser les données
+    revalidatePath(`/dashboard/admin/${concerned.id}`);
+  }
 };

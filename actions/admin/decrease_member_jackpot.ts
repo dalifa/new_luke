@@ -18,7 +18,7 @@ export const decreaseMemberJackpot = async (memberManagedId: string, formData:an
   }
   const concerned = await prismadb.profile.findUnique({
     where: { id: memberManagedId },
-  });
+  }); 
   // Vérifier si le profil concerné existe et a un crédit défini
   if (!concerned || concerned.credit === null) {
     throw new Error("Utilisateur introuvable ou crédit invalide !");
@@ -27,24 +27,27 @@ export const decreaseMemberJackpot = async (memberManagedId: string, formData:an
   if (isNaN(amountToRemove) || amountToRemove <= 0) {
     return redirect(`/dashboard/admin/${concerned.id}`)
   }
+  const concernedJackpot = Number(concerned?.jackpot)
+  if(concernedJackpot >= amountToRemove)
+  {
+    // Calcul du nouveau crédit
+    const newJackpot = concernedJackpot - amountToRemove;
 
-  // Calcul du nouveau crédit
-  const newJackpot = concerned.jackpot - amountToRemove;
+    // Mise à jour du jackpot
+    await prismadb.profile.update({
+      where: { id: concerned.id },
+      data: { jackpot: newJackpot },
+    });
 
-  // Mise à jour du jackpot
-  await prismadb.profile.update({
-    where: { id: concerned.id },
-    data: { jackpot: newJackpot },
-  });
+    // Enregistrement de l'activité
+    await prismadb.activity.create({
+      data: {
+        author: connected.firstname,
+        activity: `L'ADMIN ${connected.firstname} (codepin: ${connected.codepin}) a diminué la cagnotte de ${concerned.firstname} (codepin: ${concerned.codepin}) de ${amountToRemove}, nouvelle cagnotte total: ${newJackpot}.`,
+      },
+    });
 
-  // Enregistrement de l'activité
-  await prismadb.activity.create({
-    data: {
-      author: connected.firstname,
-      activity: `L'ADMIN ${connected.firstname} (codepin: ${connected.codepin}) a diminué la cagnotte de ${concerned.firstname} (codepin: ${concerned.codepin}) de ${amountToRemove}, nouvelle cagnotte total: ${newJackpot}.`,
-    },
-  });
-
-  // Revalidation du cache pour actualiser les données
-  revalidatePath(`/dashboard/admin/${concerned.id}`);
+    // Revalidation du cache pour actualiser les données
+    revalidatePath(`/dashboard/admin/${concerned.id}`);
+  }
 };

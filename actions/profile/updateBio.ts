@@ -5,7 +5,7 @@ import { CurrentProfile } from "@/hooks/own-current-user";
 //
 import { prismadb } from "@/lib/prismadb";
 import { revalidatePath } from "next/cache";
-//  
+//   
 export const updateBio = async (profileId: string, formData:any) => {
   const newBio = formData.get("bio");
   //

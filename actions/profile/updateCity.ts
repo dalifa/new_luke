@@ -1,21 +1,17 @@
 "use server";
-import { auth } from "@/auth";
+import { currentUser } from "@/hooks/own-current-user";
 //
 import { prismadb } from "@/lib/prismadb";
 import { revalidatePath } from "next/cache";
-// 
+//  
 export const updateCity = async (profileId: string, formData:any) => {
   const newCity = formData.get("city");
-  const session = await auth()
-  //
-  const useSession = await prismadb.user.findFirst({
-    where: { email: session?.user?.email }
-  })
+  const session = await currentUser()
   // l'abonné concerné  
   const concerned = await prismadb.profile.findFirst({
     where: { 
       id: profileId,
-      hashedEmail: useSession?.hashedEmail
+      googleImage: session?.email
      } 
   })
   // update de la ville du membre
@@ -24,14 +20,14 @@ export const updateCity = async (profileId: string, formData:any) => {
     data: { city: newCity }
   })
   //
-  // ACTIVITY
+  /* // ACTIVITY
   await prismadb.activity.create({
     data: {
       author: concerned?.firstname,
       activity: "dont le codepin est " + concerned?.codepin + "vient de updater son sa ville."
     }
-  })
+  }) */
   //
-  revalidatePath(`/dashboard/profile/${profileId}`)
+  revalidatePath(`/dashboard/${profileId}`)
   //
 };
