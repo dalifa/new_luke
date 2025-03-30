@@ -113,12 +113,14 @@ model CanBeBlessed {
 //
 model MyListToBless {
   id                     String     @id @default(auto()) @map("_id") @db.ObjectId
+  ownId                  Int?
   donorId                String     @db.ObjectId
   donor                  Profile    @relation("donations", fields: [donorId], references: [id])
   chosenRecipient        String?    @db.ObjectId
   recipient              Profile?   @relation("receivedDonations", fields: [chosenRecipient], references: [id])
   amountId               String 
-  donationNumber         String?    @unique
+  amount                 Int       
+  donationNumber         Int?       
   donatorValidation      Boolean    @default(false)
   recipientValidation    Boolean    @default(false)
   donorConfirmedAt       DateTime?
@@ -137,7 +139,7 @@ model MyPotentialRecipient {
   amount                 Int // pour l'afficher dans le dialog
   potentialRecipientId   String        @db.ObjectId
   recipient              Profile       @relation(fields: [potentialRecipientId], references: [id])
-  listStatus             Boolean       @default(false)   
+  listStatus             Boolean       @default(false)   // false  =  le recipient n'est pas encore choisi
   //
   createdAt              DateTime  @default(now())
 }

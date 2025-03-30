@@ -3,8 +3,7 @@
 import { redirect } from "next/navigation";
 import { prismadb } from "@/lib/prismadb";
 import { CurrentProfile } from "@/hooks/own-current-user";
-import { randomUUID } from "crypto"; // Pour générer un numéro de donation unique
-
+//
 export async function wishDonationConfirm(amountId: string) {
   // Récupérer l'utilisateur connecté
   const connected = await CurrentProfile();
@@ -40,16 +39,21 @@ export async function wishDonationConfirm(amountId: string) {
         },
       },
     },
-    take: maxDisplays,
+    take: maxDisplays, 
   });
 
   if (potentialRecipients.length === 0) return;
+  // compter le nombre de list to bless existante
+  const listCount = await prismadb.myListToBless.count()
+  const newOwnId = listCount + 1
 
   // Créer une entrée dans MyListToBless
   const myListToBless = await prismadb.myListToBless.create({
     data: {
+      ownId: newOwnId, // 
       donorId: connected.id,
       amountId, //
+      amount: amountConcerned?.amount
     },
   });
 
@@ -65,7 +69,10 @@ export async function wishDonationConfirm(amountId: string) {
 
     // Mettre à jour nbrOfDisplays et canBeDisplayed dans CanBeBlessed
     await prismadb.canBeBlessed.update({
-      where: { id: recipient.id },
+      where: { 
+        id: recipient.id,
+        amountId
+       },
       data: {
         nbrOfDisplays: { increment: 1 },
         canBeDisplayed: recipient.nbrOfDisplays + 1 >= recipient.maxDisplays ? false : true,
@@ -74,35 +81,9 @@ export async function wishDonationConfirm(amountId: string) {
   }
 
   // Rediriger vers la page des bénéficiaires potentiels
-  redirect(`/dashboard/potentialRecipients/${amountId}`);
+  //redirect(`/dashboard/potentialRecipients/${amountId}`);
+  redirect(`/dashboard/listToBless/${amountId}`);
 }
-
-
-
-// CEUX QUE JE VAIS AFFICHER DANS /dashboard/potentialRecipients/${amountId}
-export const getPotentialRecipients = async (amountId: string) => {
-  // Récupérer l'utilisateur connecté
-  const connected = await CurrentProfile();
-  if (!connected) return [];
-
-  // Récupérer la liste de bénédictions (MyListToBless) pour cet utilisateur et ce montant
-  const listsToBless = await prismadb.myListToBless.findMany({
-    where: {
-      donorId: connected.id,
-      amountId, // LE MONTANT CONCERNÉ
-      recipientValidation: false
-    },
-    include: {
-      potentialRecipients: {
-        include: {
-          recipient: true, // Récupère les infos du bénéficiaire
-        },
-      },
-    },
-  });
-  return listsToBless
-};
-
 
 
 /*

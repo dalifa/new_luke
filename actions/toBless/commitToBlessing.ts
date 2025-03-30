@@ -4,20 +4,10 @@ import { redirect } from "next/navigation";
 import { prismadb } from "@/lib/prismadb";
 import { CurrentProfile } from "@/hooks/own-current-user";
 
-// Fonction pour générer un numéro unique à 6 chiffres
-function generateDonationNumber(): string {
-  return Math.floor(100000 + Math.random() * 900000).toString(); // Nombre entre 100000 et 999999
-}
-
 // ⚡ Server Action pour bénir un bénéficiaire
-export async function blessRecipient(formData: FormData) {
+export async function ConfirmTheBlessing(amountId: string, recipientId: string) {
   const connected = await CurrentProfile();
-  if (!connected) return;
-
-  const recipientId = formData.get("recipientId") as string;
-  const amountId = formData.get("amountId") as string;
-
-  if (!recipientId || !amountId) return;
+  if (!connected) throw new Error("Utilisateur non authentifié");
 
   // Vérifier que l'utilisateur a bien une liste existante avec ce montant
   const existingList = await prismadb.myListToBless.findFirst({
@@ -31,8 +21,9 @@ export async function blessRecipient(formData: FormData) {
 
   if (!existingList) return;
 
-  // Générer un numéro unique pour le don
-  const donationNumber = generateDonationNumber();
+    // créer le donation number
+    const listCount = await prismadb.myListToBless.count()
+    const donationNumber = listCount + 1000 
 
   // on vérifie si le recipient est canBeBlessed du connecté
   const verif = await prismadb.myPotentialRecipient.count({
@@ -52,8 +43,14 @@ export async function blessRecipient(formData: FormData) {
         donationNumber,
       },
     });
+    // signaler que le recipient à été choisi
+    await prismadb.myPotentialRecipient.updateMany({
+      where: { listToBlessId: existingList?.id },
+      data: { listStatus: true}
+    })
   }
+
   // Rediriger vers la page du bénéficiaire choisi
-  redirect(`/dashboard/recipientDetail/${existingList.id}`);
+  redirect(`/dashboard/myRecipients/${amountId}`); 
 }
 

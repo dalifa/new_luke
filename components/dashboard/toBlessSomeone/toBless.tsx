@@ -135,41 +135,42 @@ export const ToBless = async () => {
         </Button>
         )}
         {two && metric && countTwo >= metric?.maxDisplays ? (
-          <AmountTwoDialog params={{ amountId: two?.id }}/>
+          <AmountTwoDialog amountId={ two?.id }/>
         ):(
         <Button variant="blue" className="bg-blue-300">
           10€
         </Button>
         )}
         {three && metric && countThree >= metric?.maxDisplays ? (
-          <AmountThreeDialog params={{ amountId: three?.id }}/>
+          <AmountThreeDialog amountId={ three?.id }/>
         ):(
         <Button variant="blue" className="bg-blue-300">
           20€
         </Button>
         )}
+        {/*
         {four && metric && countFour >= metric?.maxDisplays ? (
-          <AmountFourDialog params={{ amountId: four?.id }}/>
+          <AmountFourDialog amountId={ four?.id }/>
         ):(
         <Button variant="blue" className="bg-blue-300">
           50€
         </Button>
         )}
         {five && metric && countFive >= metric?.maxDisplays ? (
-          <AmountFiveDialog params={{ amountId: five?.id }}/>
+          <AmountFiveDialog amountId={ five?.id }/>
         ):(
         <Button variant="blue" className="bg-blue-300">
           100€
         </Button>
         )}
         {six && metric && countSix >= metric?.maxDisplays ? (
-          <AmountSixDialog params={{ amountId: six?.id }}/>
+          <AmountSixDialog amountId={ six?.id }/>
         ):(
         <Button variant="blue" className="bg-blue-300">
           200€
         </Button>
-        )}
-      </div>
+        )}  */}
+      </div> 
     </Card>
   );
 };

@@ -7,7 +7,7 @@ import { prismadb } from "@/lib/prismadb";
 export const recipientForDev = async (formData:any) => {
   const connected = await CurrentProfile();
   const amount = await prismadb.amount.findFirst({
-    where: { rank: "one" } //  
+    where: { rank: "three" } //  
   })
     if(connected && amount) // s'ils existent
     {

@@ -1,38 +1,55 @@
 "use client";
-
-import { useEffect, useState } from "react";
+//
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import Link from "next/link";
+//
+import { wishDonationConfirm } from "@/actions/toBless/wish-donation-confirm";
+import { TbAlertTriangleFilled } from "react-icons/tb";
 
-export default function AmountFiveDialog({ params }: { params: { amountId: string } }) {
+export default function AmountFiveDialog({ amountId }: { amountId: string }) {
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(formData: FormData) {
+    setLoading(true);
+    await wishDonationConfirm(amountId); // ⚡ Exécute l’action serveur et redirige automatiquement
+  }
+//
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="blue">
-          100€ 
-        </Button>
+        <Button variant="blue">100€</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Confirmer vouloir donner 100€</DialogTitle>
-          <DialogDescription>
-            Vous allez sélectionner des bénéficiaires potentiels.
-          </DialogDescription>
+        <DialogHeader className="flex gap-y-4">
+          <DialogTitle className="text-center text-blue-600">
+            Confirmer vouloir donner 100€
+          </DialogTitle>
+          <DialogDescription className="text-center"></DialogDescription>
+          <div className="flex flex-row items-center justify-center py-4 gap-x-4">
+            <TbAlertTriangleFilled className="text-orange-500 w-6 h-6"/>
+            Votre engagement sera irréversible
+          </div>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <Link href={`/dashboard/potentialRecipients/${params.amountId}`}>
-            <Button>100€</Button>
-          </Link>
-        </div>
-      </DialogContent>
+        
+        {/* FORMULAIRE */} 
+        <form action={handleSubmit} className="flex flex-col gap-4">
+          <Button variant={"blue"} className="w-full" disabled={loading}>
+            {loading ? "Traitement..." : "S'engager"}
+          </Button>
+        </form>
+        <DialogClose className="w-full p-2 text-sm rounded-md border-2 hover:border-red-300 hover:text-rose-500">
+          Ne pas s'engager
+        </DialogClose>
+      </DialogContent> 
     </Dialog>
   );
 }
