@@ -11,7 +11,7 @@ export default function DonorBlessValidation({ onConfirm }: { onConfirm: () => P
     setLoading(true);
     await onConfirm();
     setLoading(false);
-  }
+  } 
 
   return (
     <Dialog>

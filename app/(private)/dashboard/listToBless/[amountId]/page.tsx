@@ -2,7 +2,7 @@ import ConfirmTheBlessingForm from '@/components/dashboard/toBlessSomeone/amount
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { capitalize, CurrentProfile } from '@/hooks/own-current-user'
 import { prismadb } from '@/lib/prismadb'
 import { ShieldAlert, UserRound } from 'lucide-react'
@@ -68,20 +68,24 @@ const ListToBless = async ({ params }: { params: { amountId: string } }) => {
             <p className="text-gray-500">{capitalize(recipient.city)}</p>
             <p>{capitalize(recipient.country)}</p>
 
-            <Dialog>
+            <Dialog> 
               <DialogTrigger className="w-3/5 text-xl bg-blue-500 hover:bg-blue-600 rounded-md text-white p-2">
                 Bénir de {concernedAmount?.amount}{concernedAmount?.currency}
               </DialogTrigger>
               <DialogContent className="w-4/5 rounded-md">
                 <DialogHeader className="flex flex-col gap-4 mb-4">
-                  <DialogTitle className="text-center text-blue-500 mt-2">
-                    Donner librement {concernedAmount?.amount}{concernedAmount?.currency}
+                  <DialogTitle className="text-xl/10 text-center text-blue-500 mt-2">
+                    Bénir librement <br/> 
+                    <span className='text-slate-600'>{capitalize(recipient?.username)} de   {concernedAmount?.amount}{concernedAmount?.currency}</span>
                   </DialogTitle> 
-                  <DialogDescription className="flex text-center items-center gap-x-2 ">
+                  <DialogDescription className="flex items-center justify-center gap-x-2 ">
                     <ShieldAlert className='text-orange-600'/> Votre engagement sera irréversible
                   </DialogDescription>
                 </DialogHeader> 
                 { concernedAmount && ( <ConfirmTheBlessingForm amountId={concernedAmount?.id} recipientId={recipient?.id}/> )}
+                <DialogClose className="w-full text-xl p-2 rounded-md border-2 hover:border-red-300 hover:text-rose-500">
+                  Je renonce
+                </DialogClose>
               </DialogContent>
             </Dialog>
           </Card>
