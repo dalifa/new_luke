@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 export default function DonorBlessValidation({ onConfirm }: { onConfirm: () => Promise<void> }) {
   const [loading, setLoading] = useState(false);
@@ -15,17 +16,20 @@ export default function DonorBlessValidation({ onConfirm }: { onConfirm: () => P
 
   return (
     <Dialog>
-      <DialogTrigger className="w-full">
-        <Button variant="blue" className="w-full">J'ai envoyé le don ✅</Button>
+      <DialogTrigger className="w-full font-medium p-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-xl ">J'ai envoyé le don
       </DialogTrigger>
       <DialogContent className="rounded-md">
         <DialogHeader>
-          <DialogTitle className="text-center text-blue-500">Confirmer l'envoi</DialogTitle>
-          <DialogDescription className="text-center">Es-tu sûr d'avoir envoyé l'argent via Wero ?</DialogDescription>
+          <DialogTitle className="text-center text-blue-500 text-xl mb-4">Confirmez-vous</DialogTitle>
+          <DialogDescription className="text-center text-slate-500 text-xl/10">
+            avoir envoyé l'argent via Wero ?
+            et avoir envoyé par SMS le numéro unique du don à l&apos;intéressé.e ?
+          </DialogDescription>
         </DialogHeader>
-        <div className="flex justify-center">
-          <Button onClick={handleConfirm} variant="blue" disabled={loading}>
-            {loading ? "Confirmation..." : "Oui, j'ai envoyé"}
+        <DialogClose className="text-xl text-slate-500 border-2 border-slate-300 p-1 rounded-md hover:bg-red-500 hover:text-white hover:border-red-500">Annuler</DialogClose>
+        <div className="flex justify-center w-full">
+          <Button onClick={handleConfirm} variant="blue" className="w-full text-xl" disabled={loading}>
+            {loading ? "Confirmation..." : "Oui, je confirme"}
           </Button>
         </div>
       </DialogContent>

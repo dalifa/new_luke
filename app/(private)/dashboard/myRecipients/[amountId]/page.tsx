@@ -39,19 +39,17 @@ const MyRecipients = async ({params}:{params: {amountId: string}}) => {
     <div className="flex justify-center items-center min-h-screen">
       <Card className="bg-white shadow-md p-6 w-4/5 md:w-1/2 lg:w-1/3 text-center">
         <h2 className="text-xl font-semibold text-blue-600 mb-4">
-          Détails du bénéficiaire
+          Bénéficiaire Choisi
         </h2>
         <hr className="mb-4" />
 
         <div className="flex flex-col items-center gap-3 mb-2">
           <Avatar className="h-20 w-20">
-            {recipientChosen?.recipient?.googleImage ? (
-              <AvatarImage src={recipientChosen?.recipient?.googleImage} />
-            ) : (
+            {recipientChosen?.recipient?.googleImage && (
+              <AvatarImage src={recipientChosen?.recipient?.googleImage}/> )}
               <AvatarFallback className="bg-blue-500 text-white">
                 {recipientChosen?.recipient?.firstname[0]}
               </AvatarFallback>
-            )}
           </Avatar>
           { recipientChosen?.recipient && (
           <p className="text-lg font-semibold text-blue-500">
@@ -96,21 +94,21 @@ const MyRecipients = async ({params}:{params: {amountId: string}}) => {
 
           <Separator className="my-4" />
 
-          {!recipientChosen?.donatorValidation && (
+          {recipientChosen?.donatorValidation && (
           <div className='w-full grid grid-cols-2 gap-4'>
             <CheckSquare className='text-blue-500'/>
             <p>WERO <span className='text-green-600'>OK</span></p>
           </div>
           )}
 
-          {recipientChosen?.donatorValidation && (
+          {!recipientChosen?.donatorValidation && (
             <DonorBlessValidation onConfirm={handleConfirm} />
           )}
-
+          {recipientChosen?.donatorValidation && (
           <div className='mt-5'>
             <p>Votre bénéficière ne va pas tarder à valider de son côté la reception de votre don.</p>
             <p className='mt-5 text-blue-500'>Merci pour votre générosité 🙏🏼</p>
-          </div>
+          </div> )}
         </div>
       </Card>
     </div>

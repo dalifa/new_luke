@@ -54,6 +54,13 @@ export async function ConfirmMyBlessing(amountId: string, recipientId: string): 
       where: { listToBlessId: existingList?.id },
       data: { isRecipientChosen: true },
     });
+    // ON MET LE DONOR ET LE RECIPIENT DANS ALREADYMET
+    await prismadb.alreadyMet.create({
+      data: {
+        profileId: connected?.id,
+        profileMetId: recipientId
+      }
+    })
 
     console.log("Mise à jour réussie. Redirection en cours...");
     return `/dashboard/myRecipients/${amountId}`;

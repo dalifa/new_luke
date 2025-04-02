@@ -23,7 +23,8 @@ export const ToBless = async () => {
   const four = await AmountFour()
   const five = await AmountFive()
   const six = await AmountSix()
-  //
+  // on vérifie s'il y a un ou autant de profile  à qui
+  // le connecté peut donné parce qu'ils ne se sont jamais rencontré
   const countOne = await prismadb.canBeBlessed.count({
     where: {
       canBeDisplayed: true,
@@ -119,6 +120,63 @@ export const ToBless = async () => {
       },
     },
   });
+  // on vérifie que le conncté n'a pas de bless non confirmé par un destinataire
+  // ex: il ne peut pas redonner 5€ s'il en a déjà donné et que le destinataire
+  // n'a toujours pas validé avoir reçu le wero.
+  const lastOneBlessCount = await prismadb.myListToBless.count({
+    where: {
+      donorId: connected?.id,
+      amountId: one?.id,
+      isRecipientChosen: true,
+      recipientValidation: false
+    }
+  })
+  //
+  const lastTwoBlessCount = await prismadb.myListToBless.count({
+    where: {
+      donorId: connected?.id,
+      amountId: two?.id,
+      isRecipientChosen: true,
+      recipientValidation: false
+    }
+  })
+  //
+  const lastThreeBlessCount = await prismadb.myListToBless.count({
+    where: {
+      donorId: connected?.id,
+      amountId: three?.id,
+      isRecipientChosen: true,
+      recipientValidation: false
+    }
+  })
+  //
+  const lastFourBlessCount = await prismadb.myListToBless.count({
+    where: {
+      donorId: connected?.id,
+      amountId: four?.id,
+      isRecipientChosen: true,
+      recipientValidation: false
+    }
+  })
+  // 
+  const lastFiveBlessCount = await prismadb.myListToBless.count({
+    where: {
+      donorId: connected?.id,
+      amountId: five?.id,
+      isRecipientChosen: true,
+      recipientValidation: false
+    }
+  })
+  //
+  const lastSixBlessCount = await prismadb.myListToBless.count({
+    where: {
+      donorId: connected?.id,
+      amountId: six?.id,
+      isRecipientChosen: true,
+      recipientValidation: false
+    }
+  })
+  //
 
   return (
     <Card className="bg-white shadow-blue-100 shadow-md p-4">
@@ -127,21 +185,21 @@ export const ToBless = async () => {
       </p>
       <hr className="w-full mb-2" />
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
-        {one && metric && countOne >= metric?.maxDisplays ? (
+        {one && metric && countOne >= metric?.maxDisplays && lastOneBlessCount < 1 ? (
           <AmountOneDialog amountId={ one?.id }/>
         ):(
         <Button variant="blue" className="bg-blue-300">
           5€
         </Button>
         )}
-        {two && metric && countTwo >= metric?.maxDisplays ? (
+        {two && metric && countTwo >= metric?.maxDisplays && lastTwoBlessCount < 1  ? (
           <AmountTwoDialog amountId={ two?.id }/>
         ):(
         <Button variant="blue" className="bg-blue-300">
           10€
         </Button>
         )}
-        {three && metric && countThree >= metric?.maxDisplays ? (
+        {three && metric && countThree >= metric?.maxDisplays && lastThreeBlessCount < 1  ? (
           <AmountThreeDialog amountId={ three?.id }/>
         ):(
         <Button variant="blue" className="bg-blue-300">
@@ -149,21 +207,21 @@ export const ToBless = async () => {
         </Button>
         )}
         {/*
-        {four && metric && countFour >= metric?.maxDisplays ? (
+        {four && metric && countFour >= metric?.maxDisplays && lastFourBlessCount < 1  ? (
           <AmountFourDialog amountId={ four?.id }/>
         ):(
         <Button variant="blue" className="bg-blue-300">
           50€
         </Button>
         )}
-        {five && metric && countFive >= metric?.maxDisplays ? (
+        {five && metric && countFive >= metric?.maxDisplays && lastFiveBlessCount < 1  ? (
           <AmountFiveDialog amountId={ five?.id }/>
         ):(
         <Button variant="blue" className="bg-blue-300">
           100€
         </Button>
         )}
-        {six && metric && countSix >= metric?.maxDisplays ? (
+        {six && metric && countSix >= metric?.maxDisplays && lastSixBlessCount < 1  ? (
           <AmountSixDialog amountId={ six?.id }/>
         ):(
         <Button variant="blue" className="bg-blue-300">
