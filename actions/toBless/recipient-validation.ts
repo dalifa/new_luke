@@ -2,6 +2,7 @@
 
 import { prismadb } from "@/lib/prismadb";
 import { CurrentProfile } from "@/hooks/own-current-user";
+import { redirect } from "next/navigation";
 // LE CONNECTÉ À REÇU LE DONATION NUMBER ET ICI VALIDE AVOIR REÇU LE DON PAR WERO
 export async function recipientValidation(donationNumber: string, recipientId: string) {
   const connected = await CurrentProfile();
@@ -61,36 +62,12 @@ export async function recipientValidation(donationNumber: string, recipientId: s
       });
     }
     //
-    return { success: true };
+    //return { success: true }; 
+    //
+    redirect("/dashboard/historique")
   }
 }
 
-
-
 /*
-"use server";
-//
-import { prismadb } from "@/lib/prismadb";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-//
-export async function recipientValidation(listToBlessId: string) {
-  if (!listToBlessId) return;
-  // on select le amountId concerné
-  const concerned = await prismadb.myListToBless.findFirst({
-    where: {
-      id: listToBlessId,
-    }
-  })
-  //
-  await prismadb.myListToBless.update({
-    where: { id: listToBlessId },
-    data: {
-      recipientValidation: true,
-    },
-  });
-//
-  revalidatePath(`/dashboard/myDonors/${concerned?.amountId}`);
-  redirect("/dashboard");
-}
+
 */

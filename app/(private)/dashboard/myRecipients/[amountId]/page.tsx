@@ -15,7 +15,7 @@ const MyRecipients = async ({params}:{params: {amountId: string}}) => {
   const concernedAmount = await prismadb.amount.findFirst({
     where: { id: params?.amountId }
   })
-  //
+  // 
   const recipientChosen = await prismadb.myListToBless.findFirst({
     where: { 
       amountId: concernedAmount?.id,

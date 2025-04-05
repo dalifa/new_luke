@@ -16,7 +16,7 @@ export async function ConfirmMyBlessing(amountId: string, recipientId: string): 
       isRecipientChosen: false, // Vérifie si le recipient a été choisi
     },
   });
-  console.log("🔍 Vérification dans la base de données avec : ", {
+  console.log("Vérification dans la base de données avec : ", {
     donorId: connected.id,
     amountId,
     recipientValidation: false,

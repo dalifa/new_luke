@@ -189,7 +189,7 @@ export const ToBless = async () => {
           <AmountOneDialog amountId={ one?.id }/>
         ):(
         <Button variant="blue" className="bg-blue-300">
-          5€
+          5€ 
         </Button>
         )}
         {two && metric && countTwo >= metric?.maxDisplays && lastTwoBlessCount < 1  ? (
