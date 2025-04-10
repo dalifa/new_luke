@@ -6,8 +6,10 @@ import { Separator } from '@/components/ui/separator'
 import { capitalize, CurrentProfile } from '@/hooks/own-current-user'
 import { prismadb } from '@/lib/prismadb'
 import { decrypt } from '@/lib/utils'
+import { format } from "date-fns"
 import { ArrowUp01, Building2, CheckSquare, HandCoins, MapPin, Phone, UserRound } from 'lucide-react'
-import React from 'react'
+//
+const DATE_FORMAT = "d MMM yyyy, HH:mm"
 
 const MyRecipients = async ({params}:{params: {amountId: string}}) => {
   const connected = await CurrentProfile()
@@ -41,6 +43,7 @@ const MyRecipients = async ({params}:{params: {amountId: string}}) => {
         <h2 className="text-xl font-semibold text-blue-600 mb-4">
           Bénéficiaire Choisi
         </h2>
+        { !recipientChosen?.donorConfirmedAt && recipientChosen?.recipientChosenAt && (<p className='mb-4 text-slate-500'>Le:&nbsp;{format(new Date(recipientChosen?.recipientChosenAt), DATE_FORMAT)}</p>)}
         <hr className="mb-4" />
 
         <div className="flex flex-col items-center gap-3 mb-2">
@@ -93,11 +96,22 @@ const MyRecipients = async ({params}:{params: {amountId: string}}) => {
           </div>
 
           <Separator className="my-4" />
+           
+           <div>
+            { recipientChosen?.donorConfirmedAt && (<p>Validé le:</p>)}
+            { recipientChosen?.donorConfirmedAt && (<p>{format(new Date(recipientChosen?.donorConfirmedAt), DATE_FORMAT)}</p>)}
+           </div>
 
           {recipientChosen?.donatorValidation && (
           <div className='w-full grid grid-cols-2 gap-4'>
             <CheckSquare className='text-blue-500'/>
             <p>WERO <span className='text-green-600'>OK</span></p>
+          </div>
+          )}
+          {recipientChosen?.donatorValidation && (
+          <div className='w-full grid grid-cols-2 gap-4 mt-2'>
+            <div><p className='text-start text-blue-500'>SMS</p></div>
+            <p>WBY:{recipientChosen?.donationNumber} &nbsp;<span className='text-green-600'>OK</span></p>
           </div>
           )}
 

@@ -29,8 +29,29 @@ export async function recipientValidation(donationNumber: string, recipientId: s
     // Mettre à jour recipientValidation à true
     await prismadb.myListToBless.update({
       where: { id: donation.id },
-      data: { recipientValidation: true },
+      data: { 
+        recipientValidation: true,
+        recipientConfirmedAt: new Date(), // Date
+      },
     });
+    // augmenté le montant total donné du donator
+    const donatorGiven = await prismadb.profile.findFirst({
+      where: { id: donation?.donor?.id }, 
+    })
+    if(donatorGiven)
+    {
+      await prismadb.profile.updateMany({
+        where: { id: donation?.donor?.id },
+        data: { given: donatorGiven?.given + donation?.amount }
+      })
+    }
+    // augmenter le montant total reçu du connecté
+    await prismadb.profile.updateMany({
+      where: { id: connected?.id },
+      data: {
+        received: connected?.received + donation?.amount
+      }
+    })
 
     // Vérifier si celui qui à donné au connecté est déjà dans canBeBlessed
     const donorExistingInCanBeBlessed = await prismadb.canBeBlessed.findFirst({

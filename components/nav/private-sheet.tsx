@@ -46,13 +46,6 @@ export async function PrivateSheet() {
             </Link>
           </SheetClose>
           <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-blue-400">
-            <Link href={"/dashboard/transfert"} className="text-slate-600">
-              <div className="flex flex-row gap-5 ">
-                <ArrowLeftRight/> Transfert
-              </div>
-            </Link>
-          </SheetClose>
-          <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-blue-400">
             <Link href={"/dashboard/stats"} className="text-slate-600">
               <div className="flex flex-row gap-5 ">
                 <BarChart4/> Stats

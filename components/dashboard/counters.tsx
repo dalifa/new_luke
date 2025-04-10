@@ -17,30 +17,6 @@ const DATE_FORMAT = "d MMM yyyy, HH:mm"
 export async function Counters() {
   // 
   const connected = await CurrentProfile()
-  // last donation
-  const lastDonation = await prismadb.collectionResult.findFirst({
-    where: { donatorProfileId: connected?.id },
-    orderBy:{ id: "desc" }
-  })
-  // last jackpot
-  const lastjackpot = await prismadb.collectionResult.findFirst({
-    where: { 
-      recipientProfileId: connected?.id,
-      donationReceived: 2
-     },
-    orderBy:{ id: "desc" }
-  })
-  // on SELECT LE MONTANT DE CETTE DERNIER TRIPL
-  const lastAmount = await prismadb.collection.findFirst({
-    where: {id: lastjackpot?.collectionId }
-  })
-  // codes de demande de transfert
-  const transferCodes = await prismadb.transferDemand.findMany({
-    where: { 
-      usercodepin: connected?.codepin,
-      isUsed: false
-    }
-  }) 
   //
   return (
     <Card className='bg-white shadow-blue-100 shadow-md p-4'>
@@ -64,7 +40,7 @@ export async function Counters() {
           <p className="text-blue-700 font-semibold text-xl">{connected?.codepin}</p>
         </div>
         <div className="grid grid-cols-2 items-center text-slate-500 text-md md:text-lg justify-between">
-            <p>Donné:</p>
+            <p>Total Donné:</p>
             <p className="text-end">  
             {
               connected && connected?.given > 0 ? (
@@ -76,7 +52,7 @@ export async function Counters() {
             </p>
         </div>
         <div className="grid grid-cols-2 items-center text-slate-500 text-md md:text-lg justify-between">
-          <p>Reçu:</p>
+          <p>Total Reçu:</p>
           <p className="text-end">
           {
             connected && connected?.received > 0 ? (

@@ -26,14 +26,27 @@ export const updatePhone = async (profileId: string, formData:any) => {
     where: { id: concerned?.id },
     data: { encryptedPhone:phoneCrypted }
   })
-  //
-  // ACTIVITY
+  // ON LE RENTRE DANS LA TABLE SUBSCRIPTION
+  if(concerned?.id )
+  {  
+    await prismadb.subscription.createMany({
+      data:{
+        profileId: concerned?.id,
+        codepin: concerned?.codepin,
+        email: concerned?.encryptedEmail
+      }
+    })
+  }
+  // fin du provisoir
+
+  // ACTIVITY 
+  /*
   await prismadb.activity.create({
     data: {
       author: concerned?.firstname,
       activity: "dont le codepin est " + concerned?.codepin + " vient de updater son phone."
     }
-  })
+  }) */
   //
   revalidatePath(`/dashboard/profile/${profileId}`)
   //

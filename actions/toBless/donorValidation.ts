@@ -17,6 +17,7 @@ export async function donorBlessingValidation(listToBlessId: string) {
     where: { id: listToBlessId },
     data: {
       donatorValidation: true,
+      donorConfirmedAt: new Date(), // Date et heure actuelles
     },
   });
 //

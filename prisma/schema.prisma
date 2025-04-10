@@ -40,7 +40,7 @@ model Account {
   scope             String?
   id_token          String? @db.String
   session_state     String?
-
+  //
   @@unique([provider, providerAccountId])
 }
 //
@@ -52,12 +52,8 @@ model Profile {
   codepin              Int      @unique @default(1000)
   userId               String?
   //
-  credit               Int      @default(0)
   given                Int      @default(0) 
-  jackpot              Int      @default(0)
   received             Int      @default(0)
-  recoveryLevel        Int      @default(0)
-  awaitingRecovery     Boolean  @default(false)
   // lorsqu'il choisira son pays, on lui mettra ici son currency correspondant
   currency             String   @default("not informed")
   googleImage          String? 
@@ -72,18 +68,6 @@ model Profile {
   country              String   @default("pays")
   bio                  String   @default("présentez-vous") 
   //  
-  isPartner            Boolean  @default(false)
-  // le maximum qu'il peut recevoir des user approvisionnant leur compte
-  maxPartnerCredit     Int      @default(0)
-  // ce qu'il peut actuellement encaisser des user
-  partnerCredit        Int      @default(0)
-  // ce que le partenaire peut remettre à un user qui recupère sa cagnotte
-  partnerCreditToRemit Int      @default(0)
-  //
-  collectionParticipants    CollectionParticipant[]
-  profilesMets              ProfilesMet[]  @relation("profilesMet")
-  profilesOf                ProfilesMet[]  @relation("metProfiles")
-  //
   // Relations
   canBeBlessed          CanBeBlessed[]
   potentialRecipients   MyPotentialRecipient[]
@@ -91,6 +75,7 @@ model Profile {
   donationsReceived     MyListToBless[] @relation("receivedDonations")
   metProfiles           AlreadyMet[]  @relation("metProfiles")
   metByProfiles         AlreadyMet[]  @relation("metByProfiles")
+  subscriptions         Subscription[]
   //
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
@@ -106,10 +91,10 @@ model CanBeBlessed {
   nbrOfDisplays    Int      @default(0)   
   canBeDisplayed   Boolean  @default(false)
   maxDisplays      Int      @default(1)
-
+  //
   @@index([canBeDisplayed, nbrOfDisplays])
 }
-
+//
 //
 model MyListToBless {
   id                     String     @id @default(auto()) @map("_id") @db.ObjectId
@@ -119,6 +104,7 @@ model MyListToBless {
   chosenRecipient        String?    @db.ObjectId
   recipient              Profile?   @relation("receivedDonations", fields: [chosenRecipient], references: [id])
   isRecipientChosen      Boolean    @default(false)
+  recipientChosenAt      DateTime?
   amountId               String 
   amount                 Int       
   donationNumber         Int?       
@@ -127,12 +113,13 @@ model MyListToBless {
   donorConfirmedAt       DateTime?
   recipientConfirmedAt   DateTime?
   createdAt              DateTime   @default(now())
-  
+  //
   potentialRecipients    MyPotentialRecipient[]
-
+  //
   @@index([donorId, chosenRecipient])
 }
-
+//
+//
 model MyPotentialRecipient {
   id                     String        @id @default(auto()) @map("_id") @db.ObjectId
   listToBlessId          String        @db.ObjectId
@@ -145,6 +132,7 @@ model MyPotentialRecipient {
   createdAt              DateTime      @default(now())
 }
 //
+//
 model AlreadyMet {
   id               String   @id @default(auto()) @map("_id") @db.ObjectId
   profileId         String   @db.ObjectId
@@ -152,93 +140,10 @@ model AlreadyMet {
   profileMetId     String   @db.ObjectId
   profileMet       Profile  @relation("metByProfiles", fields: [profileMetId], references: [id])    
   @@unique([profileId, profileMetId]) // Un utilisateur ne peut rencontrer un autre qu'une seule fois
-  
+  //
   createdAt       DateTime @default(now())
 }
-
-// la collecte
-model Collection {
-  id                 String     @id @default(auto()) @map("_id") @db.ObjectId
-  amount             Int
-  currency           String     @default("€")
-  collectionType     String     @default("totality")
-  group              Int        @default(1)
-  groupStatus        Int        @default(0)
-  // permet d'updater le group
-  groupPlus          Int        @default(0)
-  isGroupComplete    Boolean    @default(false)
-  // la collecte est cloturé ?
-  isCollectionClosed Boolean    @default(false)
-  // les combien de don ont été déjà fait. s'ils sont === à group ont met isCollectionClosed à true
-  donationCollected  Int        @default(0)
-  // les participants
-  collectionParticipants         CollectionParticipant[]
-  //
-  createdAt          DateTime   @default(now())
-  updatedAt          DateTime   @updatedAt
-}
-// ceux qui participe a la collecte
-model CollectionParticipant {
-  id                 String      @id @default(auto()) @map("_id") @db.ObjectId
-  // id de la collecte soit tripl, snippets, totality ou ddc
-  collectionId       String      @db.ObjectId
-  collection         Collection  @relation(fields: [collectionId], references: [id])
-  // celui à qui on peut donner
-  profileId          String      @db.ObjectId
-  profile            Profile     @relation(fields: [profileId], references: [id])
-  // son rang parmi le participants à cette collecte
-  rank               Int
-  // le projet qu'il souhaite faire financer
-  project            String      @default("Non renseigné") 
-  // a renoncé à recevoir
-  isOnlyDonator      Boolean     @default(false)
-  // si lui même a donné (uniquement pour tripl, snippets, totality)
-  hasGive            Boolean     @default(false) // le participant a t-il donné ?
-  //
-  createdAt          DateTime    @default(now())
-  updatedAt          DateTime    @updatedAt
-  //
-  @@unique([collectionId, profileId]) // pour que cette paire (collectionId et profileId ne soit enregistrée qu'une seule fois)
-}
 //
-model CollectionResult {
-  id                 String  @id @default(auto()) @map("_id") @db.ObjectId
-  // email du donateur
-  donatorProfileId   String  @default("")
-  // id de la collecte
-  collectionId       String  @default("")
-  // montant à donner dans la collecte
-  amount             Int?
-  // la monnaie concerné de la collecte
-  currency           String @default("nothing")
-  //
-  recipientProfileId String @default("")
-  //number of donations received = concerne toujours le recipient
-  donationReceived   Int  @default(0)
-  //
-  createdAt          DateTime @default(now())
-}
-// les profiles met
-model ProfilesMet {
-  id                  String  @id @default(auto()) @map("_id") @db.ObjectId
-  profileId           String  @db.ObjectId
-  profile             Profile @relation("profilesMet", fields: [profileId], references: [id])
-  participantMetId    String  @db.ObjectId
-  participantMet      Profile @relation("metProfiles", fields: [participantMetId], references: [id])    
-  @@unique([profileId, participantMetId])
-}
-//
-model TransferDemand {
-  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
-  email              String?
-  usercodepin        Int      @default(1000)
-  amountToTransfer   Int
-  currency           String   @default("nothing")  
-  transferCode       Int      @default(0)
-  isUsed             Boolean  @default(false) 
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
-}
 //
 model Activity {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -279,11 +184,18 @@ model Metric {
   maxDisplays          Int  @default(1)
   //
 }
-// Only For Tests
-model CurrentProfileForTest {
-  id                   String  @id @default(auto()) @map("_id") @db.ObjectId
-  profileTestId        String?
-  usercodepin          Int
-  lastProfile          Int?
-}
 //
+//
+model Subscription {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  profileId      String   @db.ObjectId
+  profile        Profile  @relation(fields: [profileId], references: [id])
+  codepin        Int
+  email          String?
+  canParticipate Boolean    @default(false) // peut donner et recevoir
+  remainingDays  Int        @default(0)
+  startsTo       DateTime   @updatedAt // debut de l'abonnement
+  endsAt         DateTime?  // Fin réelle de l'abonnement
+  //
+  createdAt      DateTime   @default(now())
+}

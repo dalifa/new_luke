@@ -1,27 +1,18 @@
 //
-import { PotentialForDev } from '@/components/admin/add-potential-recipient-dev'
 import { SearchBar } from '@/components/admin/searchBar'
 import { CurrentProfile } from '@/hooks/own-current-user'
 import { prismadb } from '@/lib/prismadb'
-import Link from 'next/link'
+import { UpdateMaxDisplays } from './[memberManagedId]/_component/manage-Max-Displays'
+import { AdminSubscriptionManager } from '@/components/admin/manage-subscription'
 // 
 const Admin = async () => {
   //
   const connected = CurrentProfile()
-  // Nbre total de recovery
-  const nbrOfrecovery = await prismadb.profile.count({
-    where: { 
-      awaitingRecovery: true
-    }
-  })
   //
-  const amount = await prismadb.amount.findFirst({
-    where: { rank: "one" }
-  })
+  const currentMaxDisplays = await prismadb.metric.findFirst()
   //
-  const potentialRecipients = await prismadb.canBeBlessed.findMany({
+  const recipient = await prismadb.canBeBlessed.findFirst({
     where: { 
-      amountId: amount?.id,
       canBeDisplayed: true
     },
     include: {
@@ -37,14 +28,16 @@ const Admin = async () => {
         <SearchBar/>
       </div>
       <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 m-4'>
-        
-        <div className='flex flex-col items-center justify-center gap-y-2 p-4 border-2 border-slate-200 rounded-md'>
-          <Link href={"/dashboard/admin/currentRecovery"}>
-            <p className='text-2xl font-semibold'>{nbrOfrecovery}</p>
-          </Link>
-          <p>Recoveries</p>
+        <div className='flex flex-col items-center justify-center gap-y-4 p-4 border-2 border-slate-200 rounded-md'>
+          <p className='text-xl'>Nombre de Personnes par liste</p>
+          <p className='text-2xl text-blue-500 font-medium'>{currentMaxDisplays?.maxDisplays}</p>
+          <div className=''>
+            <UpdateMaxDisplays/>
+          </div>
         </div>
-        <div className='border-2 border-slate-200 rounded-md'>abonnement à jour dans le mois</div>
+        <div className=' flex items-center justify-center border-2 border-slate-200 rounded-md'>
+          <AdminSubscriptionManager/>
+        </div>
         
         <div className='border-2 border-slate-200 rounded-md'>nombre d'inscrit au total</div>
         <div className='border-2 border-slate-200 rounded-md'>nombre d'inscrit dans le mois</div>
@@ -55,22 +48,18 @@ const Admin = async () => {
         <div className='border-2 border-slate-200 rounded-md'>combien ont reçu depuis le debut</div>
         <div className='border-2 border-slate-200 rounded-md'>combien on reçu dans le mois</div>
 
-        <div className='border-2 border-slate-200 rounded-md'>
+        <div className='border-2 border-slate-200 rounded-md p-2'>
           {
-            potentialRecipients.map((recipient) => (
-              <p key={recipient?.id} className='text-blue-600 text-xl m-2 font-semibold'>
-                {recipient?.profile?.username} <br/>
-                {recipient?.amountId} <br/>
-                {recipient?.currency} <br/>
-                {recipient?.maxDisplays} <br/>
-                {recipient?.nbrOfDisplays} <br/>
-                {recipient?.canBeDisplayed === true && (<span>true</span>)}
-              </p>
-            ))
+            recipient &&
+              <div key={recipient?.id} className='text-xl mb-4'>
+                <p className=''>
+                  Pseudo: <span className='text-blue-500'>{recipient?.profile?.username} </span>
+                </p>
+                <p>MaxD: <span className='text-blue-500'>{recipient?.maxDisplays}</span></p>
+                <p>Nod: {recipient?.nbrOfDisplays}</p>
+                <p>Affichable: {recipient?.canBeDisplayed === true && (<span>true</span>)}</p>
+              </div>
           }
-        </div>
-        <div className='border-2 border-slate-200 rounded-md'>
-          <PotentialForDev/>
         </div>
       </div>
     </div>

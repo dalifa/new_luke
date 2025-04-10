@@ -27,53 +27,15 @@ const MemberManaged = async ({ params }: { params: { memberManagedId: string } }
         <p>Prénom: <span className="text-blue-500 font-semibold">{memberConcerned?.firstname}</span></p>
         <p>Account: { memberConcerned?.isActiveAccount === true ? (<span className="text-green-500 font-semibold">ACTIF</span>):(<span className="text-rose-500 font-semibold">INACTIF</span>)}</p>
         <p>Is Partner: { memberConcerned?.isPartner === true ? (<span className="text-green-500 font-semibold">YES</span>):(<span className="text-rose-500 font-semibold">NOT</span>)}</p>
+        
         <p>Pays: <span className="text-blue-500 font-semibold">{memberConcerned?.country}</span></p>
-
-        <p>Prénom: <span className="text-blue-500 font-semibold">{memberConcerned?.firstname}</span></p>
         <p>Pseudo: <span className="text-blue-500 font-semibold">{memberConcerned?.username}</span></p>
         
-        <p>Crédit actuel: <span className="text-blue-500 font-semibold">{memberConcerned?.credit}</span>&nbsp;{memberConcerned?.currency}</p>
-        <p>Cagnotte actuelle: <span className="text-blue-500 font-semibold">{memberConcerned?.jackpot}</span>&nbsp;{memberConcerned?.currency}</p>
-        
-        <p>Partner Credit: <span className="text-blue-500 font-semibold">{memberConcerned?.partnerCredit}</span>&nbsp;{memberConcerned?.currency}</p>
-        <p>Partner Max Credit: <span className="text-blue-500 font-semibold">{memberConcerned?.maxPartnerCredit}</span>&nbsp;{memberConcerned?.currency}</p>
+        <p>Total donné: <span className="text-blue-500 font-semibold">{memberConcerned?.credit}</span>&nbsp;{memberConcerned?.currency}</p>
+        <p>Total reçu: <span className="text-blue-500 font-semibold">{memberConcerned?.jackpot}</span>&nbsp;{memberConcerned?.currency}</p>
       </div> 
-      <div className="w-full lg:w-4/5 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10">
-        <div>
-          {memberConcerned?.id && ( <IncreaseMemberCredit memberManagedId={memberConcerned?.id}/> )}
-        </div>
-        <div>
-          {memberConcerned?.id && ( <DecreaseMemberCredit memberManagedId={memberConcerned?.id}/> )}
-        </div>
-        <div>
-          {memberConcerned?.id && ( <IncreaseMemberJackpot memberManagedId={memberConcerned?.id}/> )}
-        </div> 
-        <div>
-          {memberConcerned?.id && ( <DecreaseMemberJackpot memberManagedId={memberConcerned?.id}/> )}
-        </div>
-        <div>
-          {memberConcerned?.id && ( <ActiverInactiveAccount memberManagedId={memberConcerned?.id}/> )}
-        </div>
-        <div>
-          {memberConcerned?.id && ( <MakePartner memberManagedId={memberConcerned?.id}/> )}
-        </div>
-      </div>
-      <div className="w-full lg:w-4/5 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10">
-        <div>
-          {memberConcerned?.id && ( <IncreasePartnerCredit memberManagedId={memberConcerned?.id}/> )}
-        </div>
-        <div>
-        {memberConcerned?.id && ( <DecreasePartnerCredit memberManagedId={memberConcerned?.id}/> )}
-        </div>
-        <div>
-          {memberConcerned?.id && ( <IncreasePartnerMaxCredit memberManagedId={memberConcerned?.id}/> )}
-        </div>
-        <div>
-        {memberConcerned?.id && ( <DecreasePartnerMaxCredit memberManagedId={memberConcerned?.id}/> )}
-        </div>
-      </div>
     </div>  
   )
 }
-
+//
 export default MemberManaged

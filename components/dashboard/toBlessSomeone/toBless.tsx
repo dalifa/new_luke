@@ -12,6 +12,12 @@ import AmountThreeDialog from "./amountForm/amountThreeDialog";
 
 export const ToBless = async () => {
   const connected = await CurrentProfile();
+  // VÉRIFICATION DE L'ABONNEMENT DU CONNECTÉ
+  const subscription = await prismadb.subscription.findFirst({
+    where: {
+      codepin: connected?.codepin
+    }
+  })
   //
   const metric = await prismadb.metric.findFirst({
     select: { maxDisplays: true }
@@ -167,7 +173,7 @@ export const ToBless = async () => {
       recipientValidation: false
     }
   })
-  //
+  // 
   const lastSixBlessCount = await prismadb.myListToBless.count({
     where: {
       donorId: connected?.id,
@@ -185,21 +191,21 @@ export const ToBless = async () => {
       </p>
       <hr className="w-full mb-2" />
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
-        {one && metric && countOne >= metric?.maxDisplays && lastOneBlessCount < 1 ? (
+        {one && metric && countOne >= metric?.maxDisplays && lastOneBlessCount < 1 && subscription?.remainingDays !== 0 ? (
           <AmountOneDialog amountId={ one?.id }/>
         ):(
         <Button variant="blue" className="bg-blue-300">
           5€ 
         </Button>
         )}
-        {two && metric && countTwo >= metric?.maxDisplays && lastTwoBlessCount < 1  ? (
+        {two && metric && countTwo >= metric?.maxDisplays && lastTwoBlessCount < 1 && subscription?.remainingDays !== 0 ? (
           <AmountTwoDialog amountId={ two?.id }/>
         ):(
         <Button variant="blue" className="bg-blue-300">
           10€
         </Button>
         )}
-        {three && metric && countThree >= metric?.maxDisplays && lastThreeBlessCount < 1  ? (
+        {three && metric && countThree >= metric?.maxDisplays && lastThreeBlessCount < 1 && subscription?.remainingDays !== 0 ? (
           <AmountThreeDialog amountId={ three?.id }/>
         ):(
         <Button variant="blue" className="bg-blue-300">
@@ -207,21 +213,21 @@ export const ToBless = async () => {
         </Button>
         )}
         {/*
-        {four && metric && countFour >= metric?.maxDisplays && lastFourBlessCount < 1  ? (
+        {four && metric && countFour >= metric?.maxDisplays && lastFourBlessCount < 1 && subscription?.remainingDays !== 0 ? (
           <AmountFourDialog amountId={ four?.id }/>
         ):(
         <Button variant="blue" className="bg-blue-300">
           50€
         </Button>
         )}
-        {five && metric && countFive >= metric?.maxDisplays && lastFiveBlessCount < 1  ? (
+        {five && metric && countFive >= metric?.maxDisplays && lastFiveBlessCount < 1 && subscription?.remainingDays !== 0 ? (
           <AmountFiveDialog amountId={ five?.id }/>
         ):(
         <Button variant="blue" className="bg-blue-300">
           100€
         </Button>
         )}
-        {six && metric && countSix >= metric?.maxDisplays && lastSixBlessCount < 1  ? (
+        {six && metric && countSix >= metric?.maxDisplays && lastSixBlessCount < 1 && subscription?.remainingDays !== 0 ? (
           <AmountSixDialog amountId={ six?.id }/>
         ):(
         <Button variant="blue" className="bg-blue-300">

@@ -6,7 +6,10 @@ import { Separator } from '@/components/ui/separator'
 import { capitalize, CurrentProfile } from '@/hooks/own-current-user'
 import { prismadb } from '@/lib/prismadb'
 import { Bell, Building2, CheckSquare, HandCoins, MapPin, Phone, UserRound } from 'lucide-react'
-import React from 'react'
+import { format } from 'date-fns'
+//
+const DATE_FORMAT = "d MMM yyyy, HH:mm"
+
 // CEUX QUI ONT CHOISI DE BENIR LE CONNECTÉ
 const MyConfirmedDonors = async ({params}:{params: {amountId: string}}) => {
   const connected = await CurrentProfile()
@@ -52,9 +55,10 @@ const MyConfirmedDonors = async ({params}:{params: {amountId: string}}) => {
           )}
           de {concernedAmount?.amount} {concernedAmount?.currency}
         </h2>
+        { !confirmed?.donatorValidation && confirmed?.recipientChosenAt && (<p>Le:&nbsp;{format(new Date(confirmed?.recipientChosenAt), DATE_FORMAT)}</p>)}
         <hr className="mb-4" />
 
-        {/* 📌 Infos Donateur */}
+        {/* Infos Donateur */}
         <div className="flex flex-col items-center gap-3 mb-2">
           <div className="w-full grid grid-cols-2 gap-4 my-4 items-center">
             <Avatar className="h-20 w-20">
@@ -68,7 +72,7 @@ const MyConfirmedDonors = async ({params}:{params: {amountId: string}}) => {
             </p>
           </div>
 
-          {/* 🏠 Infos supplémentaires */}
+          {/* Infos supplémentaires */}
           <div className="w-full grid grid-cols-2 gap-4 mt-2">
             <UserRound className="text-blue-500" />
             <p className="text-lg text-slate-600 break-words font-semibold">
@@ -97,9 +101,14 @@ const MyConfirmedDonors = async ({params}:{params: {amountId: string}}) => {
             </p>
           </div>
 
-          <Separator className="my-4" />
+          <Separator className="my-4"/>
 
-          {/* 🆗 Validation WERO & SMS */}
+          <div className='text-slate-500 mb-4'> 
+            { confirmed?.donorConfirmedAt && (<p>Confirmé le:</p>)}
+            { confirmed?.donorConfirmedAt && (<p>{format(new Date(confirmed?.donorConfirmedAt), DATE_FORMAT)}</p>)}
+          </div>
+
+          {/* Validation WERO & SMS */}
           {confirmed?.donatorValidation && (
             <>
               <div className="w-full grid grid-cols-2 gap-4">
@@ -128,104 +137,8 @@ const MyConfirmedDonors = async ({params}:{params: {amountId: string}}) => {
 
   )
 /*
-  return (
-    <div className="flex flex-col justify-center items-center min-h-screen pt-5">
-      <div className="w-full">
-        {connected && (<ValidateDonationForm recipientId={connected?.id}/> )}
-      </div>
-
-      {/* Contenu principal avec un padding top pour éviter que le formulaire cache le haut * / }
-      <div className="flex flex-col justify-center items-center mt-20 p-4 w-full max-w-3xl">
-      
-      {confirmedDonorsLists && confirmedDonorsLists.map ((confirmed:any) =>(
-      <Card key={confirmed?.id} className="bg-white shadow-md mt-5 lg:mt-0 py-6 px-3 w-4/5 md:w-3/5 lg:w-2/5 text-center">
-        <h2 className="text-xl font-semibold text-blue-600 mb-4">
-          {confirmed?.donatorValidation === true ? 
-          (<span>Confirme vous avoir béni via Wéro &nbsp;</span>):(<span>S&apos;engage à vous bénir&nbsp;</span>)} 
-          de {concernedAmount?.amount} {concernedAmount?.currency}
-        </h2>
-        <hr className="mb-4"/>
-
-        <div className="flex flex-col items-center gap-3 mb-2">
-          <div className='w-full items-center grid grid-cols-2 gap-4 my-4'>
-            <Avatar className="h-20 w-20">
-              {confirmed && (
-                <AvatarImage src={confirmed?.donor?.googleImage}/> )}
-                <AvatarFallback className="bg-blue-500 text-white">
-                  {confirmed?.donor?.firstname}
-                </AvatarFallback>
-            </Avatar>
-            <div>
-              { confirmed && (
-              <p className="text-lg break-words font-semibold text-slate-600">
-                {capitalize(confirmed?.donor?.username)}azertyuiopazertyuiop
-              </p>)}
-            </div>
-          </div>
-          
-          <div className='w-full grid grid-cols-2 gap-4 mt-4'>
-            <UserRound className='text-blue-500'/>
-            { confirmed && (
-            <p className="text-lg text-slate-600 break-words font-semibold">
-              {capitalize(confirmed?.donor?.firstname)}
-            </p>)}
-          </div>
-          <div className='w-full grid grid-cols-2 gap-4 mt-2'>
-            <Building2 className='text-blue-500'/>
-            { confirmed && (<p className="text-slate-600 break-words">
-              {capitalize(confirmed?.donor?.city)} church of de god salvation
-              </p>)}
-          </div>
-          <div className='w-full grid grid-cols-2 gap-4 mt-2'>
-            <Building2 className='text-blue-500'/>
-            { confirmed && (<p className="text-slate-600 break-words">
-              {capitalize(confirmed?.donor?.city)}
-              </p>)}
-          </div>
-          <div className='w-full grid grid-cols-2 gap-4 mt-2'>
-            <MapPin className='text-blue-500'/>
-            { confirmed && (<p className="text-slate-600 break-words">
-              {capitalize(confirmed?.donor?.country)}
-              </p>)}
-          </div>
-          <div className='w-full grid grid-cols-2 gap-4 mt-2'>
-            <HandCoins className='text-blue-500'/>
-            <p className="text-xl font-bold text-green-600">
-              {concernedAmount?.amount} {concernedAmount?.currency}
-            </p>
-          </div>
-          <div className='w-full grid grid-cols-2 gap-4 mt-2'>
-            <Building2 className='text-blue-500'/>
-            { confirmed && (<p className="text-slate-600 break-words">
-              {capitalize(confirmed?.donor?.bio)} je sers dans le ministère de la louange et je suis étudiant
-              </p>)}
-          </div>
-
-          <Separator className="my-4" />
-
-          {confirmed?.donatorValidation && (
-          <div className='w-full grid grid-cols-2 gap-4'>
-            <CheckSquare className='text-blue-500'/>
-            <p className='text-slate-600'>WERO <span className='text-green-600'>OK</span></p>
-          </div>
-          )}
-          {confirmed?.donatorValidation && (
-          <div className='w-full grid grid-cols-2 gap-4'>
-            <Bell className='text-blue-500'/>
-            <p className='text-slate-600'>SMS <span className='text-green-600'>OK</span></p>
-          </div>
-          )}
-          {confirmed?.donatorValidation && (
-          <div className='w-full grid grid-cols-1 mt-4'>
-            <p className='text-slate-600'>Merci de valider la réception du don de votre côté, pour permettre à votre donateur de figurer dans une liste de personnes à bénir.</p>
-          </div>
-          )}
-        </div>
-      </Card>
-      ))}
-      </div>
-    </div>
-  ) */
+  
+*/
 }
 
 export default MyConfirmedDonors
