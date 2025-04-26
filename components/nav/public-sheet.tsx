@@ -11,12 +11,13 @@ import { useMobileSidebar } from "@/hooks/use-mobile-sidebar"
 import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
 import { LogGoogleButton } from "../auth/log-google-button"
+import { Button } from "../ui/button"
 
 export function PublicSheet() {
   const pathname = usePathname();
   const [isMounted, setIsMounted] = useState(false);
   const active = pathname
-  //
+  // 
   const onOpen = useMobileSidebar((state) => state.onOpen);
   const onClose = useMobileSidebar((state) => state.onClose);
   const isOpen = useMobileSidebar((state) => state.isOpen);
@@ -34,7 +35,12 @@ export function PublicSheet() {
   }
   return (
     <>
-    <MenuIcon className="cursor-pointer text-white" onClick={onOpen}/>
+    <Button size="sm" className=" text-white bg-indigo-400 hover:bg-white hover:text-indigo-600" 
+      onClick={onOpen}
+    >
+      <MenuIcon className="w-5 h-5 md:w-6 md:h-6"/>
+    </Button>
+    
     
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent className="pt-14">
@@ -126,4 +132,3 @@ export function PublicSheet() {
     </>
   )
 }
-

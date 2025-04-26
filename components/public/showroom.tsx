@@ -29,16 +29,16 @@ const Showroom = () => {
   }, []);
 
   return (
-    <div className="flex-col bg-blue-500 flex items-center justify-center min-h-screen text-white text-center">
+    <div className="flex-col bg-indigo-600 flex items-center justify-center min-h-screen text-white text-center">
       <div className='min-w-96'>
         <div className="overflow-hidden whitespace-nowrap">
           <div className="mt-5 transition-opacity duration-1000 opacity-0" id="slogan1">
-            <p className="scrolling-text text-3xl md:text-5xl font-black">WE BLESS YOU</p>
+            <p className="scrolling-text text-3xl md:text-7xl font-black">WE BLESS YOU</p>
             {/* &nbsp; pour mettre l'espace entre 2 mots */}
           </div>
         </div>
-        <div className='grid grid-cols-1 mt-14'>
-          <span className="text-xl md:text-2xl">
+        <div className='grid grid-cols-1 mt-20'>
+          <span className="text-xl md:text-2xl lg:text-4xl">
             <TypewriterComponent
               options={{
               strings: [
@@ -56,12 +56,12 @@ const Showroom = () => {
         </div>
         <div className='px-3 mt-16 transition-opacity duration-1000 opacity-0' id="slogan2">
           <div className='px-10'>
-            <Link href={"/ccm"}>
+            <Link href={"/home"}>
             <Button size="lg"
-              className="w-full border-2 text-blue-500 bg-white hover:bg-blue-300 hover:text-white hover:border-white" 
+              className="w-full py-2 text-indigo-600 bg-white hover:bg-indigo-400 hover:text-white" 
             >
-              <Telescope className="h-5 w-5"/>
-              <span className="ml-5 text-lg">Découvrir</span>
+              <Telescope className="h-5 w-5 lg:h-7 lg:w-7"/>
+              <span className="ml-5 text-xl">Découvrir</span>
             </Button>
             </Link>
           </div>

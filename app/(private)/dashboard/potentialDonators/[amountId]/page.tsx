@@ -4,7 +4,7 @@ import { capitalize, CurrentProfile } from '@/hooks/own-current-user'
 import { prismadb } from '@/lib/prismadb'
 import { UserRound } from 'lucide-react'
 import React from 'react'
-// CEUX CHEZ QUI JE SUIS AFFICHÉ, DONC MES POTENTIELS DONOTEURS
+// CEUX CHEZ QUI JE SUIS AFFICHÉ, DONC MES POTENTIELS DONATEURS
 const ListToBless = async ({ params }: { params: { amountId: string } }) => {
   const connected = await CurrentProfile();
 

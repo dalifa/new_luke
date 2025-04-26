@@ -1,22 +1,14 @@
 
-import { Button } from "@/components/ui/button"
 import {
   Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
-import { capitalize, CurrentProfile } from '@/hooks/own-current-user';
+import { CurrentProfile } from '@/hooks/own-current-user';
 import { prismadb } from '@/lib/prismadb';
 import Link from 'next/link';
 // pour forma date

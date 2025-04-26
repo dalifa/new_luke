@@ -176,5 +176,3 @@ const HistoryDetails = async ({
 }
 //
 export default HistoryDetails
-
-/* */

@@ -90,7 +90,7 @@ const Dashboard = async () => {
         <div className='w-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5'>
           {/* montant total donné et reçu */}
           <Counters/> 
-          {/* donner à un autre */}
+          {/* acte de donner à un autre */}
           <ToBless/>   
           {/* promesses de dons faites */}
           <DonationPromised/> 

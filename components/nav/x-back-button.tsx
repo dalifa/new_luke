@@ -1,5 +1,5 @@
 "use client"
-import { ChevronLeft, X } from "lucide-react"
+import { X } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
 
 //

@@ -1,16 +1,14 @@
 "use client"
 
 import { 
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
+  Card,
+  CardContent,
+  CardHeader,
  }  
 from "@/components/ui/card";
 import { Header } from "@/components/auth/header";
-import { Button } from "../ui/button";
 import Link from "next/link";
-import { ArrowLeft, ChevronLeft } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 
 interface CardWrapperProps {
     children: React.ReactNode;

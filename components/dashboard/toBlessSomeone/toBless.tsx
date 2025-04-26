@@ -185,12 +185,12 @@ export const ToBless = async () => {
   //
 
   return (
-    <Card className="bg-white shadow-blue-100 shadow-md p-4">
-      <p className="text-center mb-4 font-semibold text-slate-600 text-xl lg:text-lg">
+    <Card className="bg-white shadow-xl p-6 rounded-lg">
+      <p className="text-center text-xl font-semibold text-gray-700 mb-4">
         BÉNIR  
       </p>
-      <hr className="w-full mb-2" />
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
+      <hr className="border-t border-gray-300 mb-4" />
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         {one && metric && countOne >= metric?.maxDisplays && lastOneBlessCount < 1 && subscription?.remainingDays !== 0 ? (
           <AmountOneDialog amountId={ one?.id }/>
         ):(

@@ -1,6 +1,5 @@
 "use client"
 
-import { FcGoogle } from "react-icons/fc"
 import { Button } from "@/components/ui/button"
 
 import { signIn } from "next-auth/react";
@@ -21,10 +20,10 @@ export const NavLogButton = () => {
 
     return (
       <div className="flex flex-col gap-y-1 items-center">
-        <Button size="sm" className=" text-white bg-blue-500 hover:bg-blue-400" 
+        <Button size="sm" className=" text-white bg-indigo-400 hover:bg-white hover:text-indigo-600" 
           onClick={() => onClick("google")}
         >
-          <LogIn className="h-5 w-5"/>
+          <LogIn className="h-5 w-5 md:w-6 md:h-6"/>
         </Button>
       </div>
     )

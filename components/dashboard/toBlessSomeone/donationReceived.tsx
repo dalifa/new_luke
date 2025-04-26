@@ -37,13 +37,45 @@ export async function DonationReceived() {
   //
   //
     return(
-      <Card className='bg-white shadow-blue-100 shadow-md p-4'>
+      <Card className="bg-white shadow-xl p-6 rounded-lg">
+      <p className="text-center mb-3 text-xl font-semibold text-gray-700">PROMESSES DE DONS REÇU</p>
+      <hr className="border-t border-gray-300 mb-4" />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Chosen recipients */}
+        {chosenAsRecipientLists.map((chosen) => (
+          <div key={chosen.id} className="rounded-md bg-green-600">
+            <Link href={`/dashboard/myDonors/${chosen?.amountId}`}>
+              <Button className="w-full bg-green-600 hover:bg-green-700">
+                {chosen?.amount}{connected?.currency}
+              </Button>
+            </Link>
+          </div>
+        ))}
+        
+        {/* Potential donors */}
+        {potentialDonors.map((potential) => (
+          <div key={potential.id} className="rounded-md bg-green-600">
+            <Link href={`/dashboard/potentialDonators/${potential?.list?.amountId}`}>
+              <Button className="w-full bg-green-600 hover:bg-green-700">
+                {potential?.amount}{connected?.currency}
+              </Button>
+            </Link>
+          </div>
+        ))}
+      </div>
+    </Card>
+      
+    )
+}
+
+/*
+<Card className='bg-white shadow-blue-100 shadow-md p-4'>
         <p className='text-center mb-3 font-semibold text-slate-600 text-xl lg:text-lg'>
           PROMESSES DE DONS REÇU
         </p> 
         <hr className='w-full mb-2'/>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-        {/* choix du recipient fait */}
+        {/* choix du recipient fait * / }
         {
           chosenAsRecipientLists.map((chosen) => (
             <div key={chosen.id} className="rounded-md bg-green-600">
@@ -55,7 +87,7 @@ export async function DonationReceived() {
             </div>
           ))
         }
-        {/* choix du recipient pas encore fait */}
+        {/* choix du recipient pas encore fait * / }
         {
           potentialDonors.map((potential) => (
             <div key={potential.id} className="rounded-md bg-green-600">
@@ -69,5 +101,4 @@ export async function DonationReceived() {
         }
       </div>
       </Card>
-    )
-}
+*/

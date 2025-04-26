@@ -76,9 +76,23 @@ model Profile {
   metProfiles           AlreadyMet[]  @relation("metProfiles")
   metByProfiles         AlreadyMet[]  @relation("metByProfiles")
   subscriptions         Subscription[]
+  questions             QuestionResponse[]
   //
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
+}
+//
+model QuestionResponse {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  profileId        String   @db.ObjectId
+  profile          Profile  @relation(fields: [profileId], references: [id])
+  question1        Boolean  @default(false)
+  question2        Boolean  @default(false)
+  question3        Boolean  @default(false)
+  question4        Boolean  @default(false)
+  question5        Boolean  @default(false)
+  //
+  createdAt            DateTime @default(now())
 }
 //
 model CanBeBlessed {

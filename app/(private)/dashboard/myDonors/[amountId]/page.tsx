@@ -136,9 +136,6 @@ const MyConfirmedDonors = async ({params}:{params: {amountId: string}}) => {
 </div>
 
   )
-/*
-  
-*/
 }
 
 export default MyConfirmedDonors

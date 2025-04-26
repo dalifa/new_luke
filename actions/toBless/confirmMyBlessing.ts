@@ -65,7 +65,5 @@ export async function ConfirmMyBlessing(amountId: string, recipientId: string): 
   return;
 }
 
-
-
 /*
 */

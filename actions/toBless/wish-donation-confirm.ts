@@ -85,7 +85,5 @@ export async function wishDonationConfirm(amountId: string) {
   redirect(`/dashboard/listToBless/${amountId}`);
 }
 
-
 /*
-
 */

@@ -16,7 +16,32 @@ export default function DonorBlessValidation({ onConfirm }: { onConfirm: () => P
 
   return (
     <Dialog>
-      <DialogTrigger className="w-full font-medium p-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-xl ">J'ai envoyé le don
+      <DialogTrigger className="w-full font-medium p-3 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-xl">
+        J'ai envoyé le don
+      </DialogTrigger>
+      <DialogContent className="rounded-md">
+        <DialogHeader>
+          <DialogTitle className="text-center text-blue-600 text-xl mb-4">Confirmez-vous ?</DialogTitle>
+          <DialogDescription className="text-center text-gray-500">
+            Avez-vous envoyé l'argent via Wero ? Et envoyé par SMS le numéro unique du don ?
+          </DialogDescription>
+        </DialogHeader>
+        <DialogClose className="text-xl text-gray-500 border-2 border-gray-300 p-2 rounded-md hover:bg-red-500 hover:text-white hover:border-red-500">
+          Annuler
+        </DialogClose>
+        <div className="flex justify-center w-full">
+          <Button onClick={handleConfirm} variant="blue" className="w-full text-xl" disabled={loading}>
+            {loading ? "Confirmation..." : "Oui, je confirme"}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+    
+  );
+}
+
+/*<Dialog>
+      <DialogTrigger className="w-full font-medium p-3 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-xl ">J'ai envoyé le don
       </DialogTrigger>
       <DialogContent className="rounded-md">
         <DialogHeader>
@@ -33,6 +58,4 @@ export default function DonorBlessValidation({ onConfirm }: { onConfirm: () => P
           </Button>
         </div>
       </DialogContent>
-    </Dialog>
-  );
-}
+    </Dialog> */

@@ -1,6 +1,4 @@
 
-//import Navbar from "@/components/nav/navbar"
-
 export default function PublicLayout({
   children,
 }: {

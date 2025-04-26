@@ -1,12 +1,11 @@
 import ConfirmTheBlessingForm from '@/components/dashboard/toBlessSomeone/amountForm/confirmTheBlessingForm'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { capitalize, CurrentProfile } from '@/hooks/own-current-user'
 import { prismadb } from '@/lib/prismadb'
 import { ShieldAlert, UserRound } from 'lucide-react'
-import React from 'react'
+//
 
 const ListToBless = async ({ params }: { params: { amountId: string } }) => {
   const connected = await CurrentProfile();
@@ -30,15 +29,13 @@ const ListToBless = async ({ params }: { params: { amountId: string } }) => {
     },
   }); 
 
-  // ✅ Extraction des bénéficiaires potentiels avec leur montant
+  // Extraction des bénéficiaires potentiels avec leur montant
   const potentialRecipientsList = recipients.flatMap((list:any) =>
     list.potentialRecipients.map((p:any) => ({
       recipient: p.recipient,
       potentialAmount: list.amount, // ✅ Le montant est maintenant inclus
     }))
   ); 
-
-  //console.log(potentialRecipientsList);
 
   return (
     <Card className="bg-white shadow-blue-100 shadow-md p-4 m-4">
@@ -96,4 +93,3 @@ const ListToBless = async ({ params }: { params: { amountId: string } }) => {
 };
 
 export default ListToBless;
-

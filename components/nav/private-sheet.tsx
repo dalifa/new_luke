@@ -6,7 +6,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { Archive, ArrowLeftRight, BarChart4, LayoutDashboard, MenuIcon, UserRound } from "lucide-react"
+import { Archive, BarChart4, LayoutDashboard, MenuIcon, UserRound } from "lucide-react"
 import { Separator } from "../ui/separator"
 import Link from "next/link"
 import { CurrentProfile } from "@/hooks/own-current-user"

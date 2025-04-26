@@ -8,7 +8,7 @@ export default function PublicLayout({
   return (
     <div className="h-full bg-white">
       <PublicTopbar/>
-      <main className="pb-20 bg-white">
+      <main className="bg-white">
         {children}
       </main>
     </div>

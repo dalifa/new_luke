@@ -6,15 +6,15 @@ import { Button } from "../ui/button"
 
 const BackButton = () => {
     const router = useRouter()
-    const pathname = usePathname()
+    const pathname = usePathname() 
     return (
         <>
-            {
+            { 
                 pathname !== "/" ? (
-                    <Button size="sm" className=" text-white bg-blue-500 hover:bg-blue-400" 
+                    <Button size="sm" className=" text-white bg-indigo-400 hover:bg-white hover:text-indigo-600" 
                       onClick={() => router.back()}
                     >
-                        <ChevronLeft className='cursor-pointer h-6 w-6 '/>
+                        <ChevronLeft className='cursor-pointer h-5 w-5 md:h6 md:w-6'/>
                     </Button>
                 ):(<span className="text-yellow">🤗</span>)
             }
