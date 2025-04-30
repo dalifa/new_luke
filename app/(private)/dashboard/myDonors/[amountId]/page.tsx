@@ -29,12 +29,14 @@ const MyConfirmedDonors = async ({params}:{params: {amountId: string}}) => {
   });
   // fixed top-5 left-0 w-full bg-white p-4 shadow-md z-10"
   return(
-    <div className="flex flex-col items-center min-h-screen pt-5">
+    <div className="flex flex-col items-center min-h-screen pt-5 bg-indigo-600">
   {/* Formulaire fixé en haut * / }
   <div className="w-full flex justify-center border-2 border-red-500"> */}
-  <div className='fixed top-12 flex flex-col justify-center items-center w-full max-w-4xl bg-white'>
-    <div className="w-full sm:w-4/5 md:w-3/5 p-4">
-    <p className='my-4 text-slate-600 font-medium text-center text-xl'>Valider avoir été béni via Wéro</p>
+  <div className='fixed top-12  flex flex-col justify-center items-center w-full max-w-4xl bg-white'>
+    <div className="w-full sm:w-4/5 md:w-3/5 p-4 bg-indigo-600">
+      <p className='my-4 text-white font-medium text-center text-xl'>
+        Valider avoir été béni via Wéro
+      </p>
       {connected && <ValidateDonationForm recipientId={connected?.id} />}
     </div>
   </div>
@@ -47,9 +49,9 @@ const MyConfirmedDonors = async ({params}:{params: {amountId: string}}) => {
         className="bg-white shadow-md py-6 px-3 w-full sm:w-4/5 md:w-3/5 text-center mt-6"
       >
         {/* 💰 Titre avec statut du donateur */}
-        <h2 className="text-xl font-semibold text-blue-600 mb-4">
+        <h2 className="text-xl font-semibold text-indigo-600 mt-10 mb-4">
           {confirmed?.donatorValidation ? (
-            <span>Confirme vous avoir béni via Wéro &nbsp;</span>
+            <span>A confirmé vous avoir béni via Wéro &nbsp;</span>
           ) : (
             <span>S&apos;engage à vous bénir&nbsp;</span>
           )}
@@ -63,7 +65,7 @@ const MyConfirmedDonors = async ({params}:{params: {amountId: string}}) => {
           <div className="w-full grid grid-cols-2 gap-4 my-4 items-center">
             <Avatar className="h-20 w-20">
               {confirmed?.donor && <AvatarImage src={confirmed?.donor?.googleImage} />}
-              <AvatarFallback className="bg-blue-500 text-white">
+              <AvatarFallback className="bg-indigo-600 text-white">
                 {confirmed?.donor?.firstname}
               </AvatarFallback>
             </Avatar>
@@ -74,28 +76,28 @@ const MyConfirmedDonors = async ({params}:{params: {amountId: string}}) => {
 
           {/* Infos supplémentaires */}
           <div className="w-full grid grid-cols-2 gap-4 mt-2">
-            <UserRound className="text-blue-500" />
+            <UserRound className="text-indigo-600" />
             <p className="text-lg text-slate-600 break-words font-semibold">
               {capitalize(confirmed?.donor?.firstname)}
             </p>
           </div>
 
           <div className="w-full grid grid-cols-2 gap-4 mt-2">
-            <MapPin className="text-blue-500" />
+            <MapPin className="text-indigo-600" />
             <p className="text-slate-600 break-words">
               {capitalize(confirmed?.donor?.country)}
             </p>
           </div>
 
           <div className="w-full grid grid-cols-2 gap-4 mt-2">
-            <HandCoins className="text-blue-500" />
+            <HandCoins className="text-indigo-600" />
             <p className="text-xl font-bold text-green-600">
               {concernedAmount?.amount} {concernedAmount?.currency}
             </p>
           </div>
 
           <div className="w-full grid grid-cols-2 gap-4 mt-2">
-            <Building2 className="text-blue-500" />
+            <Building2 className="text-indigo-600" />
             <p className="text-slate-600 break-words">
               {capitalize(confirmed?.donor?.bio)}
             </p>
@@ -103,7 +105,7 @@ const MyConfirmedDonors = async ({params}:{params: {amountId: string}}) => {
 
           <Separator className="my-4"/>
 
-          <div className='text-slate-500 mb-4'> 
+          <div className='text-slate-600 mb-4'> 
             { confirmed?.donorConfirmedAt && (<p>Confirmé le:</p>)}
             { confirmed?.donorConfirmedAt && (<p>{format(new Date(confirmed?.donorConfirmedAt), DATE_FORMAT)}</p>)}
           </div>
@@ -112,12 +114,12 @@ const MyConfirmedDonors = async ({params}:{params: {amountId: string}}) => {
           {confirmed?.donatorValidation && (
             <>
               <div className="w-full grid grid-cols-2 gap-4">
-                <CheckSquare className="text-blue-500" />
+                <CheckSquare className="text-indigo-600" />
                 <p className="text-slate-600">WERO <span className="text-green-600">OK</span></p>
               </div>
 
               <div className="w-full grid grid-cols-2 gap-4">
-                <Bell className="text-blue-500" />
+                <Bell className="text-indigo-600" />
                 <p className="text-slate-600">SMS <span className="text-green-600">OK</span></p>
               </div>
 
@@ -137,5 +139,5 @@ const MyConfirmedDonors = async ({params}:{params: {amountId: string}}) => {
 
   )
 }
-
+//
 export default MyConfirmedDonors

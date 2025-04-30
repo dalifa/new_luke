@@ -50,35 +50,39 @@ const ListToBless = async ({ params }: { params: { amountId: string } }) => {
         {potentialRecipientsList.map(({recipient, potentialRecipients}) => (
           <Card
             key={recipient.id}
-            className="flex flex-col items-center p-4 text-xl gap-3"
+            className="flex flex-col items-center p-4 text-xl gap-3 text-slate-700"
           >
             <Avatar className="h-20 w-20 lg:h-24 lg:w-24">
               {recipient.googleImage && (
                 <AvatarImage src={recipient.googleImage} />)}
-                <AvatarFallback className="bg-blue-500">
+                <AvatarFallback className="bg-indigo-600">
                   <UserRound className="text-white h-14 w-14" />
                 </AvatarFallback>
             </Avatar>
-            <p className="text-xl capitalize font-semibold text-blue-500">
+            <p className="text-xl capitalize font-semibold text-indigo-600">
               {recipient.username}
             </p>
-            <p className="break-words">{capitalize(recipient.bio)}</p>
+            <p className="break-words text-center">{capitalize(recipient.bio)}</p>
             <p className="text-gray-500">{capitalize(recipient.city)}</p>
             <p>{capitalize(recipient.country)}</p>
 
             <Dialog> 
-              <DialogTrigger className="w-3/5 text-xl bg-blue-500 hover:bg-blue-600 rounded-md text-white p-2">
+              <DialogTrigger className="w-3/5 text-xl bg-indigo-600 hover:bg-indigo-500 rounded-md text-white p-2">
                 Bénir de {concernedAmount?.amount}{concernedAmount?.currency}
               </DialogTrigger>
               <DialogContent className="w-4/5 rounded-md">
                 <DialogHeader className="flex flex-col gap-4 mb-4">
-                  <DialogTitle className="text-xl/10 text-center text-blue-500 mt-2">
+                  <DialogTitle className="text-xl/10 text-center text-indigo-600 mt-2">
                     Bénir librement <br/> 
-                    <span className='text-slate-600'>{capitalize(recipient?.username)} de   {concernedAmount?.amount}{concernedAmount?.currency}</span>
+                    <span className='text-slate-700'>{capitalize(recipient?.username)} de   {concernedAmount?.amount}{concernedAmount?.currency}</span>
                   </DialogTitle> 
-                  <DialogDescription className="flex items-center justify-center gap-x-2 ">
-                    <ShieldAlert className='text-orange-600'/> Votre engagement sera irréversible
-                  </DialogDescription>
+                  <div className='flex flex-col md:flex-row gap-4 items-center justify-center'>
+                    <ShieldAlert className='text-orange-600'/>
+                    <DialogDescription className="text-xl gap-x-2 ">
+                      Votre engagement sera irréversible
+                    </DialogDescription>
+                  </div>
+                  
                 </DialogHeader> 
                 { concernedAmount && ( <ConfirmTheBlessingForm amountId={concernedAmount?.id} recipientId={recipient?.id}/> )}
                 <DialogClose className="w-full text-xl p-2 rounded-md border-2 hover:border-red-300 hover:text-rose-500">

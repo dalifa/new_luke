@@ -194,21 +194,21 @@ export const ToBless = async () => {
         {one && metric && countOne >= metric?.maxDisplays && lastOneBlessCount < 1 && subscription?.remainingDays !== 0 ? (
           <AmountOneDialog amountId={ one?.id }/>
         ):(
-        <Button variant="blue" className="bg-indigo-400">
-           
+        <Button variant="primary">
+           5€
         </Button>
         )}
         {two && metric && countTwo >= metric?.maxDisplays && lastTwoBlessCount < 1 && subscription?.remainingDays !== 0 ? (
           <AmountTwoDialog amountId={ two?.id }/>
         ):(
-        <Button variant="blue" className="bg-indigo-400">
+        <Button variant="primary">
           10€
         </Button>
         )}
         {three && metric && countThree >= metric?.maxDisplays && lastThreeBlessCount < 1 && subscription?.remainingDays !== 0 ? (
           <AmountThreeDialog amountId={ three?.id }/>
         ):(
-        <Button variant="blue" className="bg-indigo-400">
+        <Button variant="primary">
           20€
         </Button>
         )}
@@ -216,21 +216,21 @@ export const ToBless = async () => {
         {four && metric && countFour >= metric?.maxDisplays && lastFourBlessCount < 1 && subscription?.remainingDays !== 0 ? (
           <AmountFourDialog amountId={ four?.id }/>
         ):(
-        <Button variant="blue" className="bg-indigo-400">
+        <Button variant="primary">
           50€
         </Button>
         )}
         {five && metric && countFive >= metric?.maxDisplays && lastFiveBlessCount < 1 && subscription?.remainingDays !== 0 ? (
           <AmountFiveDialog amountId={ five?.id }/>
         ):(
-        <Button variant="blue" className="bg-indigo-400">
+        <Button variant="primary">
           100€
         </Button>
         )}
         {six && metric && countSix >= metric?.maxDisplays && lastSixBlessCount < 1 && subscription?.remainingDays !== 0 ? (
           <AmountSixDialog amountId={ six?.id }/>
         ):(
-        <Button variant="blue" className="bg-indigo-400">
+        <Button variant="primary">
           200€
         </Button>
         )}  {/*  */}

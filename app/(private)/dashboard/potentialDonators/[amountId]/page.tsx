@@ -27,7 +27,7 @@ const ListToBless = async ({ params }: { params: { amountId: string } }) => {
   });
   //
   return (
-    <Card className="bg-white shadow-blue-100 shadow-md p-4 m-4">
+    <Card className="bg-white shadow-xl p-4 m-4 my-10 md:my-20">
       <h2 className="text-center mb-4 font-semibold text-slate-700 text-xl lg:text-2xl">
         Peuvent vous bénir de {concernedAmount?.amount}{concernedAmount?.currency}
       </h2>
@@ -37,23 +37,23 @@ const ListToBless = async ({ params }: { params: { amountId: string } }) => {
         {potentialDonors.map((potential) => (
           <Card
             key={potential.id}
-            className="flex flex-col items-center p-4 text-xl gap-3"
+            className="flex flex-col items-center p-4 text-xl gap-3 text-slate-700"
           >
             <Avatar className="h-20 w-20 lg:h-24 lg:w-24">
               {potential?.list?.donor?.googleImage && (
                 <AvatarImage src={potential?.list?.donor?.googleImage} />)}
-                <AvatarFallback className="bg-blue-500">
+                <AvatarFallback className="bg-indigo-600">
                   <UserRound className="text-white h-14 w-14" />
                 </AvatarFallback>
             </Avatar>
-            <p className="text-xl capitalize font-semibold text-blue-500">
+            <p className="text-xl capitalize font-semibold text-indigo-600">
               {potential?.list?.donor?.username}
             </p>
             <p className="break-words">{capitalize(potential?.list?.donor?.bio)}</p>
             <p className="text-gray-500">{capitalize(potential?.list?.donor?.city)}</p>
             <p>{capitalize(potential?.list?.donor?.country)}</p>
             <div>
-              <p>pourrais vous bénir de {potential?.list?.amount}{connected?.currency}</p>
+              <p>Pourrais vous bénir de {potential?.list?.amount}{connected?.currency}</p>
             </div>
           </Card>
         ))}

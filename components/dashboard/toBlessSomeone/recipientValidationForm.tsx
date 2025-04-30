@@ -24,7 +24,7 @@ export default function ValidateDonationForm({ recipientId }: { recipientId: str
   }
 
   return (
-    <div className="p-6 bg-white shadow-md rounded-lg">
+    <div className="p-6 bg-white shadow-xl rounded-lg">
       <form onSubmit={handleSubmit} className="flex items-center gap-4">
         <input
           type="text"
@@ -34,7 +34,7 @@ export default function ValidateDonationForm({ recipientId }: { recipientId: str
           className="border p-3 rounded-md w-full"
           required
         />
-        <Button type="submit" variant="blue" disabled={loading}>
+        <Button type="submit" variant="primary" disabled={loading}>
           {loading ? "Validation..." : "Valider"}
         </Button>
       </form>

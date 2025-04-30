@@ -16,21 +16,21 @@ export default function DonorBlessValidation({ onConfirm }: { onConfirm: () => P
 
   return (
     <Dialog>
-      <DialogTrigger className="w-full font-medium p-3 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-xl">
+      <DialogTrigger className="w-full font-medium p-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-md text-xl">
         J&apos;ai envoyé le don
       </DialogTrigger>
-      <DialogContent className="rounded-md">
+      <DialogContent className="rounded-md w-4/5">
         <DialogHeader>
-          <DialogTitle className="text-center text-blue-600 text-xl mb-4">Confirmez-vous ?</DialogTitle>
-          <DialogDescription className="text-center text-gray-500">
-            Avez-vous envoyé l&apos;argent via Wero ? Et envoyé par SMS le numéro unique du don ?
+          <DialogTitle className="text-center text-indigo-600 text-xl mb-4">Confirmez-vous ?</DialogTitle>
+          <DialogDescription className="text-center text-slate-600 text-xl">
+            Avez-vous envoyé l&apos;argent via Wero? <br/> Et envoyé par SMS le Donation Number?
           </DialogDescription>
         </DialogHeader>
-        <DialogClose className="text-xl text-gray-500 border-2 border-gray-300 p-2 rounded-md hover:bg-red-500 hover:text-white hover:border-red-500">
+        <DialogClose className="text-xl text-slate-600 border-2 border-gray-300 p-2 rounded-md hover:bg-red-500 hover:text-white hover:border-red-500">
           Annuler
         </DialogClose>
         <div className="flex justify-center w-full">
-          <Button onClick={handleConfirm} variant="blue" className="w-full text-xl" disabled={loading}>
+          <Button onClick={handleConfirm} variant="primary" className="w-full text-xl" disabled={loading}>
             {loading ? "Confirmation..." : "Oui, je confirme"}
           </Button>
         </div>

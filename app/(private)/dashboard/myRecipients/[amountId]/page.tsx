@@ -39,8 +39,8 @@ const MyRecipients = async ({params}:{params: {amountId: string}}) => {
 
   return (
     <div className="flex justify-center items-center min-h-screen">
-      <Card className="bg-white shadow-md p-6 w-4/5 md:w-1/2 lg:w-1/3 text-center">
-        <h2 className="text-xl font-semibold text-blue-600 mb-4">
+      <Card className="bg-white shadow-xl mt-10 p-6 md:w-1/2 lg:w-1/3 text-center">
+        <h2 className="text-2xl font-semibold text-indigo-600 mb-4">
           Bénéficiaire Choisi
         </h2>
         { !recipientChosen?.donorConfirmedAt && recipientChosen?.recipientChosenAt && (<p className='mb-4 text-slate-500'>Le:&nbsp;{format(new Date(recipientChosen?.recipientChosenAt), DATE_FORMAT)}</p>)}
@@ -50,49 +50,49 @@ const MyRecipients = async ({params}:{params: {amountId: string}}) => {
           <Avatar className="h-20 w-20">
             {recipientChosen?.recipient?.googleImage && (
               <AvatarImage src={recipientChosen?.recipient?.googleImage}/> )}
-              <AvatarFallback className="bg-blue-500 text-white">
+              <AvatarFallback className="bg-indigo-600 text-white">
                 {recipientChosen?.recipient?.firstname[0]}
               </AvatarFallback>
           </Avatar>
           { recipientChosen?.recipient && (
-          <p className="text-lg font-semibold text-blue-500">
+          <p className="text-lg font-semibold text-indigo-600">
             {capitalize(recipientChosen?.recipient?.username)}
           </p>)}
           
           <div className='w-full grid grid-cols-2 gap-4 mt-2'>
-            <UserRound className='text-blue-500'/>
+            <UserRound className='text-indigo-600'/>
             { recipientChosen?.recipient && (
-            <p className="text-lg font-semibold text-blue-500">
+            <p className="text-lg font-semibold text-indigo-600">
               {capitalize(recipientChosen?.recipient?.firstname)}
             </p>)}
           </div>
           <div className='w-full grid grid-cols-2 gap-4 mt-2'>
-            <Building2 className='text-blue-500'/>
-            { recipientChosen?.recipient && (<p className="text-gray-600">
+            <Building2 className='text-indigo-600'/>
+            { recipientChosen?.recipient && (<p className="text-slate-600">
               {capitalize(recipientChosen?.recipient?.city)}
               </p>)}
           </div>
           <div className='w-full grid grid-cols-2 gap-4 mt-2'>
-            <MapPin className='text-blue-500'/>
-            { recipientChosen?.recipient && (<p className="text-gray-600">
+            <MapPin className="text-indigo-600"/>
+            { recipientChosen?.recipient && (<p className="text-slate-600">
               {capitalize(recipientChosen?.recipient?.country)}
               </p>)}
           </div>
           <div className='w-full grid grid-cols-2 gap-4 mt-2'>
-            <Phone className='text-blue-500'/>
-            { recipientChosen?.recipient && (<p className="text-gray-600">
+            <Phone className="text-indigo-600"/>
+            { recipientChosen?.recipient && (<p className="text-slate-600">
               {decrypt(recipientChosen?.recipient?.encryptedPhone)}
               </p>)}
           </div>
           <div className='w-full grid grid-cols-2 gap-4 mt-2'>
-            <HandCoins className='text-blue-500'/>
+            <HandCoins className="text-indigo-600"/>
             <p className="text-xl font-bold text-green-600">
               {concernedAmount?.amount} {concernedAmount?.currency}
             </p>
           </div>
           <div className='w-full grid grid-cols-2 gap-4 mt-2'>
-            <ArrowUp01 className='text-blue-500'/>
-            <p className="text-gray-700"><strong>{recipientChosen?.donationNumber}</strong></p>
+            <ArrowUp01 className="text-indigo-600"/>
+            <p className="text-slate-700"><strong>{recipientChosen?.donationNumber}</strong></p>
           </div>
 
           <Separator className="my-4" />
@@ -104,13 +104,13 @@ const MyRecipients = async ({params}:{params: {amountId: string}}) => {
 
           {recipientChosen?.donatorValidation && (
           <div className='w-full grid grid-cols-2 gap-4'>
-            <CheckSquare className='text-blue-500'/>
+            <CheckSquare className='text-indigo-600'/>
             <p>WERO <span className='text-green-600'>OK</span></p>
           </div>
           )}
           {recipientChosen?.donatorValidation && (
           <div className='w-full grid grid-cols-2 gap-4 mt-2'>
-            <div><p className='text-start text-blue-500'>SMS</p></div>
+            <div><p className='text-start text-indigo-600'>SMS</p></div>
             <p>WBY:{recipientChosen?.donationNumber} &nbsp;<span className='text-green-600'>OK</span></p>
           </div>
           )}
@@ -121,7 +121,7 @@ const MyRecipients = async ({params}:{params: {amountId: string}}) => {
           {recipientChosen?.donatorValidation && (
           <div className='mt-5'>
             <p>Votre bénéficière ne va pas tarder à valider de son côté la reception de votre don.</p>
-            <p className='mt-5 text-blue-500'>Merci pour votre générosité 🙏🏼</p>
+            <p className='mt-5 text-indigo-600'>Merci pour votre générosité 🙏🏼</p>
           </div> )}
         </div>
       </Card>
