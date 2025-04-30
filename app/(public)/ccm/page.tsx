@@ -80,7 +80,8 @@ const Ccm = () => {
             <p className="text-xl md:text-2xl text-white text-justify">
               Depuis votre App bancaire ou WERO (pour L&apos;Europe), faite le virement par numéro de portable
               au destinataire choisi, avec le Donation Number dans le libellé au format: ( ex: WBY-2547 ). 
-              Revenez ensuite sur WBY pour confirmer le transfert en cliquant sur le bouton dédié. <br/>
+              Revenez ensuite sur WBY pour confirmer le transf
+              ert en cliquant sur le bouton dédié. <br/>
               <span className="font-semibold">⚠️ Ne pas transférer le montant après avoir pris connaissance des infos personnelles du destinataire, 
               peut être considéré comme de la tromperie et peut entraîner votre radiation de la plateforme.</span>
             </p>
