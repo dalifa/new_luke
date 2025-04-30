@@ -31,7 +31,7 @@ export default async function ExpiredUsersPage() {
               <p><strong>Nom :</strong> {user.profile?.firstname} {decrypt(user.profile?.encryptedLastname)}</p>
               <p><strong>Email :</strong> {user.email}</p>
               <p><strong>Codepin :</strong> {user.codepin}</p>
-              <p><strong>Fin de l'abonnement :</strong> mettre la date ici</p>
+              <p><strong>Fin de l&apos;abonnement :</strong> mettre la date ici</p>
               <p><strong>Jours restants :</strong> {user.remainingDays}</p>
               {/* Bouton pour relancer (plus tard) */}
               {/* <button className="mt-2 text-sm text-blue-500 hover:underline">Relancer</button> */}

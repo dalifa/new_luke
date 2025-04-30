@@ -1,16 +1,6 @@
 
 //
 import { auth } from "@/auth"
-import { DecreaseMemberCredit } from "./_component/decreaseMemberCredit"
-import { IncreasePartnerCredit } from "./_component/increasePartnerCredit"
-import { IncreasePartnerMaxCredit } from "./_component/increasePartnerMaxCredit"
-import { IncreaseMemberCredit } from "./_component/increaseMemberCredit"
-import { DecreasePartnerCredit } from "./_component/decreasePartnerCredit"
-import { DecreasePartnerMaxCredit } from "./_component/decreasePartnerMaxCredit"
-import { IncreaseMemberJackpot } from "./_component/increaseMemberJackpot"
-import { DecreaseMemberJackpot } from "./_component/decreaseMemberJackpot"
-import { MakePartner } from "./_component/makePartner"
-import { ActiverInactiveAccount } from "./_component/activeInactiveAccount"
 
 const MemberManaged = async ({ params }: { params: { memberManagedId: string } }) => {
   // la redirection pour les non connectés est faite depuis le fichier middleware 
@@ -26,13 +16,13 @@ const MemberManaged = async ({ params }: { params: { memberManagedId: string } }
         <p>Code PIN: <span className="text-blue-500 font-semibold">{memberConcerned?.codepin}</span></p>
         <p>Prénom: <span className="text-blue-500 font-semibold">{memberConcerned?.firstname}</span></p>
         <p>Account: { memberConcerned?.isActiveAccount === true ? (<span className="text-green-500 font-semibold">ACTIF</span>):(<span className="text-rose-500 font-semibold">INACTIF</span>)}</p>
-        <p>Is Partner: { memberConcerned?.isPartner === true ? (<span className="text-green-500 font-semibold">YES</span>):(<span className="text-rose-500 font-semibold">NOT</span>)}</p>
+        {/* <p>Is Partner: { memberConcerned?.isPartner === true ? (<span className="text-green-500 font-semibold">YES</span>):(<span className="text-rose-500 font-semibold">NOT</span>)}</p>
         
         <p>Pays: <span className="text-blue-500 font-semibold">{memberConcerned?.country}</span></p>
         <p>Pseudo: <span className="text-blue-500 font-semibold">{memberConcerned?.username}</span></p>
         
         <p>Total donné: <span className="text-blue-500 font-semibold">{memberConcerned?.credit}</span>&nbsp;{memberConcerned?.currency}</p>
-        <p>Total reçu: <span className="text-blue-500 font-semibold">{memberConcerned?.jackpot}</span>&nbsp;{memberConcerned?.currency}</p>
+        <p>Total reçu: <span className="text-blue-500 font-semibold">{memberConcerned?.jackpot}</span>&nbsp;{memberConcerned?.currency}</p> */}
       </div> 
     </div>  
   )
