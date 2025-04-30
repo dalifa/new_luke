@@ -1,6 +1,7 @@
 import { JoinButton } from "@/components/auth/public-join-button"
 
 import Link from "next/link"
+import { Suspense } from "react"
 //
 const Home = () => {
   return (
@@ -19,7 +20,9 @@ const Home = () => {
               <p>La plateforme où tout enfant de Dieu peut librement bénir un autre, et être lui-même béni par d&apos;autres en retour.</p>
             </div>
             <div className="bg-indigo-600 border-none ">
+            <Suspense fallback={null}>
               <JoinButton/>
+             </Suspense> 
             </div>
           </div>
         </div>
