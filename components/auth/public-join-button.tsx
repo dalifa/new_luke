@@ -18,7 +18,7 @@ export const JoinButton = () => {
   }
 
     return (
-      <Button size="sm" className="text-white text-lg py-5 bg-green-600 hover:bg-blue-400" 
+      <Button size="sm" className="text-white text-lg py-5 bg-green-600 hover:bg-white hover:text-indigo-600" 
           onClick={() => onClick("google")}
         >
           Rejoindre la communauté

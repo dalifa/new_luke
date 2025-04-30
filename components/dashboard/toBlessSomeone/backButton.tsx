@@ -7,7 +7,7 @@ const BackButton = () => {
   const router = useRouter()
   const pathname = usePathname()
   return (
-    <>
+    <> 
     {
       pathname !== "/" ? (
         <Button variant="outline" size="sm" className="py-5" 

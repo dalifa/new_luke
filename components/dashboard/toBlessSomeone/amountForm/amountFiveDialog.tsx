@@ -26,11 +26,11 @@ export default function AmountFiveDialog({ amountId }: { amountId: string }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="blue">100€</Button>
+        <Button variant="primary">100€</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="w-4/5 md:w-2/5 rounded-md">
         <DialogHeader className="flex gap-y-4">
-          <DialogTitle className="text-center text-blue-600">
+          <DialogTitle className="text-center text-indigo-600">
             Confirmer vouloir donner 100€
           </DialogTitle>
           <DialogDescription className="text-center"></DialogDescription>
@@ -42,12 +42,12 @@ export default function AmountFiveDialog({ amountId }: { amountId: string }) {
         
         {/* FORMULAIRE */} 
         <form action={handleSubmit} className="flex flex-col gap-4">
-          <Button variant={"blue"} className="w-full" disabled={loading}>
-            {loading ? "Traitement..." : "S'engager"}
+          <Button variant={"primary"} className="w-full" disabled={loading}>
+            {loading ? "Traitement..." : "Je veux bénir"}
           </Button>
         </form>
         <DialogClose className="w-full p-2 text-sm rounded-md border-2 hover:border-red-300 hover:text-rose-500">
-          Ne pas s'engager
+          Je renonce
         </DialogClose>
       </DialogContent> 
     </Dialog>

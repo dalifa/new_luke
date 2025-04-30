@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { DialogClose } from "@radix-ui/react-dialog";
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
+
 
 export default function DonorBlessValidation({ onConfirm }: { onConfirm: () => Promise<void> }) {
   const [loading, setLoading] = useState(false);
@@ -17,13 +17,13 @@ export default function DonorBlessValidation({ onConfirm }: { onConfirm: () => P
   return (
     <Dialog>
       <DialogTrigger className="w-full font-medium p-3 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-xl">
-        J'ai envoyé le don
+        J&apos;ai envoyé le don
       </DialogTrigger>
       <DialogContent className="rounded-md">
         <DialogHeader>
           <DialogTitle className="text-center text-blue-600 text-xl mb-4">Confirmez-vous ?</DialogTitle>
           <DialogDescription className="text-center text-gray-500">
-            Avez-vous envoyé l'argent via Wero ? Et envoyé par SMS le numéro unique du don ?
+            Avez-vous envoyé l&apos;argent via Wero ? Et envoyé par SMS le numéro unique du don ?
           </DialogDescription>
         </DialogHeader>
         <DialogClose className="text-xl text-gray-500 border-2 border-gray-300 p-2 rounded-md hover:bg-red-500 hover:text-white hover:border-red-500">

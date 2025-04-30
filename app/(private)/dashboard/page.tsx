@@ -85,8 +85,8 @@ const Dashboard = async () => {
   }
   //
   return (
-    <div className='lg:pt-5 h-ull flex items-center flex-col bg-white/90'>
-      <div className='w-full md:w-4/5 flex flex-col items-center m-4 gap-y-4 px-5 lg:pb-20'>
+    <div className='lg:pt-5 h-full flex items-center flex-col bg-indigo-600'>
+      <div className='w-full md:w-4/5 flex flex-col items-center pt-10 m-4 gap-y-4 px-5 lg:pb-20'>
         <div className='w-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5'>
           {/* montant total donné et reçu */}
           <Counters/> 

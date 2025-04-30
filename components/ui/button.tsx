@@ -21,7 +21,7 @@ const buttonVariants = cva(
         blue: "bg-blue-500 text-white hover:bg-blue-400 hover:text-white hover:shadow-sm",
         success: "bg-green-600 text-white hover:bg-green-500 hover:text-white hover:shadow-sm",
         violet: "bg-violet-600 text-white hover:bg-violet-500 hover:text-white hover:shadow-sm",
-        primary: "bg-red-600 text-white hover:bg-red-500 hover:text-white hover:shadow-sm",
+        primary: "bg-indigo-600 text-white hover:bg-indigo-700 hover:text-white hover:shadow-sm",
         orange: "bg-orange-600 text-white hover:bg-orange-500 hover:text-white hover:shadow-sm",
       },
       size: {

@@ -9,7 +9,7 @@ export function ConfirmEnterTripl() {
  
   return (
     <Button type="submit" aria-disabled={pending} 
-      variant={"blue"}
+      variant={"primary"}
     >
       Confirmer 
     </Button>

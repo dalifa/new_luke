@@ -15,7 +15,7 @@ const Home = () => {
                 Parce que donner est le meilleur moyen de recevoir.
               </h1>
             </div>
-            <div className="text-xl text-white font-light">
+            <div className="text-2xl text-white font-light">
               <p>La plateforme où tout enfant de Dieu peut librement bénir un autre, et être lui-même béni par d&apos;autres en retour.</p>
             </div>
             <div className="bg-indigo-600 border-none ">
@@ -52,13 +52,13 @@ const Home = () => {
           </div>
         </div>
         {/* 2 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 md:flex-row rounded-lg">
+        <div className="flex flex-col md:flex-row-reverse rounded-lg">
           <img
             src={`/assets/donataires.jpg`}
             alt="image 1"
-            className="w-full h-full object-cover rounded-t-lg md:rounded-l-lg md:rounded-r-none"
+            className="w-full h-full md:w-1/2 object-cover rounded-t-lg md:rounded-r-lg md:rounded-l-none"
           />
-          <div className="flex flex-col items-center justify-center bg-white rounded-b-lg md:rounded-r-lg md:rounded-l-none p-4">
+          <div className="flex flex-col items-center justify-center bg-white rounded-b-lg md:rounded-l-lg md:rounded-r-none p-4">
             <h1 className="text-2xl md:text-3xl text-center text-slate-700 font-semibold">
               Sélectionner une personne à bénir parmi les profils qui vous seront proposés.
             </h1>
@@ -79,16 +79,16 @@ const Home = () => {
           </div>
         </div>
         {/* 4 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 md:flex-row rounded-lg">
+        <div className="flex flex-col md:flex-row-reverse rounded-lg">
           <img
-          src={`/assets/connexion.jpg`}
-          alt="image 1"
-          className="w-full h-full object-cover rounded-t-lg md:rounded-l-lg md:rounded-r-none"
+            src={`/assets/giv1.jpg`}
+            alt="image 1"
+            className="w-full h-full md:w-1/2 object-cover rounded-t-lg md:rounded-r-lg md:rounded-l-none"
           />
-          <div className="flex flex-col items-center justify-center bg-white rounded-b-lg md:rounded-r-lg md:rounded-l-none p-4">
+          <div className="flex flex-col items-center justify-center bg-white rounded-b-lg md:rounded-l-lg md:rounded-r-none p-4">
             <h1 className="text-2xl md:text-3xl text-center text-slate-700 font-semibold">
-              Une fois le don confirmé par votre donataire, vous entrez à votre tour dans 
-              la boucle et devenez visible auprès des prochains donateurs.
+            Le donataire confirme la reception du don, et vous êtes à votre tour 
+            rendu visible auprès des prochains donateurs.
             </h1>
           </div>
         </div>
@@ -120,6 +120,11 @@ const Home = () => {
           </div>
         </div>
       </div>
+      <div className="flex flex-col items-center justify-center text-white bg-indigo-600 px-4 md:px-10 py-10 md:py-20 font-semibold">
+        <p className="text-center text-3xl leading-relaxed">
+          Notre but ultime est de faire en sorte qu&apos;il soit possible que, n&apos;importe lequel des enfants de Dieu, de n&apos;importe où autour du monde, bénisse et/ou soit béni par n&apos;importe lequel de ses frères ou soeurs en Christ Jésus.
+        </p>
+      </div>
       <div className="mb-10">
         <div className="flex flex-col text-white space-y-5 text-2xl md:text-3xl">
           <div className="p-4 mt-5">
@@ -140,3 +145,21 @@ const Home = () => {
 }
 //
 export default Home
+
+
+/*
+
+        <div className="flex flex-col md:flex-row-reverse rounded-lg border-2 border-yellow-400">
+          <img
+          src={`/assets/giv1.jpg`}
+          alt="image 1"
+          className="w-full md:w-1/2 h-full object-cover rounded-t-lg md:rounded-l-lg md:rounded-r-none"
+          />
+          <div className="flex flex-col items-center justify-center bg-white rounded-b-lg md:rounded-l-lg md:rounded-r-none p-4">
+            <h1 className="text-2xl md:text-3xl text-center text-slate-700 font-semibold">
+              Une fois le don confirmé par votre donataire, vous entrez à votre tour dans 
+              la boucle et devenez visible auprès des prochains donateurs.
+            </h1>
+          </div>
+        </div>
+*/

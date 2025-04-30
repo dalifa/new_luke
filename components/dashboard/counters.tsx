@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import {
     Tooltip,
     TooltipContent,
-    TooltipProvider,
+    TooltipProvider, 
     TooltipTrigger,
   } from "@/components/ui/tooltip"
 // pour format date
@@ -19,7 +19,7 @@ export async function Counters() {
   const connected = await CurrentProfile()
   //
   return (
-    <Card className='bg-white shadow-blue-100 shadow-md p-4'>
+    <Card className='bg-white shadow-xl p-4'>
       <p className='text-center mb-5 font-semibold text-slate-600 text-xl lg:text-lg'>
         COMPTEURS
       </p>

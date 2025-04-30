@@ -5,8 +5,8 @@ export default function PublicLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="h-full bg-white">
-      <main className="md:pt-5 pb-20 bg-white">
+    <div className="h-full bg-indigo-600">
+      <main className="md:pt-5 pb-20 bg-indigo-600">
         { children }
       </main>
     </div>

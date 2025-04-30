@@ -44,10 +44,10 @@ const HistoryDetails = async ({
     return (
         <div className='pt-2 h-ull flex items-center flex-col'>
             <div className='w-full lg:w-4/5 flex flex-col items-center gap-y-4 m-4 px-4'>
-                <Card className='w-full flex flex-col p-4 gap-y-2 mb-2 text-center text-slate-700 shadow-md shadow-blue-100'>
-                  <p className='text-lg md:text-xl'>Historique de la liste n°{concernedList?.ownId}</p>
+                <Card className='w-full flex flex-col p-4 gap-y-2 mb-2 text-center text-indigo-600 shadow-xl'>
+                  <p className='text-xl md:text-2xl'>Historique de la liste n°{concernedList?.ownId}</p>
                 </Card>
-                <div className='w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4'>
+                <div className='w-full grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4'>
                 <Card 
                   key={donator?.id} className="bg-white shadow-md py-6 px-3 w-full text-center mt-6"
                 >

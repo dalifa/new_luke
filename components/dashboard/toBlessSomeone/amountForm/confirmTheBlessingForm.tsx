@@ -28,7 +28,7 @@ export default function ConfirmTheBlessingForm({ amountId, recipientId }: { amou
   //
   return (
     <form action={handleSubmit} className="flex flex-col gap-4">
-      <Button variant={"blue"} className="w-full text-xl" disabled={loading}>
+      <Button variant={"primary"} className="w-full text-xl" disabled={loading}>
         {loading ? "Traitement..." : "I Bless You"}
       </Button> 
     </form>

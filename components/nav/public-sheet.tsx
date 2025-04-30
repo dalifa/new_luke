@@ -96,25 +96,6 @@ export function PublicSheet() {
             </Link>
           </SheetClose>
           <SheetClose className="bg-neutral-100 hover:bg-blue-300 hover:text-black hover:font-medium rounded-md text-neutral-500 w-full p-2">
-            <Link href={"/partenariat"}>
-              <div className="flex flex-row items-center gap-2">
-                <Handshake/>
-                <p>Partenariat</p>
-              </div>
-            </Link>
-          </SheetClose>
-          <SheetClose className="bg-neutral-100 hover:bg-blue-300 hover:text-black hover:font-medium rounded-md text-neutral-500 w-full p-2">
-            <Link href={"/securite"}>
-            <div className="flex flex-row items-center gap-2">
-                <ShieldBan/>
-                <p>
-                  <span className=" flex lg:hidden">Confidentialité</span>
-                  <span className="hidden lg:flex">sécurité et confidentialité</span>
-                </p>
-              </div>
-            </Link>
-          </SheetClose>
-          <SheetClose className="bg-neutral-100 hover:bg-blue-300 hover:text-black hover:font-medium rounded-md text-neutral-500 w-full p-2">
             <Link href={"/stats"}>
               <div className="flex flex-row items-center gap-2">
                 <BarChart4/>

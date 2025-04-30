@@ -36,11 +36,14 @@ const Ccm = () => {
               Paiement et Validation de l&apos;Abonnement
             </h1>
             <p className="text-xl md:text-2xl text-white text-justify">
-              L&apos;abonnement à la plateforme coûte 2€/mois, sans engagement. 
-              Pour ce faire, éffectuez un transfert de 2€ ( ou de 6€ pour trois mois 😉) 
-              via WERO ou votre App bancaire au numéro 06*******1 de WBY. N&apos;oubliez
-              pas d&apos;indiquer votre code PIN dans le libellé sous le format: ( ex: WBY-2315 ). 
-              La validation n&apos;étant pas automatique, elle peut prendre jusqu&apos;à 24h au maximum.
+              L’abonnement à la plateforme, sans engagement, coûte 2 €/mois pour la zone euro.
+              Pour ce faire, effectuez un transfert de 2 € (ou de 6 € pour trois mois 😉)
+              via WERO ou votre app bancaire, au numéro 06*******1 de WBY.
+              N’oubliez pas d’indiquer votre code PIN dans le libellé, sous le format :
+              (ex. : WBY-2315).
+              La validation n’étant pas automatique, elle peut prendre jusqu’à 24 h maximum.
+              <br/> Si votre zone monétaire est différente de la zone euro, nous vous tiendrons informé·e
+              du processus d’abonnement dès que WBY y sera accessible..
             </p>
           </div>
         </div>
@@ -75,7 +78,7 @@ const Ccm = () => {
               Transfert via WERO ou App Bancaire
             </h1>
             <p className="text-xl md:text-2xl text-white text-justify">
-              Depuis votre App bancaire ou WERO, faite le virement par numéro de portable
+              Depuis votre App bancaire ou WERO (pour L&apos;Europe), faite le virement par numéro de portable
               au destinataire choisi, avec le Donation Number dans le libellé au format: ( ex: WBY-2547 ). 
               Revenez ensuite sur WBY pour confirmer le transfert en cliquant sur le bouton dédié. <br/>
               <span className="font-semibold">⚠️ Ne pas transférer le montant après avoir pris connaissance des infos personnelles du destinataire, 

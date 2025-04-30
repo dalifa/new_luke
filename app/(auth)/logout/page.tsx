@@ -6,9 +6,9 @@ import { Card } from '@/components/ui/card'
 
 const Logout = () => {
   return (
-    <div className='w-full flex items-center justify-center flex-col bg-blue-500'>
+    <div className='w-full flex items-center justify-center flex-col bg-indigo-600'>
       <div className='flex w-full md:w-2/5 items-center justify-center flex-col'>
-        <Card className='w-4/5 lg:w-3/5 p-5 md:p-10 bg-white text-blue-500 text-center items-center'>
+        <Card className='w-4/5 p-5 md:p-10 bg-white text-indigo-600 text-center items-center'>
           <div className='w-full flex flex-col items-end'>
             <XBackButton/>
           </div>
@@ -22,7 +22,7 @@ const Logout = () => {
                 await signOut()             
               }}
             >
-              <Button variant={"blue"} className='w-full h-12 md:h-14 text-lg hover:bg-blue-600'>
+              <Button variant={"primary"} className='w-full h-12 md:h-14 text-lg'>
                 Déconnexion
               </Button>
             </form>

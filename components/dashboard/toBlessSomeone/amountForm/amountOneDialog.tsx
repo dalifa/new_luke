@@ -25,11 +25,11 @@ export default function AmountOneDialog({ amountId }: { amountId: string }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="blue">5€</Button>
+        <Button variant="primary">5€</Button>
       </DialogTrigger>
       <DialogContent className="w-4/5 md:w-2/5 rounded-md">
         <DialogHeader className="flex gap-y-2 mt-1">
-          <DialogTitle className="text-center text-blue-600">
+          <DialogTitle className="text-center text-indigo-600">
             Confirmer vouloir bénir de 5€
           </DialogTitle>
           <DialogDescription className="text-center"></DialogDescription>
@@ -41,12 +41,12 @@ export default function AmountOneDialog({ amountId }: { amountId: string }) {
         
         {/* FORMULAIRE */} 
         <form action={handleSubmit} className="flex flex-col gap-4">
-          <Button variant={"blue"} className="w-full text-sm" disabled={loading}>
+          <Button variant={"primary"} className="w-full text-sm" disabled={loading}>
             {loading ? "Traitement..." : "Je veux bénir"}
           </Button>
         </form>
         <DialogClose className="w-full p-2 text-sm rounded-md border-2 hover:border-red-300 hover:text-rose-500">
-          Ne pas s'engager
+          Je renonce
         </DialogClose>
       </DialogContent> 
     </Dialog>

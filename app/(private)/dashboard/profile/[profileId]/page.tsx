@@ -31,12 +31,11 @@ const Profile = async ({ params }: { params: { profileId: string } }) => {
   const allCountries = await fetchCountries();
   //
   return (
-    <div className='h-ull flex items-center justify-center flex-col'> 
+    <div className='h-full flex flex-col items-center justify-center bg-indigo-600'> 
       <div className="flex w-full md:w-3/5 mt-5 md:mt-20">
         <div className="grid grid-cols-1 text-slate-600 bg-white rounded p-2 gap-y-10 md:p-5 w-full shadow-md mx-4 shadow-blue-300">
           <div className="mt-5">
-            <p className="text-center text-blue-500 text-xl font-medium">Vos informations de profil</p>
-            
+            <p className="text-center text-indigo-600 text-xl font-medium">Vos informations de profil</p>
           </div>
           <div className='grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-10 mb-5'>
             { concerned && (

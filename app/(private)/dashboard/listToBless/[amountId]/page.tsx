@@ -2,6 +2,7 @@ import ConfirmTheBlessingForm from '@/components/dashboard/toBlessSomeone/amount
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Card } from '@/components/ui/card'
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Separator } from '@/components/ui/separator'
 import { capitalize, CurrentProfile } from '@/hooks/own-current-user'
 import { prismadb } from '@/lib/prismadb'
 import { ShieldAlert, UserRound } from 'lucide-react'
@@ -38,12 +39,12 @@ const ListToBless = async ({ params }: { params: { amountId: string } }) => {
   ); 
 
   return (
-    <Card className="bg-white shadow-blue-100 shadow-md p-4 m-4">
-      <h2 className="text-center mb-4 font-semibold text-slate-700 text-xl lg:text-2xl">
+    <Card className="bg-indigo-600 border-4 border-indigo-400 shadow-xl py-10 px-2 md:px-5 mx-2 md:mx-10 my-16">
+      <h2 className="text-center text-white mb-4 font-semibold text-2xl lg:text-3xl">
         Bénéficiaires potentiels de vos {concernedAmount?.amount}
         {concernedAmount?.currency}
       </h2>
-      <hr className="w-full mb-4" />
+      <Separator className='bg-indigo-400 my-10 border-2 border-indigo-400 ' />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
         {/* il faut laisser les deux : {recipient, potentialRecipients} pour que ça marche */}
         {potentialRecipientsList.map(({recipient, potentialRecipients}) => (
