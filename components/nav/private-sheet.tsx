@@ -16,43 +16,45 @@ export async function PrivateSheet() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <MenuIcon className="cursor-pointer"/>
+        <div className="p-2 rounded-md bg-indigo-400 hover:bg-white hover:text-indigo-600">
+          <MenuIcon className="cursor-pointer"/>
+        </div>
       </SheetTrigger>
       <SheetContent>
         <SheetHeader className="mt-4">
-          <SheetTitle className="text-center text-blue-500">Menu</SheetTitle>
+          <SheetTitle className="text-center text-indigo-400">Menu</SheetTitle>
         </SheetHeader>
         <Separator/>
         <div className="grid gap-2 py-4">
-          <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-blue-400">
+          <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-indigo-400">
             <Link href={"/dashboard"} className="text-slate-600">
               <div className="flex flex-row gap-5 ">
-                <LayoutDashboard/> Dashboard
+                <LayoutDashboard className="text-indigo-600"/> Dashboard
               </div>
             </Link>
           </SheetClose>
-          <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-blue-400">
+          <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-indigo-400">
             <Link href={`/dashboard/profile/${connected?.id}`} className="text-slate-600">
               <div className="flex flex-row gap-5">
-                <UserRound/> Profile
+                <UserRound className="text-indigo-600"/> Profile
               </div>
             </Link>
           </SheetClose>
-          <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-blue-400">
+          <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-indigo-400">
             <Link href={"/dashboard/historique"} className="text-slate-600">
               <div className="flex flex-row gap-5 ">
-                <Archive/> Historique
+                <Archive className="text-indigo-600"/> Historique
               </div>
             </Link>
           </SheetClose>
-          <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-blue-400">
+          <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-indigo-400">
             <Link href={"/dashboard/stats"} className="text-slate-600">
               <div className="flex flex-row gap-5 ">
-                <BarChart4/> Stats
+                <BarChart4 className="text-indigo-600"/> Stats
               </div>
             </Link>
           </SheetClose>
-          <SheetClose asChild className="mt-10 bg-blue-500 rounded-md hover:bg-blue-400 p-2">
+          <SheetClose asChild className="mt-10 bg-indigo-600 rounded-md hover:bg-indigo-400 p-2">
             <Link href={"/logout"} className="text-center text-white ">
               <p>Déconnexion</p>
             </Link>

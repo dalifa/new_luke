@@ -5,7 +5,7 @@ import {
   SheetContent,
   SheetTitle,
 } from "@/components/ui/sheet"
-import { BarChart4, FileText, Handshake, Home, Info, MenuIcon, Settings, ShieldBan, ShieldQuestion } from "lucide-react"
+import { BarChart4, FileText, Home, Info, MenuIcon, Settings, ShieldBan, ShieldQuestion } from "lucide-react"
 import Link from "next/link"
 import { useMobileSidebar } from "@/hooks/use-mobile-sidebar"
 import { useEffect, useState } from "react"
@@ -41,23 +41,22 @@ export function PublicSheet() {
       <MenuIcon className="w-5 h-5 md:w-6 md:h-6"/>
     </Button>
     
-    
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent className="pt-14">
         <SheetTitle className="hidden"></SheetTitle>
         <div className="h-full flex flex-col items-start gap-3 px-2 py-4 bg-neutral-100 rounded-sm">
-          <SheetClose className="bg-neutral-100 hover:bg-blue-300 hover:text-black hover:font-medium rounded-md text-neutral-500 w-full p-2">
+          <SheetClose className="bg-neutral-100 hover:bg-indigo-600 hover:text-black hover:font-medium rounded-md text-slate-600 w-full p-2">
             <Link href={"/home"}>
               <div className="flex flex-row items-center gap-2">
-                <Home/>
+                <Home className="text-indigo-400"/>
                 <p>Accueil</p>
               </div>
             </Link>
           </SheetClose>  
-          <SheetClose className="bg-neutral-100 hover:bg-blue-300 hover:text-black hover:font-medium rounded-md text-neutral-500 w-full p-2">
+          <SheetClose className="bg-neutral-100 hover:bg-indigo-400 hover:text-black hover:font-medium rounded-md text-slate-600 w-full p-2">
             <Link href={"/ccm"}>
               <div className="flex flex-row items-center gap-2">
-                <Settings/>
+                <Settings className="text-indigo-400"/>
                 <p className="hidden lg:flex">Comment ça marche</p>
                 <p className="flex lg:hidden">
                   Cçm
@@ -65,10 +64,10 @@ export function PublicSheet() {
               </div>
             </Link>
           </SheetClose>  
-          <SheetClose className="bg-neutral-100 hover:bg-blue-300 hover:text-black hover:font-medium rounded-md text-neutral-500 w-full p-2">
+          <SheetClose className="bg-neutral-100 hover:bg-indigo-400 hover:text-black hover:font-medium rounded-md text-slate-600 w-full p-2">
             <Link href={"/faq"}>
               <div className="flex flex-row items-center gap-2">
-                <ShieldQuestion/>
+                <ShieldQuestion className="text-indigo-400"/>
                 <p className="hidden lg:flex">Questions fréquemment posées</p>
                 <p className="flex lg:hidden">
                   Faq
@@ -76,18 +75,18 @@ export function PublicSheet() {
               </div>
             </Link>
           </SheetClose>
-          <SheetClose className="bg-neutral-100 hover:bg-blue-300 hover:text-black hover:font-medium rounded-md text-neutral-500 w-full p-2">
+          <SheetClose className="bg-neutral-100 hover:bg-indigo-400 hover:text-black hover:font-medium rounded-md text-slate-600 w-full p-2">
             <Link href={"/infos"}>
               <div className="flex flex-row items-center gap-2">
-                <Info/>
+                <Info className="text-indigo-600"/>
                 <p>Infos légales</p>
               </div>
             </Link>
           </SheetClose>
-          <SheetClose className="bg-neutral-100 hover:bg-blue-300 hover:text-black hover:font-medium rounded-md text-neutral-500 w-full p-2">
+          <SheetClose className="bg-neutral-100 hover:bg-indigo-400 hover:text-black hover:font-medium rounded-md text-slate-600 w-full p-2">
             <Link href={"/cgu"}>
             <div className="flex flex-row items-center gap-2">
-                <FileText/>
+                <FileText className="text-indigo-600"/>
                 <p className="hidden lg:flex">Conditions générales d&apos;utilisation</p>
                 <p className="flex lg:hidden">
                   Cgu
@@ -95,16 +94,16 @@ export function PublicSheet() {
               </div>
             </Link>
           </SheetClose>
-          <SheetClose className="bg-neutral-100 hover:bg-blue-300 hover:text-black hover:font-medium rounded-md text-neutral-500 w-full p-2">
+          <SheetClose className="bg-neutral-100 hover:bg-indigo-400 hover:text-black hover:font-medium rounded-md text-slate-600 w-full p-2">
             <Link href={"/stats"}>
               <div className="flex flex-row items-center gap-2">
-                <BarChart4/>
-                <p>Stats</p>
+                <BarChart4 className="text-indigo-600"/>
+                <p>Statistiques</p>
               </div>
             </Link>
           </SheetClose>
 
-          <div className="bottom-0 mx-auto">
+          <div className="bottom-0 w-full">
             <LogGoogleButton/>
           </div>
         </div>

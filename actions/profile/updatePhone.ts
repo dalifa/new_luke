@@ -37,16 +37,6 @@ export const updatePhone = async (profileId: string, formData:any) => {
       }
     })
   }
-  // fin du provisoir
-
-  // ACTIVITY 
-  /*
-  await prismadb.activity.create({
-    data: {
-      author: concerned?.firstname,
-      activity: "dont le codepin est " + concerned?.codepin + " vient de updater son phone."
-    }
-  }) */
   //
   revalidatePath(`/dashboard/profile/${profileId}`)
   //

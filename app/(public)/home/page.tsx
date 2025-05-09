@@ -1,7 +1,11 @@
 import { JoinButton } from "@/components/auth/public-join-button"
+import { HandCoins, Handshake, UserRoundCheck } from "lucide-react"
 
 import Link from "next/link"
 import { Suspense } from "react"
+import { FaRobot } from "react-icons/fa"
+import { FaUsersBetweenLines } from "react-icons/fa6";
+import { FaPray } from "react-icons/fa";
 //
 const Home = () => {
   return (
@@ -9,8 +13,8 @@ const Home = () => {
       {/* Section 1 */}
       <div className="grid grid-cols-1 md:grid-cols-2 pt-10 md:pt-10">
         {/* Texte en haut (mobile), à gauche (desktop) */}
-        <div className="h-full flex items-center justify-center p-10">
-          <div className="flex flex-col gap-8 px-10 py-5 md:p-10">
+        <div className="h-full flex flex-col items-center justify-center px-4 py-10 md:p-10 border-2 border-yellow-400">
+          <div className="flex flex-col gap-8 px-5 py-5 md:p-10">
             <div className="text-white text-4xl md:text-7xl font-bold">
               <h1>
                 Parce que donner est le meilleur moyen de recevoir.
@@ -23,6 +27,9 @@ const Home = () => {
               <Suspense fallback={null}>
                 <JoinButton/>
               </Suspense> 
+            </div>
+            <div>
+              <p className="text-center mt-4 text-black hover:text-red-600 font-semibold rounded-full mr-4 p-2 bg-yellow-400 hover:bg-white">NB:&nbsp;SITE EN BETA-TEST EXCLUSIf</p>
             </div>
           </div>
         </div>
@@ -97,35 +104,41 @@ const Home = () => {
         </div>
       </div>
       {/* section 4 */}
-      <div className="flex flex-col items-center justify-center text-white bg-indigo-600 py-10 md:py-20 text-3xl md:text-5xl font-semibold">
+      <div className="flex flex-col items-center justify-center text-white bg-indigo-600 px-2 py-10 md:py-20 text-3xl md:text-5xl font-semibold">
         <h2 className="text-center">Pourquoi cette approche ?</h2>
       </div>
       {/* section 5 */}
       <div className="h-full flex flex-col items-center justify-center bg-white font-semibold">
         <div className="grid grid-cols-1 md:grid-cols-2 m-10 text-slate-700 gap-5">
-          <div className="bg-indigo-200 text-2xl md:text-3xl p-4 rounded-lg">
+          <div className="flex flex-col text-indigo-600 items-center space-y-2 bg-indigo-200 text-2xl md:text-3xl p-4 rounded-lg">
+            <FaPray/>
             <p className="text-center">Vous êtes enfants de Dieu.</p>
           </div>
-          <div className="bg-indigo-200 text-2xl md:text-3xl p-4 rounded-lg">
+          <div className="flex flex-col text-indigo-600 items-center space-y-2 bg-indigo-200 text-2xl md:text-3xl p-4 rounded-lg">
+            <HandCoins/>
             <p className="text-center">Vous êtes généreux.</p>
           </div>
-          <div className="bg-indigo-200 text-2xl md:text-3xl p-4 rounded-lg">
+          <div className="flex flex-col text-indigo-600 items-center space-y-2 bg-indigo-200 text-2xl md:text-3xl p-4 rounded-lg">
+            <Handshake/>
             <p className="text-center">On peut vous faire confiance.</p>
           </div> 
-          <div className="bg-indigo-200 text-2xl md:text-3xl p-4 rounded-lg">
+          <div className="flex flex-col text-indigo-600 items-center space-y-2 bg-indigo-200 text-2xl md:text-3xl p-4 rounded-lg">
+          <FaUsersBetweenLines/>
             <p className="text-center">Pas d&apos;intermédiaire financier.</p>
           </div>
-          <div className="bg-indigo-200 text-2xl md:text-3xl p-4 rounded-lg">
+          <div className="flex flex-col text-indigo-600 items-center space-y-2 bg-indigo-200 text-2xl md:text-3xl p-4 rounded-lg">
+            <UserRoundCheck/>
             <p className="text-center">100% transparent: vous voyez à qui vous donnez.</p>
           </div>
-          <div className="bg-indigo-200 text-2xl md:text-3xl p-4 rounded-lg">
+          <div className="flex flex-col text-indigo-600 items-center space-y-2 bg-indigo-200 text-2xl md:text-3xl p-4 rounded-lg">
+            <FaRobot/>
             <p className="text-center">Pas de robot, pas de faux utilisateurs.</p>
           </div>
         </div>
       </div>
       <div className="flex flex-col items-center justify-center text-white bg-indigo-600 px-4 md:px-10 py-10 md:py-20 font-semibold">
         <p className="text-center text-3xl leading-relaxed">
-          Notre but ultime est de faire en sorte qu&apos;il soit possible que, n&apos;importe lequel des enfants de Dieu, de n&apos;importe où autour du monde, bénisse et/ou soit béni par n&apos;importe lequel de ses frères ou soeurs en Christ Jésus.
+        Notre but ultime: Permettre à chaque enfant de Dieu, partout dans le monde, de bénir et d&apos;être béni en Continuellement.
         </p>
       </div>
       <div className="mb-10">
