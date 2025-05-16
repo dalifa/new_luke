@@ -12,7 +12,7 @@ export default function ValidateDonationForm({ recipientId }: { recipientId: str
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     setLoading(true);
-    setError("");
+    setError(""); 
 
     const response = await recipientValidation(donationNumber, recipientId);
 

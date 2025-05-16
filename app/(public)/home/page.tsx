@@ -13,7 +13,7 @@ const Home = () => {
       {/* Section 1 */}
       <div className="grid grid-cols-1 md:grid-cols-2 pt-10 md:pt-10">
         {/* Texte en haut (mobile), à gauche (desktop) */}
-        <div className="h-full flex flex-col items-center justify-center px-4 py-10 md:p-10 border-2 border-yellow-400">
+        <div className="h-full flex flex-col items-center justify-center px-4 py-10 md:p-10">
           <div className="flex flex-col gap-8 px-5 py-5 md:p-10">
             <div className="text-white text-4xl md:text-7xl font-bold">
               <h1>

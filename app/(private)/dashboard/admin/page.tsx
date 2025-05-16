@@ -4,6 +4,7 @@ import { CurrentProfile } from '@/hooks/own-current-user'
 import { prismadb } from '@/lib/prismadb'
 import { UpdateMaxDisplays } from './[memberManagedId]/_component/manage-Max-Displays'
 import { AdminSubscriptionManager } from '@/components/admin/manage-subscription'
+import { AdminManagerCanBeDisplayed } from '@/components/admin/manage_can_be_displayed'
 // 
 const Admin = async () => {
   //
@@ -11,14 +12,6 @@ const Admin = async () => {
   //
   const currentMaxDisplays = await prismadb.metric.findFirst()
   //
-  const recipient = await prismadb.canBeBlessed.findFirst({
-    where: { 
-      canBeDisplayed: true
-    },
-    include: {
-      profile: true
-    },
-  })
   //
 
   //
@@ -38,6 +31,9 @@ const Admin = async () => {
         <div className=' flex items-center justify-center border-2 border-slate-200 rounded-md'>
           <AdminSubscriptionManager/>
         </div>
+        <div className=' flex items-center justify-center border-2 border-slate-200 rounded-md'>
+          <AdminManagerCanBeDisplayed/>
+        </div>
         
         <div className='border-2 border-slate-200 rounded-md'>nombre d&apos;inscrit au total</div>
         <div className='border-2 border-slate-200 rounded-md'>nombre d&apos;inscrit dans le mois</div>
@@ -49,17 +45,7 @@ const Admin = async () => {
         <div className='border-2 border-slate-200 rounded-md'>combien on reçu dans le mois</div>
 
         <div className='border-2 border-slate-200 rounded-md p-2'>
-          {
-            recipient &&
-              <div key={recipient?.id} className='text-xl mb-4'>
-                <p className=''>
-                  Pseudo: <span className='text-blue-500'>{recipient?.profile?.username} </span>
-                </p>
-                <p>MaxD: <span className='text-blue-500'>{recipient?.maxDisplays}</span></p>
-                <p>Nod: {recipient?.nbrOfDisplays}</p>
-                <p>Affichable: {recipient?.canBeDisplayed === true && (<span>true</span>)}</p>
-              </div>
-          }
+          
         </div>
       </div>
     </div>

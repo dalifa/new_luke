@@ -24,7 +24,7 @@ export default function DonorBlessValidation({ onConfirm }: { onConfirm: () => P
           <DialogTitle className="text-center text-indigo-600 text-xl mb-4">Confirmez-vous ?</DialogTitle>
           <DialogDescription className="text-center text-slate-600 text-xl">
             Avez-vous envoyé l&apos;argent via Wero? <br/> Et envoyé par SMS le Donation Number?
-          </DialogDescription>
+          </DialogDescription> 
         </DialogHeader>
         <DialogClose className="text-xl text-slate-600 border-2 border-gray-300 p-2 rounded-md hover:bg-red-500 hover:text-white hover:border-red-500">
           Annuler

@@ -1,5 +1,5 @@
 //
-import { fetchCountries } from "@/actions/profile/update_Country"
+
 import { auth } from "@/auth"
 import { prismadb } from "@/lib/prismadb"
 import { decrypt } from "@/lib/utils"
@@ -21,11 +21,11 @@ const Profile = async ({ params }: { params: { profileId: string } }) => {
   })
   //
   // tous les pays
-  const allCountries = await fetchCountries();
+  const allCountries = await prismadb.country.findMany({ orderBy: { name: 'asc' } })
   //
   return (
     <div className='h-full flex flex-col items-center justify-center bg-indigo-600'> 
-      <div className="flex w-full md:w-3/5 mt-5">
+      <div className="flex w-full md:w-3/5 mt-2">
         <div className="flex flex-col items-center justify-center text-slate-600 bg-white rounded p-2 gap-y-5 md:p-5 w-full mx-8 shadow-xl">
           <div className="mt-5">
             <p className="text-center text-indigo-600 text-xl font-medium">Vos informations de profil</p>
@@ -37,7 +37,7 @@ const Profile = async ({ params }: { params: { profileId: string } }) => {
                 ...concerned,
                 lastnameDecrypted: decrypt(concerned.encryptedLastname),
                 phoneDecrypted: decrypt(concerned.encryptedPhone),
-              }}
+              }}  countries={allCountries}
             />
             )}
           </div>

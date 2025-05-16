@@ -70,10 +70,8 @@ model Profile {
   bio                  String   @default("présentez-vous") 
   //  
   // Relations
-  canBeBlessed          CanBeBlessed[]
-  potentialRecipients   MyPotentialRecipient[]
-  donationsMade         MyListToBless[] @relation("donations")
-  donationsReceived     MyListToBless[] @relation("receivedDonations")
+  donorEngaged          CollectionParticipant[] @relation("donations")
+  recipientInList       CollectionParticipant[] @relation("receivedDonations")
   metProfiles           AlreadyMet[]  @relation("metProfiles")
   metByProfiles         AlreadyMet[]  @relation("metByProfiles")
   subscriptions         Subscription[]
@@ -81,6 +79,17 @@ model Profile {
   //
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
+}
+//
+model CollectionResult {
+  id                 String  @id @default(auto()) @map("_id") @db.ObjectId
+  collectionId       String?
+  donatorProfileId   String?
+  recipientProfileId String?
+  //number of donations received = concerne toujours le recipient
+  donationReceived   Int  @default(0)
+  //
+  createdAt          DateTime @default(now())
 }
 //
 model QuestionResponse {
@@ -96,55 +105,54 @@ model QuestionResponse {
   createdAt            DateTime @default(now())
 }
 //
-model CanBeBlessed {
-  id               String   @id @default(auto()) @map("_id") @db.ObjectId
-  profileId        String   @db.ObjectId
-  profile          Profile  @relation(fields: [profileId], references: [id])
-  amountId         String   @db.ObjectId
-  amount           Amount   @relation(fields: [amountId], references: [id])
-  currency         String   @default("not")
-  nbrOfDisplays    Int      @default(0)   
-  canBeDisplayed   Boolean  @default(false)
-  maxDisplays      Int      @default(1)
+// la collecte
+model Collection {
+  id                 String     @id @default(auto()) @map("_id") @db.ObjectId
+  amountId           String     @db.ObjectId
+  amount             Amount     @relation(fields: [amountId], references: [id])
+  currency           String     @default("€")
+  collectionType     String     @default("")
+  group              Int        @default(4)
+  groupStatus        Int        @default(0)
+  isGroupComplete    Boolean    @default(false)
+  isCollectionClosed Boolean    @default(false)
+  // les participants
+  collectionParticipants         CollectionParticipant[]
   //
-  @@index([canBeDisplayed, nbrOfDisplays])
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
 }
-//
-//
-model MyListToBless {
-  id                     String     @id @default(auto()) @map("_id") @db.ObjectId
-  ownId                  Int?
-  donorId                String     @db.ObjectId
-  donor                  Profile    @relation("donations", fields: [donorId], references: [id])
-  chosenRecipient        String?    @db.ObjectId
-  recipient              Profile?   @relation("receivedDonations", fields: [chosenRecipient], references: [id])
-  isRecipientChosen      Boolean    @default(false)
-  recipientChosenAt      DateTime?
-  amountId               String 
-  amount                 Int       
-  donationNumber         Int?       
-  donatorValidation      Boolean    @default(false)
-  recipientValidation    Boolean    @default(false)
-  donorConfirmedAt       DateTime?
-  recipientConfirmedAt   DateTime?
-  createdAt              DateTime   @default(now())
+// ceux qui participent à la collecte
+model CollectionParticipant {
+  id                   String      @id @default(auto()) @map("_id") @db.ObjectId
+  collectionId         String      @db.ObjectId
+  collection           Collection  @relation(fields: [collectionId], references: [id])
+  amountId             String      @db.ObjectId
+  amount               Amount      @relation(fields: [amountId], references: [id])
+  concernedAmount      Int
+  // celui qui s'engage à donner
+  donorId              String?     @db.ObjectId
+  donor                Profile?    @relation("donations", fields: [donorId], references: [id])
+  donorEngagedAt       DateTime?
+  donatorValidation    Boolean     @default(false)
+  donorConfirmedAt     DateTime? 
+  // le participant
+  potentialRecipient   String     @db.ObjectId 
+  recipient            Profile    @relation("receivedDonations", fields: [potentialRecipient], references: [id])
+  // son rang parmi le participants à cette collecte
+  rank                 Int
+  chosenAsRecipient    Boolean     @default(false)
+  // le donation number 
+  donationNumber       Int? 
+  // si il a confirmé avoir reçu
+  recipientValidation  Boolean     @default(false)
+  recipientConfirmedAt DateTime?
   //
-  potentialRecipients    MyPotentialRecipient[]
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
   //
-  @@index([donorId, chosenRecipient])
-}
-//
-//
-model MyPotentialRecipient {
-  id                     String        @id @default(auto()) @map("_id") @db.ObjectId
-  listToBlessId          String        @db.ObjectId
-  list                   MyListToBless @relation(fields: [listToBlessId], references: [id])
-  amount                 Int // pour l'afficher dans le dialog
-  potentialRecipientId   String        @db.ObjectId
-  recipient              Profile       @relation(fields: [potentialRecipientId], references: [id])
-  isRecipientChosen      Boolean       @default(false)  // false  =  le recipient n'est pas encore choisi
-  //
-  createdAt              DateTime      @default(now())
+  @@index([donorId, potentialRecipient])
+  @@unique([collectionId, donorId]) // pour que cette paire (collectionId et profileId ne soit enregistrée qu'une seule fois)
 }
 //
 //
@@ -173,7 +181,8 @@ model Amount {
   currency   String  @default("nothing")
   rank       String  @default("nothing")
   //
-  canBeBlessed   CanBeBlessed[]
+  collections Collection[]
+  collectionParticipants CollectionParticipant[]
 }
 //
 model Country {
@@ -196,11 +205,11 @@ model CommissionRate {
 model Metric {
   id                   String  @id @default(auto()) @map("_id") @db.ObjectId
   // maximum de personnes dans la liste
-  maxDisplays          Int  @default(1)
+  maxDisplays          Int  @default(4)
   //
 }
 //
-//
+// C'EST L'ADMIN QUI ENTRE LE USER POUR LA PREMIÈRE FOIS
 model Subscription {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
   profileId      String   @db.ObjectId

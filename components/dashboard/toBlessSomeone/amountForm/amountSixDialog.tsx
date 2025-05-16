@@ -25,11 +25,11 @@ export default function AmountSixDialog({ amountId }: { amountId: string }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="blue">200€</Button>
+        <Button variant="primary">200€</Button>
       </DialogTrigger>
       <DialogContent className="w-4/5 md:w-2/5 rounded-md">
         <DialogHeader className="flex gap-y-4">
-          <DialogTitle className="text-center text-blue-600">
+          <DialogTitle className="text-center text-indigo-600">
             Confirmer vouloir donner 200€
           </DialogTitle>
           <DialogDescription className="text-center"></DialogDescription>

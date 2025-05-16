@@ -9,7 +9,7 @@ const Infos = () => {
     <div className="w-full h-screen flex flex-col items-center  px-4 md:px-20 py-14 bg-indigo-600">
       <div className='my-10 md:my-14 border-4 border-indigo-400 text-xl text-white rounded-lg py-4 px-2 md:px-10'>
         <p>We Bless You</p>
-        <p>Plateforme chrétienne de don participatif direct et circulaire.</p><br/>
+        <p>Plateforme chrétienne de don participatif, direct et circulaire.</p><br/>
 
         <p>Site déployé sur Vercel</p><br/>
 

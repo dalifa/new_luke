@@ -17,11 +17,27 @@ const DATE_FORMAT = "d MMM yyyy, HH:mm"
 export async function Counters() {
   // 
   const connected = await CurrentProfile()
+  // dernier don fait ou last donation made
+  const lDM = await prismadb.collectionParticipant.findFirst({
+    where: { 
+      donorId: connected?.id, // le connecté
+      recipientValidation: true // son dernier recipient
+    },
+    orderBy: { id: "desc"}
+  }) 
+  // dernier don reçu ou last donation received
+  const lDR = await prismadb.collectionParticipant.findFirst({
+    where: { 
+      potentialRecipient: connected?.id, // le connecté est recipient
+      recipientValidation: true // il valide le don reçu
+    },
+    orderBy: { id: "desc"}
+  }) 
   //
   return (
     <Card className='bg-white shadow-xl p-4'>
       <p className='text-center mb-5 font-semibold text-slate-600 text-xl lg:text-lg'>
-        COMPTEURS
+        COMPTEURS 
       </p>
       <hr className='w-full mb-2'/>
       {/* PIN = Personal Indentification Number */}
@@ -57,6 +73,30 @@ export async function Counters() {
           {
             connected && connected?.received > 0 ? (
               <span className="text-green-800 font-semibold">&nbsp;{connected?.received}{connected?.currency}</span>
+              ):(
+                <span className="text-slate-500"> 00{connected?.currency}</span>
+              )
+          }
+          </p>
+        </div>
+        <div className="grid grid-cols-2 items-center text-slate-500 text-md md:text-lg justify-between">
+          <p>Dernier don fait:</p>
+          <p className="text-end">
+          {
+            lDM ? (
+              <span className="text-green-800 font-semibold">&nbsp;{lDM?.concernedAmount}{connected?.currency}</span>
+              ):(
+                <span className="text-slate-500"> 00{connected?.currency}</span>
+              )
+          }
+          </p>
+        </div>
+        <div className="grid grid-cols-2 items-center text-slate-500 text-md md:text-lg justify-between">
+          <p>Dernier don Reçu:</p>
+          <p className="text-end">
+          {
+            lDR ? (
+              <span className="text-green-800 font-semibold">&nbsp;{lDR?.concernedAmount}{connected?.currency}</span>
               ):(
                 <span className="text-slate-500"> 00{connected?.currency}</span>
               )

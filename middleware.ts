@@ -58,7 +58,7 @@ export default auth((req) => {
 
 // Optionally, don't invoke Middleware on some paths
 export const config = {
-    //matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
-    // on utilise ici celui de clerk
-    matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
+  //matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  // on utilise ici celui de clerk
+  matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
 }

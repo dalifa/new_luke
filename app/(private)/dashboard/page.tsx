@@ -3,8 +3,8 @@
 import { createMinimalProfile } from '@/actions/profile/create_Minimal_Profil';
 import { auth } from '@/auth';
 import { Counters } from '@/components/dashboard/counters';
-import { DonationPromised } from '@/components/dashboard/toBlessSomeone/donationPromised';
 import { DonationReceived } from '@/components/dashboard/toBlessSomeone/donationReceived';
+import { MyCollections } from '@/components/dashboard/toBlessSomeone/my_collections';
 import { ToBless } from '@/components/dashboard/toBlessSomeone/toBless';
 import { prismadb } from '@/lib/prismadb';
 import { redirect } from 'next/navigation';
@@ -41,7 +41,7 @@ const Dashboard = async () => {
         <div className='w-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5'>
           <Counters />
           <ToBless />
-          <DonationPromised />
+          <MyCollections />
           <DonationReceived />
         </div>
       </div>

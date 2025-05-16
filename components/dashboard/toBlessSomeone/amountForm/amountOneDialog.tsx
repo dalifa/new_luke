@@ -25,7 +25,7 @@ export default function AmountOneDialog({ amountId }: { amountId: string }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="primary">5€</Button>
+        <Button variant="primary">5€</Button>  
       </DialogTrigger>
       <DialogContent className="w-4/5 md:w-2/5 rounded-md">
         <DialogHeader className="flex gap-y-2 mt-1">

@@ -12,7 +12,7 @@ const prisma = new PrismaClient() //si je choisi prismadb, je ne dois plus utili
 export const { 
   handlers:{ GET, POST },
   auth, 
-  signIn,
+  signIn, 
   signOut, 
 } = NextAuth({
   adapter: PrismaAdapter(prisma), // ou
