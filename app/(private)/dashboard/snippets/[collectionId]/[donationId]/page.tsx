@@ -7,7 +7,7 @@ import { donationAmountAction } from '@/actions/snippets/donationAmount';
 import { ConfirmGiveButton } from '@/components/dashboard/action-in-collection/snippets/confirm-give-button';
 
 const Donation = async ({
-  params
+  params 
 }: {
   // donationId = le nom du fichier s'il est différent, ça ne marche pas  
   params: { donationId: string } 

@@ -17,8 +17,8 @@ const ConfirmEnterInSnippets = async ({params}:{params: {snippetsEnterId:string}
       recipientValidation: false,
       amountId: concernedAmount?.id,
       OR: [
-        { donorId: connected?.id },
-        { potentialRecipient: connected?.id }
+        { participantId: connected?.id },
+        { recipientId: connected?.id }
       ]
     }
   });

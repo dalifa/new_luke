@@ -20,7 +20,7 @@ export async function Counters() {
   // dernier don fait ou last donation made
   const lDM = await prismadb.collectionParticipant.findFirst({
     where: { 
-      donorId: connected?.id, // le connecté
+      participantId: connected?.id, // le connecté
       recipientValidation: true // son dernier recipient
     },
     orderBy: { id: "desc"}
@@ -28,7 +28,7 @@ export async function Counters() {
   // dernier don reçu ou last donation received
   const lDR = await prismadb.collectionParticipant.findFirst({
     where: { 
-      potentialRecipient: connected?.id, // le connecté est recipient
+      recipientId: connected?.id, // le connecté est recipient
       recipientValidation: true // il valide le don reçu
     },
     orderBy: { id: "desc"}

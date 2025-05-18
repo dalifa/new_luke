@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
 
 
-export default function DonorBlessValidation({ onConfirm }: { onConfirm: () => Promise<void> }) {
+export default function DonorValidation({ onConfirm }: { onConfirm: () => Promise<void> }) {
   const [loading, setLoading] = useState(false);
 
   async function handleConfirm() {
@@ -16,14 +16,14 @@ export default function DonorBlessValidation({ onConfirm }: { onConfirm: () => P
 
   return (
     <Dialog>
-      <DialogTrigger className="w-full font-medium p-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-md text-xl">
-        J&apos;ai envoyé le don
+      <DialogTrigger className="w-full font-medium p-3 bg-green-700 hover:bg-green-600 text-white rounded-md text-xl">
+        Confirmer le transfert
       </DialogTrigger>
       <DialogContent className="rounded-md w-4/5">
         <DialogHeader>
           <DialogTitle className="text-center text-indigo-600 text-xl mb-4">Confirmez-vous ?</DialogTitle>
           <DialogDescription className="text-center text-slate-600 text-xl">
-            Avez-vous envoyé l&apos;argent via Wero? <br/> Et envoyé par SMS le Donation Number?
+            Avoir envoyé l&apos;argent <br/> Et le Donation Number par SMS?
           </DialogDescription> 
         </DialogHeader>
         <DialogClose className="text-xl text-slate-600 border-2 border-gray-300 p-2 rounded-md hover:bg-red-500 hover:text-white hover:border-red-500">

@@ -13,7 +13,7 @@ export async function DonationReceived() {
   // 
     return(
       <Card className="bg-white shadow-xl p-6 rounded-lg">
-      <p className="text-center mb-3 text-xl font-semibold text-gray-700">PROMESSES DE DONS REÇU</p>
+      <p className="text-center mb-3 text-xl font-semibold text-gray-700">LISTES EN COURS</p>
       <hr className="border-t border-gray-300 mb-4" />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <p>a faire</p>

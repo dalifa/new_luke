@@ -19,16 +19,16 @@ const DATE_FORMAT = "d MMM yyyy"
 const History = async () => {
   const connected = await CurrentProfile()
   //    HISTORIQUE DES BÉNÉDICTIONS FAITES
-  const blessingsMade = await prismadb.myListToBless.findMany({
+  const blessingsMade = await prismadb.collectionParticipant.findMany({
     where: {
-      donorId: connected?.id,
+      participantId: connected?.id,
       recipientValidation: true
     }
   }) 
   //    HISTORIQUE DES BÉNÉDICTIONS REÇU
-  const blessingsReceived = await prismadb.myListToBless.findMany({
+  const blessingsReceived = await prismadb.collectionParticipant.findMany({
     where: {
-      chosenRecipient: connected?.id,
+      recipientId: connected?.id,
       recipientValidation: true
     }
   }) 
@@ -51,8 +51,8 @@ const History = async () => {
                 <div key={made?.id}>
                   <Link  href={`/dashboard/historique/${made?.id}`}>
                     <Card className='flex items-center flex-col shadow-md shadow-blue-100 p-4 text-center gap-y-2'>
-                        <p className='text-xl font-medium text-blue-500'>
-                          Bénédiction de {made?.amount}{connected?.currency}
+                        <p className='text-xl font-medium text-indigo-600'>
+                          Bénédiction de {made?.concernedAmount}{connected?.currency}
                         </p>
                         <p className='text-xs text-gray-500'>Du: {format(new Date(made?.createdAt), DATE_FORMAT)}</p>
                     </Card>
@@ -69,8 +69,8 @@ const History = async () => {
                 <div key={received?.id}>
                   <Link  href={`/dashboard/historique/${received?.id}`}>
                     <Card className='flex items-center flex-col shadow-md shadow-blue-100 p-4 text-center gap-y-2'>
-                      <p className='text-xl font-medium text-blue-500'>
-                        Bénédiction de {received?.amount}{connected?.currency}
+                      <p className='text-xl font-medium text-indigo-600'>
+                        Bénédiction de {received?.concernedAmount}{connected?.currency}
                       </p>
                       <p className='text-xs text-gray-500'>Du: {format(new Date(received?.createdAt), DATE_FORMAT)}</p>
                     </Card>

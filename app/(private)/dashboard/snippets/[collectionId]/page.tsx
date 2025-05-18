@@ -10,7 +10,7 @@ import { Ban, CircleUserRound } from 'lucide-react';
 import { JustToGiveInSnippets } from '@/components/dashboard/action-in-collection/snippets/just-donator';
 import { AlsoReceiverInSnippets } from '@/components/dashboard/action-in-collection/snippets/also-receiver';
 import { MySnippetsProjectForm } from '@/components/dashboard/action-in-collection/snippets/myproject-form';
-//
+// 
 const Collection = async ({
   params
 }:{

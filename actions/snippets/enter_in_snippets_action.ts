@@ -19,8 +19,8 @@ export const enterInSnippetsAction = async (params: string) => {
         recipientValidation: false,
         amountId: amountConcerned?.id,
         OR: [
-          { donorId: connected?.id },
-          { potentialRecipient: connected?.id }
+          { participantId: connected?.id },
+          { recipientId: connected?.id }
         ]
       }
     });
@@ -39,7 +39,7 @@ export const enterInSnippetsAction = async (params: string) => {
         // ## ON EN CRÉE UNE NOUVELLE
         const newCollection = await prismadb.collection.create({
           data: {
-            amountId: amountConcerned.id,
+            amountId: amountConcerned?.id,
             currency: connected?.currency,
             collectionType: ctype,
             groupStatus: 1
@@ -49,11 +49,11 @@ export const enterInSnippetsAction = async (params: string) => {
           // ## ON L'Y ENTRE COMME PARTICIPANT 1
           await prismadb.collectionParticipant.create({
             data: {
-              collectionId: newCollection.id,
-              amountId: amountConcerned.id,
-              concernedAmount: amountConcerned.amount,
+              collectionId: newCollection?.id,
+              amountId: amountConcerned?.id,
+              concernedAmount: amountConcerned?.amount,
               rank: 1,
-              potentialRecipient: connected.id
+              participantId: connected?.id
             }
           });
         }
@@ -64,7 +64,7 @@ export const enterInSnippetsAction = async (params: string) => {
       if (openCollectionCount === 1 && amountConcerned && connected) {
         const existingCollection = await prismadb.collection.findFirst({
           where: {
-            amountId: amountConcerned.id,
+            amountId: amountConcerned?.id,
             isGroupComplete: false,
             collectionType: ctype,
           },
@@ -72,12 +72,12 @@ export const enterInSnippetsAction = async (params: string) => {
       
         if (!existingCollection) return;
       
-        const currentGroupStatus = existingCollection.groupStatus;
+        const currentGroupStatus = existingCollection?.groupStatus;
       
         // Récupérer tous les participants existants
         const existingParticipants = await prismadb.collectionParticipant.findMany({
           where: {
-            collectionId: existingCollection.id,
+            collectionId: existingCollection?.id,
           },
           orderBy: {
             rank: 'asc',
@@ -91,12 +91,12 @@ export const enterInSnippetsAction = async (params: string) => {
               where: {
                 OR: [
                   {
-                    profileId: connected.id,
-                    profileMetId: participant.potentialRecipient
+                    profileId: connected?.id,
+                    profileMetId: participant?.participantId
                   },
                   {
-                    profileId: participant.potentialRecipient,
-                    profileMetId: connected.id
+                    profileId: participant?.participantId,
+                    profileMetId: connected?.id
                   }
                 ]
               }
@@ -123,7 +123,7 @@ export const enterInSnippetsAction = async (params: string) => {
               amountId: amountConcerned.id,
               concernedAmount: amountConcerned.amount,
               rank: 1,
-              potentialRecipient: connected.id
+              participantId: connected.id
             }
           });
           return;
@@ -139,7 +139,7 @@ export const enterInSnippetsAction = async (params: string) => {
             amountId: amountConcerned.id,
             concernedAmount: amountConcerned.amount,
             rank: newRank,
-            potentialRecipient: connected.id
+            participantId: connected.id
           }
         });
       
@@ -186,10 +186,10 @@ export const enterInSnippetsAction = async (params: string) => {
                   OR: [
                     {
                       profileId: connected.id,
-                      profileMetId: participant.potentialRecipient
+                      profileMetId: participant.participantId
                     },
                     {
-                      profileId: participant.potentialRecipient,
+                      profileId: participant.participantId,
                       profileMetId: connected.id
                     }
                   ]
@@ -212,7 +212,7 @@ export const enterInSnippetsAction = async (params: string) => {
                   amountId: amountConcerned.id,
                   concernedAmount: amountConcerned.amount,
                   rank: newRank,
-                  potentialRecipient: connected.id
+                  participantId: connected.id
                 }
               });
         
@@ -247,13 +247,12 @@ export const enterInSnippetsAction = async (params: string) => {
                 amountId: amountConcerned.id,
                 concernedAmount: amountConcerned.amount,
                 rank: 1,
-                potentialRecipient: connected.id
+                participantId: connected.id
               }
             });
           }
         }
     }
-
     revalidatePath("/dashboard");
     redirect("/dashboard");
   } catch (error) {
@@ -263,276 +262,5 @@ export const enterInSnippetsAction = async (params: string) => {
 
 //#################
 /*
-// S'IL Y A 1 COLLECTE D'OUVERTE
-      if (openCollectionCount === 1 && amountConcerned && connected) {
-        // On select la collecte en question
-        const existingCollection = await prismadb.collection.findFirst({
-          where: {
-            amountId: amountConcerned?.id,
-            isGroupComplete: false,
-            collectionType: ctype,
-          },
-        });
-        // #### S'IL Y A UN SEUL PARTICIPANT ####
-          if(existingCollection?.groupStatus === 1)
-          {
-            // On select le participant en question
-            const participant1 = await prismadb.collectionParticipant.findFirst({
-              where: { rank: 1}
-            })
-            // on vérifie que le connecté n'a pas déjà donné ou reçu de lui
-            const alreadyMetVerif = await prismadb.alreadyMet.count({
-              where: {
-                OR: [
-                  {
-                    profileId: connected?.id,
-                    profileMetId: participant1?.potentialRecipient
-                  },
-                  {
-                    profileId: participant1?.potentialRecipient,
-                    profileMetId: connected?.id
-                  }
-                ]
-              }
-            });
-            // s'ils ne se sont jamais rencontré
-            if(alreadyMetVerif === 0)
-            {
-              // On entre le connecté dans cette collecte
-              await prismadb.collectionParticipant.create({
-                data: {
-                  collectionId: existingCollection.id,
-                  amountId: amountConcerned.id,
-                  concernedAmount: amountConcerned.amount,
-                  rank: 2,
-                  potentialRecipient: connected.id
-                }
-              });
-              // on update groupStatus
-              await prismadb.collection.updateMany({
-                where: {id: existingCollection?.id },
-                data: { groupStatus: 2}
-              })
-            }else{
-              // s'ils se sont déjà rencontrés
-              // on crée un nouvelle collecte 
-              const newCollection = await prismadb.collection.create({
-                data: {
-                  amountId: amountConcerned.id,
-                  currency: connected?.currency,
-                  collectionType: ctype,
-                  groupStatus: 1
-                }
-              });
-              // On y entre le connecté comme 1er participant
-              if (newCollection && connected) {
-                await prismadb.collectionParticipant.create({
-                  data: {
-                    collectionId: newCollection.id,
-                    amountId: amountConcerned.id,
-                    concernedAmount: amountConcerned.amount,
-                    rank: 1,
-                    potentialRecipient: connected.id
-                  }
-                });
-              }
-            }
-          }
-          // #####################################
-          // #### S'IL Y A DÉJÀ DEUX PARTICIPANTS ####
-          if(existingCollection?.groupStatus === 2)
-          {
-            // On select le 1er participant
-            const participant1 = await prismadb.collectionParticipant.findFirst({
-              where: { rank: 1}
-            })
-            // on vérifie que le connecté ne l'a pas déjà croisé
-            const alreadyMetVerif1 = await prismadb.alreadyMet.count({
-              where: {
-                OR: [
-                  {
-                    profileId: connected?.id,
-                    profileMetId: participant1?.potentialRecipient
-                  },
-                  {
-                    profileId: participant1?.potentialRecipient,
-                    profileMetId: connected?.id
-                  }
-                ]
-              }
-            });
-            // On select le 2eme participant
-            const participant2 = await prismadb.collectionParticipant.findFirst({
-              where: { rank: 2}
-            })
-            // on vérifie que le connecté ne l'a pas déjà croisé
-            const alreadyMetVerif2 = await prismadb.alreadyMet.count({
-              where: {
-                OR: [
-                  {
-                    profileId: connected?.id,
-                    profileMetId: participant2?.potentialRecipient
-                  },
-                  {
-                    profileId: participant2?.potentialRecipient,
-                    profileMetId: connected?.id
-                  }
-                ]
-              }
-            });
-            // si le connecté n'a rencontré aucun des deux
-            if(alreadyMetVerif1 === 0 && alreadyMetVerif2 === 0)
-            {
-              // On entre le connecté dans la collecte
-              await prismadb.collectionParticipant.create({
-                data: {
-                  collectionId: existingCollection.id,
-                  amountId: amountConcerned.id,
-                  concernedAmount: amountConcerned.amount,
-                  rank: 3,
-                  potentialRecipient: connected.id
-                }
-              });
-              // on update groupstatus
-              await prismadb.collection.updateMany({
-                where: {id: existingCollection?.id },
-                data: { groupStatus: 3}
-              })
-            }else{
-              // s'il a rencontré ne fus qu'1 des deux
-              // On crée une nouvelle collecte 
-              const newCollection = await prismadb.collection.create({
-                data: {
-                  amountId: amountConcerned.id,
-                  currency: connected?.currency,
-                  collectionType: ctype,
-                  groupStatus: 1
-                }
-              });
-              // On select la collecte créée
-              if (newCollection && connected) {
-                // et on y entre le connecté comme 1er participant
-                await prismadb.collectionParticipant.create({
-                  data: {
-                    collectionId: newCollection.id,
-                    amountId: amountConcerned.id,
-                    concernedAmount: amountConcerned.amount,
-                    rank: 1,
-                    potentialRecipient: connected.id
-                  }
-                });
-              }
-            }
-          }
-          // #####################################
-          // #### S'IL Y A DÉJÀ TROIS PARTICIPANTS ####
-          if(existingCollection?.groupStatus === 3)
-          {
-            // On le select le 1er participant
-            const participant1 = await prismadb.collectionParticipant.findFirst({
-              where: { rank: 1}
-            })
-            // On vérifie que le connecté n'a pas déjà donné ou reçu de lui
-            const alreadyMetVerif1 = await prismadb.alreadyMet.count({
-              where: {
-                OR: [
-                  {
-                    profileId: connected?.id,
-                    profileMetId: participant1?.potentialRecipient
-                  },
-                  {
-                    profileId: participant1?.potentialRecipient,
-                    profileMetId: connected?.id
-                  }
-                ]
-              }
-            });
-            // On select le 2eme participant
-            const participant2 = await prismadb.collectionParticipant.findFirst({
-              where: { rank: 2}
-            })
-            // on vérifie que le connecté n'a pas déjà donné ou reçu de lui
-            const alreadyMetVerif2 = await prismadb.alreadyMet.count({
-              where: {
-                OR: [
-                  {
-                    profileId: connected?.id,
-                    profileMetId: participant2?.potentialRecipient
-                  },
-                  {
-                    profileId: participant2?.potentialRecipient,
-                    profileMetId: connected?.id
-                  }
-                ]
-              }
-            });
-            // On select le 3eme participant
-            const participant3 = await prismadb.collectionParticipant.findFirst({
-              where: { rank: 3}
-            })
-            // on vérifie que le connecté n'a pas déjà donné ou reçu de lui
-            const alreadyMetVerif3 = await prismadb.alreadyMet.count({
-              where: {
-                OR: [
-                  {
-                    profileId: connected?.id,
-                    profileMetId: participant3?.potentialRecipient
-                  },
-                  {
-                    profileId: participant3?.potentialRecipient,
-                    profileMetId: connected?.id
-                  }
-                ]
-              }
-            });
-            // Si le connecté n'a donné ni reçu d'aucun des trois
-            if(alreadyMetVerif1 === 0 && alreadyMetVerif2 === 0 && alreadyMetVerif3 === 0)
-            {
-              // On l'entre dans la collecte
-              await prismadb.collectionParticipant.create({
-                data: {
-                  collectionId: existingCollection.id,
-                  amountId: amountConcerned.id,
-                  concernedAmount: amountConcerned.amount,
-                  rank: 4,
-                  potentialRecipient: connected.id
-                }
-              });
-              // On update groupStatus et isGroupComplete
-              await prismadb.collection.updateMany({
-                where: {id: existingCollection?.id },
-                data: { 
-                  groupStatus: 4,
-                  isGroupComplete: true
-                }
-              })
-              // TODO ici:
-              // envoie de mail pour leur dire que leur groupe est complet
-              // et qu'ils peuvent commencé à choisir leur destinataire respectif
-            }else{
-              // s'il a rencontré ne fus qu'1 des trois
-              // on crée un nouvelle
-              const newCollection = await prismadb.collection.create({
-                data: {
-                  amountId: amountConcerned.id,
-                  currency: connected?.currency,
-                  collectionType: ctype,
-                  groupStatus: 1
-                }
-              });
-              // On l'y entre
-              if (newCollection && connected) {
-                await prismadb.collectionParticipant.create({
-                  data: {
-                    collectionId: newCollection.id,
-                    amountId: amountConcerned.id,
-                    concernedAmount: amountConcerned.amount,
-                    rank: 1,
-                    potentialRecipient: connected.id
-                  }
-                });
-              }
-            }
-          }
-      }
+
 */

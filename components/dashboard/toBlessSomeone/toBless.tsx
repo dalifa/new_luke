@@ -38,7 +38,7 @@ export const ToBless = async () => {
                     <Button variant="primary" className="w-full">{amount?.amount}{connected?.currency}</Button>
                   </Link>
                 ):( 
-                    <Button disabled variant="primary">{amount?.amount}{connected?.currency}x</Button>
+                    <Button disabled variant="primary">{amount?.amount}{connected?.currency}</Button>
                   )
                 }
             </>

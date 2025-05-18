@@ -70,8 +70,8 @@ model Profile {
   bio                  String   @default("présentez-vous") 
   //  
   // Relations
-  donorEngaged          CollectionParticipant[] @relation("donations")
-  recipientInList       CollectionParticipant[] @relation("receivedDonations")
+  participant           CollectionParticipant[] @relation("donations")
+  recipient             CollectionParticipant[] @relation("receivedDonations")
   metProfiles           AlreadyMet[]  @relation("metProfiles")
   metByProfiles         AlreadyMet[]  @relation("metByProfiles")
   subscriptions         Subscription[]
@@ -84,8 +84,8 @@ model Profile {
 model CollectionResult {
   id                 String  @id @default(auto()) @map("_id") @db.ObjectId
   collectionId       String?
-  donatorProfileId   String?
-  recipientProfileId String?
+  donatorId   String?
+  recipientId String?
   //number of donations received = concerne toujours le recipient
   donationReceived   Int  @default(0)
   //
@@ -124,44 +124,46 @@ model Collection {
 }
 // ceux qui participent à la collecte
 model CollectionParticipant {
-  id                   String      @id @default(auto()) @map("_id") @db.ObjectId
-  collectionId         String      @db.ObjectId
-  collection           Collection  @relation(fields: [collectionId], references: [id])
-  amountId             String      @db.ObjectId
-  amount               Amount      @relation(fields: [amountId], references: [id])
-  concernedAmount      Int
-  // celui qui s'engage à donner
-  donorId              String?     @db.ObjectId
-  donor                Profile?    @relation("donations", fields: [donorId], references: [id])
-  donorEngagedAt       DateTime?
-  donatorValidation    Boolean     @default(false)
-  donorConfirmedAt     DateTime? 
-  // le participant
-  potentialRecipient   String     @db.ObjectId 
-  recipient            Profile    @relation("receivedDonations", fields: [potentialRecipient], references: [id])
-  // son rang parmi le participants à cette collecte
-  rank                 Int
-  chosenAsRecipient    Boolean     @default(false)
-  // le donation number 
-  donationNumber       Int? 
-  // si il a confirmé avoir reçu
-  recipientValidation  Boolean     @default(false)
-  recipientConfirmedAt DateTime?
+  id                    String      @id @default(auto()) @map("_id") @db.ObjectId
+  collectionId          String      @db.ObjectId
+  collection            Collection  @relation(fields: [collectionId], references: [id])
+  amountId              String      @db.ObjectId
+  amount                Amount      @relation(fields: [amountId], references: [id])
+  concernedAmount       Int
+  // celui qui participe à la collecte
+  participantId         String     @db.ObjectId
+  participant           Profile    @relation("donations", fields: [participantId], references: [id])
+  rank                  Int // son rang dans la collecte
+  // est ce qu'il a choisi le recipient
+  isRecipientChosen     Boolean     @default(false)
+  recipientChosenOn     DateTime? // date du choix
+  donationNumber        Int?
+  // il valide avoir donné 
+  donorValidation       Boolean     @default(false)
+  donorValidationAt     DateTime? 
+  // ####### RECIPIENT ############ 
+  // celui que le participant à choisi comme recipient
+  recipientId           String?      @db.ObjectId 
+  recipient             Profile?     @relation("receivedDonations", fields: [recipientId], references: [id])
+  // si le recipient a confirmé avoir reçu
+  recipientValidation   Boolean     @default(false)
+  recipientValidationAt DateTime?
   //
-  createdAt            DateTime    @default(now())
-  updatedAt            DateTime    @updatedAt
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
   //
-  @@index([donorId, potentialRecipient])
-  @@unique([collectionId, donorId]) // pour que cette paire (collectionId et profileId ne soit enregistrée qu'une seule fois)
+
+  @@index([participantId, recipientId])
+  @@unique([collectionId, participantId]) // pour que cette paire (collectionId et profileId ne soit enregistrée qu'une seule fois)
 }
 //
 //
 model AlreadyMet {
   id               String   @id @default(auto()) @map("_id") @db.ObjectId
-  profileId         String   @db.ObjectId
-  profile          Profile  @relation("metProfiles", fields: [profileId], references: [id])
-  profileMetId     String   @db.ObjectId
-  profileMet       Profile  @relation("metByProfiles", fields: [profileMetId], references: [id])    
+  profileId        String?   @db.ObjectId
+  profile          Profile?  @relation("metProfiles", fields: [profileId], references: [id])
+  profileMetId     String?   @db.ObjectId
+  profileMet       Profile?  @relation("metByProfiles", fields: [profileMetId], references: [id])    
   @@unique([profileId, profileMetId]) // Un utilisateur ne peut rencontrer un autre qu'une seule fois
   //
   createdAt       DateTime @default(now())
