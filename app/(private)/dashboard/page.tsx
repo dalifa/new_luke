@@ -3,9 +3,9 @@
 import { createMinimalProfile } from '@/actions/profile/create_Minimal_Profil';
 import { auth } from '@/auth';
 import { Counters } from '@/components/dashboard/counters';
-import { DonationReceived } from '@/components/dashboard/toBlessSomeone/donationReceived';
-import { MyCollections } from '@/components/dashboard/toBlessSomeone/my_collections';
-import { ToBless } from '@/components/dashboard/toBlessSomeone/toBless';
+import { ListInProgress } from '@/components/dashboard/list_in_progress';
+import { MyCollections } from '@/components/dashboard/my_collections';
+import ToBless from '@/components/dashboard/toBless';
 import { prismadb } from '@/lib/prismadb';
 import { redirect } from 'next/navigation';
 
@@ -39,8 +39,8 @@ const Dashboard = async () => {
       <div className='w-full md:w-4/5 flex flex-col items-center pt-10 m-4 gap-y-4 px-5 lg:pb-20'>
         <div className='w-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5'>
           <Counters />
-          <DonationReceived />
-          <ToBless />
+          <ListInProgress/>
+          <ToBless/>
           <MyCollections/>
         </div>
       </div>

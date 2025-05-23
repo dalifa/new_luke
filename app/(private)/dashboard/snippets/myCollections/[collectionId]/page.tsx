@@ -1,10 +1,8 @@
 
 import { donorValidationAction } from '@/actions/snippets/donorValidation_Action'
-import { recipientChoiceAction } from '@/actions/snippets/recipient_choice_Action'
 import ChooseRecipientButton from '@/components/dashboard/snippets/chosenRecipientButton'
-//import { recipientChoiceAction } from '@/actions/snippets/recipient_choice_Action'
 import DonorValidation from '@/components/dashboard/snippets/donor_Validation'
-import RecipientChoice from '@/components/dashboard/snippets/recipient_choice'
+import RecipientValidation from '@/components/dashboard/snippets/recipient_Validation'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Card } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
@@ -13,8 +11,8 @@ import { prismadb } from '@/lib/prismadb'
 import { decrypt } from '@/lib/utils'
 import { format } from "date-fns"
 import { ArrowUp01, BadgeDollarSign, Building2, FilePen, HandCoins, MapPin, Phone, Send, UserRound } from 'lucide-react'
-//
-const DATE_FORMAT = "d MMM yyyy, HH:mm"
+// 
+const DATE_FORMAT = "d MMM yyyy, HH:mm" 
 
 const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
   const connected = await CurrentProfile()
@@ -41,14 +39,41 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
       id: params?.collectionId
     }
   })
-  // POUR CHOISIR SON DESTINATAIRE
-  
-  // POUR CONFIRMER AVOIR FAIT LE TRANSFERT WERO
+  // le nbre de fois qu'il est recipient
+  const isReceipientCount = await prismadb.collectionParticipant.count({
+    where: {
+      collectionId: params?.collectionId,
+      recipientId: connected?.id
+    }
+  })
+  // le select tout les donation number s'il a été choisi > 1 
+  const dNumbers = await prismadb.collectionParticipant.findMany({
+    where: {
+      collectionId: params?.collectionId,
+      recipientId: connected?.id
+    }
+  })
+  // le nbr de fois que son donor a validé et pas lui
+  const isReceipientValidationCount = await prismadb.collectionParticipant.count({
+    where: {
+      collectionId: params?.collectionId,
+      recipientId: connected?.id,
+      donorValidation: true,
+      recipientValidation: false
+    }
+  })
+  // SI LE CONNECTÉ A REÇU DE TOUS LES PARTICIPANTS
+  const result1 = await prismadb.collectionResult.findFirst({
+    where: {
+      collectionId: params?.collectionId,
+      recipientId: connected?.id
+    }
+  })
+  // 
   async function handleConfirm() {
     "use server";
-    //
-    if (!recipientChosen?.recipientId) return; // Vérification avant d’appeler l’Action Serveur
-    await donorValidationAction(recipientChosen?.recipientId);
+    if (!recipientChosen?.recipientId) return;
+    await donorValidationAction(recipientChosen?.recipientId, params.collectionId);
   }
   //
   return (
@@ -75,9 +100,10 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
             <p className="text-lg font-semibold text-indigo-600">
               {capitalize(donor?.participant?.username)}
             </p>)}
+            <Separator/> 
             {
-              // à vérifier si le prénom du recipient apparait
-              connected?.id === donor?.participantId && donor?.isRecipientChosen === true && donor?.participant?.id === donor?.recipientId && (
+              // affiché seulement si destinataire
+              recipientChosen?.recipientId && recipientChosen.recipientId === donor?.participantId && (
                 <div className='w-full flex flex-row gap-4 mt-2'>
                   <div className='basis-1/3'>
                     <UserRound className='text-indigo-600'/>
@@ -117,7 +143,7 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
               </div>
             </div>
             {
-              connected?.id === donor?.participantId && donor?.participant?.id === donor?.recipientId && (
+              recipientChosen?.recipientId && recipientChosen.recipientId === donor?.participantId && (
                 <div className='w-full flex flex-row gap-4 mt-2'>
                   <div className='basis-1/3'>
                     <Phone className="text-indigo-600"/>
@@ -151,16 +177,22 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
               </div>
             </div>
             {
-              connected?.id === donor?.participant?.id && donor?.isRecipientChosen === true && (
-                <div className='w-full flex flex-row gap-4 mt-2'>
-                  <div className='basis-1/3'>
-                    <ArrowUp01 className="text-indigo-600"/>
-                  </div>
-                  <div className='basis-2/3 text-end'>
-                    <p className="text-slate-700">
-                      <strong>{donor?.donationNumber}</strong>
-                    </p>
-                  </div>
+              connected?.id === donor?.participant?.id && donor?.isRecipientChosen === true && donor?.recipientValidation === false && (
+                <div className='w-full grid grid-cols-1'>
+                  {
+                    dNumbers.map((nbr) =>(
+                      <div key={nbr?.id} className='w-full flex flex-row gap-4 mt-2'>
+                        <div className='basis-1/3'>
+                          <ArrowUp01 className="text-indigo-600"/>
+                        </div>
+                        <div className='basis-2/3 text-end'>
+                          <p className="text-slate-700">
+                            <strong>{donor?.donationNumber}</strong>
+                          </p>
+                        </div>
+                      </div>
+                    ))
+                  }
                 </div>
               ) 
             }
@@ -189,24 +221,62 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
                 </div>
               </div>
             )}
-
-            {!donor?.donatorValidation && connected?.id === donor?.participantId && donor?.isRecipientChosen === true ? (
-              <DonorValidation onConfirm={handleConfirm}/> 
+            {/* le donateur confirme avoir donné */}
+            { connected && donor?.donatorValidation === false && connected?.id === donor?.participantId && donor?.isRecipientChosen === true ? (
+              <DonorValidation onConfirm={handleConfirm}/>
             ):(
               <>
               {
-                connected && verif?.isGroupComplete === true && 
-                connected?.id !== donor?.participantId &&
-                  recipientChosen?.isRecipientChosen === false && (
+                // la session exist
+                connected && 
+                // le group est complet
+                verif?.isGroupComplete === true &&
+                // le connecté n'a pas encore choisi
+                recipientChosen?.isRecipientChosen === false && 
+                // le connecté n'est pas le participant concerné
+                connected?.id !== donor?.participantId && 
+                (
+                  // le connecté à reçu de tous ou le connecté n'est pas recipient participant concerné
+                  result1?.donationReceived === verif?.group - 1 || connected?.id !== donor?.recipientId) && (
                     <ChooseRecipientButton
                       collectionId={params.collectionId}
                       participantId={connected.id}
                       recipientId={donor?.participant?.id}
                     />
-                 )}
+                  )}
               </>
             )}
-            {donor?.donatorValidation && (
+            {/* n'apparait que sur le profil du participant donor connecté */}
+            {
+              recipientChosen?.recipientId && recipientChosen.recipientId === donor?.participantId && (
+                <button className="w-full mt-4 bg-green-700 text-white px-4 py-2 rounded-lg disabled:opacity-50">
+                  Destinataire choisi
+                </button>
+              )
+            }
+            {/* n'apparait que sur le profil du recipient connecté */}
+            {
+              connected?.id === donor?.recipientId && (
+                <button className="w-full mt-4 bg-green-700 text-white px-4 py-2 rounded-lg disabled:opacity-50">
+                  Votre donateur
+                </button>
+              )
+            }
+            {/* n'apparait que sur le profil du recipient connecté */}
+            {
+              isReceipientCount > 0 && connected?.id === donor?.participantId && (
+                <button className="w-full mt-4 bg-green-700 text-white px-4 py-2 rounded-lg disabled:opacity-50">
+                  Vous avez été choisi {isReceipientCount > 1 && (<span>({isReceipientCount})</span>)}
+                </button>
+              )
+            }
+            {/* n'apparait que sur le profil du recipient connecté */}
+            { isReceipientValidationCount > 0 && connected?.id === donor?.participantId && (
+                <RecipientValidation/> 
+              )
+            }
+            {/* n'apparait que sur le profil du participant donor connecté */}
+            {donor?.donorValidation && connected?.id === donor?.participantId && (
               <div className='mt-5'>
                 <p>Votre donataire ne devrait pas tarder à valider de son côté la reception de votre don.</p>
                 <p className='mt-5 text-indigo-600'>Merci pour votre générosité 🙏🏼</p>
@@ -223,10 +293,5 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
 export default MyRecipients
 
 /*
-async function handleChoice() {
-    "use server";
-    //
-    if (recipientChosen?.recipientId) return; // Vérification avant d’appeler l’Action Serveur
-    await recipientChoiceAction();
-  }
+
 */

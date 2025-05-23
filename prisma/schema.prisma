@@ -83,9 +83,9 @@ model Profile {
 //
 model CollectionResult {
   id                 String  @id @default(auto()) @map("_id") @db.ObjectId
-  collectionId       String?
-  donatorId   String?
-  recipientId String?
+  collectionId       String
+  donorId            String
+  recipientId        String
   //number of donations received = concerne toujours le recipient
   donationReceived   Int  @default(0)
   //
@@ -152,7 +152,6 @@ model CollectionParticipant {
   createdAt             DateTime    @default(now())
   updatedAt             DateTime    @updatedAt
   //
-
   @@index([participantId, recipientId])
   @@unique([collectionId, participantId]) // pour que cette paire (collectionId et profileId ne soit enregistrée qu'une seule fois)
 }
@@ -225,3 +224,4 @@ model Subscription {
   //
   createdAt      DateTime   @default(now())
 }
+//

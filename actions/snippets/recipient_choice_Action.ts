@@ -14,12 +14,17 @@ export async function recipientChoiceAction({
   recipientId: string
 }) {
   try {
+    //
+    const nbr = await prismadb.profile.count()
+    //
     await prismadb.collectionParticipant.updateMany({
       where: {
         collectionId,
         participantId,
       },
       data: {
+        // donationNumber à refaire en mieux
+        donationNumber: 1000 + nbr,
         recipientId,
         isRecipientChosen: true,
         recipientChosenOn: new Date()

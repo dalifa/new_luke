@@ -1,35 +1,26 @@
-"use server";
-import { CurrentProfile } from "@/hooks/own-current-user";
-//
-import { prismadb } from "@/lib/prismadb";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-//
-export async function donorValidationAction(collectionId: string) {
-  const connected = await CurrentProfile()
-  if (!collectionId) return;
-  // on select le amountId concerné
-  const concerned = await prismadb.collectionParticipant.findFirst({
-    where: {
-      collectionId
-    }
-  })
-  //
-  if(connected?.id)
-  {
+// actions/snippets/donorValidation_Action.ts
+'use server';
+
+import { prismadb } from '@/lib/prismadb';
+import { revalidatePath } from 'next/cache';
+
+export async function donorValidationAction(recipientId: string, collectionId: string) {
+  try {
     await prismadb.collectionParticipant.updateMany({
-      where: { 
+      where: {
+        recipientId,
         collectionId,
-        participantId: connected?.id,
-        isRecipientChosen: true
       },
       data: {
         donorValidation: true,
-        donorValidationAt: new Date(), // Date et heure actuelles
+        donorValidationAt: new Date(),
       },
     });
+
+    revalidatePath(`/dashboard/recipients/${collectionId}`);
+  } catch (error) {
+    console.error("Erreur lors de la validation du don:", error);
+    throw new Error("La confirmation a échoué.");
   }
-  //
-  revalidatePath(`/dashboard/snippets/myCollections/${concerned?.collectionId}`);
-  redirect(`/dashboard/snippets/myCollections/${concerned?.collectionId}`);
 }
+
