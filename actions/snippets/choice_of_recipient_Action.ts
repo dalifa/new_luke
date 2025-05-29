@@ -30,6 +30,8 @@ export async function recipientChoiceAction({
         recipientChosenOn: new Date()
       }
     })
+    // ENTRER LE DONOR ET LE RECIPIENT DANS RESULT POUR SAVOIR QUI À CHOISI QUI
+    //
     revalidatePath(`/dashboard/snippets/myCollections/${collectionId}`);
     redirect(`/dashboard/snippets/myCollections/${collectionId}`);
     return { success: true }

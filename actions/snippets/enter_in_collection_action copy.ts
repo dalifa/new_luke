@@ -7,6 +7,10 @@ import { redirect } from "next/navigation";
 //
 export const enterInSnippetsAction = async (params: string) => {
   try {
+    // pour a voir le nombre de participants en cours, dans le groupe 
+    const metric = await prismadb.metric.findFirst()
+    const currentGroup = metric?.currentGroup
+    //
     const amountConcerned = await prismadb.amount.findFirst({
       where: { id: params }
     });
@@ -19,8 +23,8 @@ export const enterInSnippetsAction = async (params: string) => {
         recipientValidation: false,
         amountId: amountConcerned?.id,
         OR: [
-          { participantId: connected?.id },
-          { recipientId: connected?.id }
+          { participantId: connected?.id }, // il est donateur
+          { recipientId: connected?.id } // ou destinataire
         ]
       }
     });
@@ -42,7 +46,8 @@ export const enterInSnippetsAction = async (params: string) => {
             amountId: amountConcerned?.id,
             currency: connected?.currency,
             collectionType: ctype,
-            groupStatus: 1
+            groupStatus: 1,
+            group: currentGroup // nombre actuel de participants autorisé
           }
         });
         if (newCollection && connected) {
@@ -78,6 +83,7 @@ export const enterInSnippetsAction = async (params: string) => {
         const existingParticipants = await prismadb.collectionParticipant.findMany({
           where: {
             collectionId: existingCollection?.id,
+            onStandBy: false // qui n'ont pas quitté
           },
           orderBy: {
             rank: 'asc',
@@ -113,7 +119,8 @@ export const enterInSnippetsAction = async (params: string) => {
               amountId: amountConcerned.id,
               currency: connected.currency,
               collectionType: ctype,
-              groupStatus: 1
+              groupStatus: 1,
+              group: currentGroup // nombre actuel de participants autorisé
             }
           });
           // on l'entre
@@ -130,6 +137,15 @@ export const enterInSnippetsAction = async (params: string) => {
         }
       
         // Si aucune rencontre → on l’ajoute à la collecte existante
+
+        // On vérifie s'il n'y a pas de onStandBy à true
+        const standByCount = await prismadb.collectionParticipant.count({
+          where:{
+            collectionId: existingCollection.id,
+            onStandBy: true
+          }
+        })
+
         const newRank = currentGroupStatus + 1;
         const isGroupNowComplete = newRank === 4;
       
@@ -173,7 +189,10 @@ export const enterInSnippetsAction = async (params: string) => {
         
           for (const coll of openCollections) {
             const participants = await prismadb.collectionParticipant.findMany({
-              where: { collectionId: coll.id },
+              where: { 
+                collectionId: coll.id,
+                onStandBy: false
+              },
               orderBy: { rank: "asc" }
             });
         
@@ -218,7 +237,7 @@ export const enterInSnippetsAction = async (params: string) => {
         
               // Mise à jour du groupStatus
               const updateData: any = { groupStatus: newRank };
-              if (newRank === 4) updateData.isGroupComplete = true;
+              if (newRank === coll?.group) updateData.isGroupComplete = true;
         
               await prismadb.collection.update({
                 where: { id: coll.id },
@@ -237,7 +256,8 @@ export const enterInSnippetsAction = async (params: string) => {
                 amountId: amountConcerned.id,
                 currency: connected.currency,
                 collectionType: ctype,
-                groupStatus: 1
+                groupStatus: 1,
+                group: currentGroup // nombre actuel de participants autorisé
               }
             });
         

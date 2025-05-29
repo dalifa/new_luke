@@ -1,6 +1,7 @@
-import { enterInSnippetsAction } from "@/actions/snippets/enter_in_snippets_action"
-import GoBack from "@/components/dashboard/snippets/cancel-button"
-import { ConfirmEnterSnippets } from "@/components/dashboard/snippets/confirm-enter-button"
+//
+import { enterInSnippetsAction } from "@/actions/snippets/enter_in_collection_action";
+import GoBack from "@/components/dashboard/snippets/cancel_button";
+import { ConfirmEnterSnippetsClient } from "@/components/dashboard/snippets/confirm_enter_button";
 import { Card } from "@/components/ui/card"
 import { CurrentProfile } from "@/hooks/own-current-user"
 import { prismadb } from "@/lib/prismadb"
@@ -16,6 +17,7 @@ const ConfirmEnterInSnippets = async ({params}:{params: {snippetsEnterId:string}
     where: {
       recipientValidation: false,
       amountId: concernedAmount?.id,
+      onStandBy: false,
       OR: [
         { participantId: connected?.id },
         { recipientId: connected?.id }
@@ -40,9 +42,7 @@ const ConfirmEnterInSnippets = async ({params}:{params: {snippetsEnterId:string}
               <h2 className="text-center">Confirmez-vous vouloir bénir de <span className="font-medium ">{concernedAmount?.amount}€</span> </h2>
               <div className="grid grid-cols-2 gap-10 mt-10">
                 <GoBack/>
-                <form action={enterInASnippetsAmountId}>
-                  <ConfirmEnterSnippets/>
-                </form>
+                <ConfirmEnterSnippetsClient amountId={params.snippetsEnterId}/>
               </div>
             </div>
           </Card>):(

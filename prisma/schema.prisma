@@ -134,6 +134,7 @@ model CollectionParticipant {
   participantId         String     @db.ObjectId
   participant           Profile    @relation("donations", fields: [participantId], references: [id])
   rank                  Int // son rang dans la collecte
+  onStandBy             Boolean    @default(false)
   // est ce qu'il a choisi le recipient
   isRecipientChosen     Boolean     @default(false)
   recipientChosenOn     DateTime? // date du choix
@@ -205,8 +206,8 @@ model CommissionRate {
 // TRÈS IMPORTANT
 model Metric {
   id                   String  @id @default(auto()) @map("_id") @db.ObjectId
-  // maximum de personnes dans la liste
-  maxDisplays          Int  @default(4)
+  // maximum de personnes dans la liste actuellement
+  currentGroup         Int  @default(4)
   //
 }
 //

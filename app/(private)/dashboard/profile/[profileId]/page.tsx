@@ -1,5 +1,4 @@
 //
-
 import { auth } from "@/auth"
 import { prismadb } from "@/lib/prismadb"
 import { decrypt } from "@/lib/utils"
@@ -28,7 +27,10 @@ const Profile = async ({ params }: { params: { profileId: string } }) => {
       <div className="flex w-full md:w-3/5 mt-2">
         <div className="flex flex-col items-center justify-center text-slate-600 bg-white rounded p-2 gap-y-5 md:p-5 w-full mx-8 shadow-xl">
           <div className="mt-5">
-            <p className="text-center text-indigo-600 text-xl font-medium">Vos informations de profil</p>
+            { concerned?.city === "ville" || concerned?.username === "pseudo" || concerned?.firstname === "prénom" ? (
+              <p className="text-center text-indigo-600 text-xl font-medium">Mettre à jour vos infos</p>):(
+              <p className="text-center text-indigo-600 text-xl font-medium">Modifier vos informations</p>
+            )}
           </div>
           <div className='w-full flex flex-col items-center justify-center gap-x-4 gap-y-10 mb-5 p-4'>
             { concerned && (

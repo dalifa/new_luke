@@ -12,7 +12,8 @@ export const MyCollections = async () => {
   const myCollections = await prismadb.collectionParticipant.findMany({
     where: {
       participantId: connected?.id,
-      recipientValidation: false
+      recipientValidation: false,
+      onStandBy: false
     }
   })
   //

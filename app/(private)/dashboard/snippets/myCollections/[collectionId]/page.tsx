@@ -1,7 +1,9 @@
 
-import { donorValidationAction } from '@/actions/snippets/donorValidation_Action'
+
+import { donorValidationAction } from '@/actions/snippets/donorTransferValidation_Action'
 import ChooseRecipientButton from '@/components/dashboard/snippets/chosenRecipientButton'
 import DonorValidation from '@/components/dashboard/snippets/donor_Validation'
+import LeaveCollectionButton from '@/components/dashboard/snippets/leaveCollectionButton'
 import RecipientValidation from '@/components/dashboard/snippets/recipient_Validation'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Card } from '@/components/ui/card'
@@ -20,6 +22,7 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
   const participants = await prismadb.collectionParticipant.findMany({
     where: { 
       collectionId: params?.collectionId,
+      onStandBy: false
     },
     include: { 
       participant: true,
@@ -62,7 +65,7 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
       recipientValidation: false
     }
   })
-  // SI LE CONNECTÉ A REÇU DE TOUS LES PARTICIPANTS
+  // SI LE CONNECTÉ A ETE CHOISI PAR DE TOUS LES PARTICIPANTS
   const result1 = await prismadb.collectionResult.findFirst({
     where: {
       collectionId: params?.collectionId,
@@ -196,7 +199,15 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
                 </div>
               ) 
             }
-            <Separator className="my-4" />   
+            <Separator className="my-4"/>  
+            {/* Si le groupe n'est pas complet on affiche le boutton sortir */} 
+            {
+              connected && connected?.id === donor?.participantId && verif?.isGroupComplete === false && (
+                <LeaveCollectionButton 
+                collectionId={params.collectionId}
+                participantId={connected.id} />
+              )
+            }
             <div>
               { donor?.donorValidation && (<p>Validé le:</p>)}
               { donor?.donorValidationAt && (<p>{format(new Date(donor?.donorValidationAt), DATE_FORMAT)}</p>)}
@@ -234,18 +245,26 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
                 // le connecté n'a pas encore choisi
                 recipientChosen?.isRecipientChosen === false && 
                 // le connecté n'est pas le participant concerné
-                connected?.id !== donor?.participantId && 
+                connected?.id !== donor?.participantId || 
                 (
+                  connected && 
+                  // le group est complet
+                  verif?.isGroupComplete === true &&
+                  // le connecté n'a pas encore choisi
+                  recipientChosen?.isRecipientChosen === false && 
+                  // le connecté n'est pas le participant concerné
+                  connected?.id !== donor?.participantId &&
                   // le connecté à reçu de tous ou le connecté n'est pas recipient participant concerné
-                  result1?.donationReceived === verif?.group - 1 || connected?.id !== donor?.recipientId) && (
+                  //result1?.donationReceived === verif?.group - 1 || connected?.id !== donor?.recipientId) && (
+                  result1?.donationReceived === verif?.group - 1 ) && (
                     <ChooseRecipientButton
                       collectionId={params.collectionId}
                       participantId={connected.id}
                       recipientId={donor?.participant?.id}
                     />
-                  )}
+                )}
               </>
-            )}
+            )} 
             {/* n'apparait que sur le profil du participant donor connecté */}
             {
               recipientChosen?.recipientId && recipientChosen.recipientId === donor?.participantId && (
