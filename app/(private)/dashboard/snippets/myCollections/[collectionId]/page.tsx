@@ -12,7 +12,7 @@ import { capitalize, CurrentProfile } from '@/hooks/own-current-user'
 import { prismadb } from '@/lib/prismadb'
 import { decrypt } from '@/lib/utils'
 import { format } from "date-fns"
-import { ArrowUp01, BadgeDollarSign, Building2, FilePen, HandCoins, MapPin, Phone, Send, UserRound } from 'lucide-react'
+import { ArrowUp01, BadgeDollarSign, Building2, CheckSquare, FilePen, HandCoins, MapPin, Phone, Send, UserRound } from 'lucide-react'
 // 
 const DATE_FORMAT = "d MMM yyyy, HH:mm" 
 
@@ -74,6 +74,14 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
       donorId: connected?.id
     }
   })
+  // nombre de fois que le connecté à validé en tant que recipient (Number Of Validation As Recipient)
+  const novar = await prismadb.collectionParticipant.count({
+    where: {
+      collectionId: params?.collectionId,
+      recipientId: connected?.id,
+      recipientValidation: true
+    }
+  })
   // 
   async function handleConfirm() {
     "use server";
@@ -107,7 +115,7 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
             </p>)}
             <Separator/> 
             {
-              // affiché seulement si destinataire
+              // affiché seulement si le participantId est destinataire d'un autre
               connectedAsParticipant?.recipientId && connectedAsParticipant.recipientId === donor?.participantId && (
                 <div className='w-full flex flex-row gap-4 mt-2'>
                   <div className='basis-1/3'>
@@ -194,20 +202,34 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
               </div>
               )
             }
+            {
+              connected?.id === donor?.participantId && connectedAsRecipient?.recipientValidation === true && (
+                <div className='w-full flex flex-row gap-4 mt-2'>
+                <div className='basis-1/3'>
+                  <CheckSquare className="text-indigo-600"/>
+                </div>
+                <div className='basis-2/3 text-end'>
+                  <p className="text-slate-700">
+                    <strong>{novar}</strong> {novar > 1 ? (<span className='text-green-600'>dons confirmés reçus</span>):(<span className='text-green-600'>don confirmé reçu</span>)}
+                  </p>
+                </div>
+              </div>
+              )
+            }
             <Separator className="my-4"/>  
             {/* Si le groupe n'est pas complet on affiche le boutton sortir */} 
             {
               connected && connected?.id === donor?.participantId && concernedCollection?.isGroupComplete === false && (
                 <LeaveCollectionButton 
                 collectionId={params.collectionId}
-                participantId={connected.id} />
+                participantId={connected.id}/>
               )
             }
             <div>
-              { donor?.donorValidation && (<p>Validé le:</p>)}
-              { donor?.donorValidationAt && (<p>{format(new Date(donor?.donorValidationAt), DATE_FORMAT)}</p>)}
+              { donor?.donorValidation && (donor?.recipientId === connected?.id || connected?.id === donor?.participantId ) && (<p>Validé le:</p>)}
+              { donor?.donorValidationAt && (donor?.recipientId === connected?.id || connected?.id === donor?.participantId ) && (<p>{format(new Date(donor?.donorValidationAt), DATE_FORMAT)}</p>)}
             </div>
-            {donor?.donorValidation && (
+            {donor?.donorValidation && (donor?.recipientId === connected?.id || connected?.id === donor?.participantId ) && (
               <div className='w-full flex flex-row gap-4 mt-2'>
                 <div className='basis-1/3'>
                   <BadgeDollarSign className='text-indigo-600'/>
@@ -217,7 +239,7 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
                 </div>  
               </div>
             )}
-            {donor?.donorValidation && (
+            {donor?.donorValidation && (donor?.recipientId === connected?.id || connected?.id === donor?.participantId ) && (
               <div className='w-full flex flex-row gap-4 mt-2'>
                 <div className='basis-1/3'>
                   <Send className='text-indigo-600'/>
@@ -278,15 +300,22 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
 
             {/* ################ S'AFFICHE SUR LE PROFIL DU RECIPIENT ############### */}
             {
-              connectedAsParticipant?.isRecipientChosen === true && connectedAsParticipant?.recipientId === donor?.participantId && donor?.donorValidation === false && (
+              connectedAsParticipant?.isRecipientChosen === true && connectedAsParticipant?.recipientId === donor?.participantId && donor?.recipientValidation === false && (
                 <button className="w-full mt-4 bg-green-600 text-white px-4 py-2 rounded-lg disabled:opacity-50">
                   Votre Destinataire
                 </button>
               )
             }
+            {
+              connectedAsParticipant?.recipientId === donor?.participantId && connectedAsParticipant?.recipientValidation === true && (
+                <button className="w-full mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg disabled:opacity-50">
+                  Votre destinataire a confirmé avoir reçu le don
+                </button>
+              )
+            }
             {/* n'apparait que sur le profil du connecté s'il est recipientId */}
             {
-              result1AsRecipient && connected?.id === donor?.participantId && (
+              result1AsRecipient && connected?.id === donor?.participantId && connectedAsRecipient?.recipientValidation === false && (
                 <button className="w-full mt-4 bg-green-600 text-white px-4 py-2 rounded-lg disabled:opacity-50">
                   Vous avez été choisi {result1AsRecipient?.donationReceived > 1 && (<span>({result1AsRecipient?.donationReceived})</span>)}
                 </button>
@@ -295,9 +324,9 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
             {/* n'apparait que sur le profil du recipient connecté */}
             { isReceipientValidationCount > 0 && connected?.id === donor?.participantId && (
                 <RecipientValidation 
-                collectionId={params.collectionId}
+                collectionId={params.collectionId} 
                 recipientId={connected.id}
-                donorId={donor?.recipient?.id ?? ""}
+                //donorId={donor?.recipient?.id ?? ""}  
               />
               )
             }

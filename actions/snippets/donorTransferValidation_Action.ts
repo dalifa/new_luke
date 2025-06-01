@@ -1,13 +1,18 @@
 // actions/snippets/donorValidation_Action.ts
-'use server';
+'use server'; 
 
+import { CurrentProfile } from '@/hooks/own-current-user';
 import { prismadb } from '@/lib/prismadb';
 import { revalidatePath } from 'next/cache';
+import { connected } from 'process';
 
 export async function donorValidationAction(recipientId: string, collectionId: string) {
   try {
+    const connected = await CurrentProfile()
+    //
     await prismadb.collectionParticipant.updateMany({
       where: {
+        participantId: connected?.id,
         recipientId,
         collectionId,
       },

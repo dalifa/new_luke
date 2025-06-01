@@ -3,7 +3,7 @@
 import { CurrentProfile } from "@/hooks/own-current-user"
 import { prismadb } from "@/lib/prismadb"
 import { revalidatePath } from "next/cache"
-import { number } from "zod"
+
 
 export async function recipientValidationAction({
   collectionId,
@@ -20,6 +20,7 @@ export async function recipientValidationAction({
 
   try {
     const connected = await CurrentProfile()
+    //
     const exist = await prismadb.collectionParticipant.findFirst({
       where: {
         collectionId,
@@ -48,6 +49,27 @@ export async function recipientValidationAction({
           profileId: exist?.participantId,
           profileMetId: recipientId 
         },
+      })
+      // On update le total reçu ou donné par le recipient et le donor
+      const donorProfile = await prismadb.profile.findFirst({
+        where: {
+          id: exist?.participantId
+        }
+      })
+      // LE DONOR A DONNÉ EN PLUS
+      if(donorProfile)
+      {
+        await prismadb.profile.updateMany({
+          where: { id: exist?.participantId },
+          data: {
+            given: donorProfile?.given + exist?.concernedAmount
+          }
+        })
+      }
+      // LE RECIPIENT A REÇU EN PLUS
+      await prismadb.profile.updateMany({
+        where: { id: connected?.id },
+        data: { received: connected?.received + exist?.concernedAmount }
       })
     
 

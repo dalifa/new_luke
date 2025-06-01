@@ -14,21 +14,14 @@ import Link from 'next/link';
 // pour forma date
 import { format } from "date-fns"
 // on crée une constance pour date
-const DATE_FORMAT = "d MMM yyyy"
+const DATE_FORMAT = "d MMM yyyy" 
 
 const History = async () => {
   const connected = await CurrentProfile()
-  //    HISTORIQUE DES BÉNÉDICTIONS FAITES
-  const blessingsMade = await prismadb.collectionParticipant.findMany({
+  //    HISTORIQUE DES LISTES DE BÉNÉDICTIONS
+  const historics = await prismadb.collectionParticipant.findMany({
     where: {
       participantId: connected?.id,
-      recipientValidation: true
-    }
-  }) 
-  //    HISTORIQUE DES BÉNÉDICTIONS REÇU
-  const blessingsReceived = await prismadb.collectionParticipant.findMany({
-    where: {
-      recipientId: connected?.id,
       recipientValidation: true
     }
   }) 
@@ -39,48 +32,22 @@ const History = async () => {
             Historique des bénédictions
           </p>
         </div>
-        <Tabs defaultValue="made" className="">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="made">Dons faits</TabsTrigger>
-            <TabsTrigger value="received">Dons reçus</TabsTrigger>
-          </TabsList>
-          <TabsContent value="made">
-            <div className='w-full grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4'>
+        <div className='w-full grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4'>
             {
-              blessingsMade.map((made) => (
-                <div key={made?.id}>
-                  <Link  href={`/dashboard/historique/${made?.id}`}>
-                    <Card className='flex items-center flex-col shadow-md shadow-blue-100 p-4 text-center gap-y-2'>
+              historics.map((historic) => (
+                <div key={historic?.id}>
+                  <Link  href={`/dashboard/historique/${historic?.id}`}>
+                    <Card className='flex items-center flex-col shadow-md p-4 text-center gap-y-2'>
                         <p className='text-xl font-medium text-indigo-600'>
-                          Bénédiction de {made?.concernedAmount}{connected?.currency}
+                          Liste de bénédiction de {historic?.concernedAmount}{connected?.currency}
                         </p>
-                        <p className='text-xs text-gray-500'>Du: {format(new Date(made?.createdAt), DATE_FORMAT)}</p>
+                        <p className='text-xs text-gray-500'>Du: {format(new Date(historic?.createdAt), DATE_FORMAT)}</p>
                     </Card>
                   </Link>
                 </div>
               ))
             }
             </div>
-          </TabsContent>
-          <TabsContent value="received">
-            <div className='w-full grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4'>
-            {
-              blessingsReceived.map((received) => (
-                <div key={received?.id}>
-                  <Link  href={`/dashboard/historique/${received?.id}`}>
-                    <Card className='flex items-center flex-col shadow-md shadow-blue-100 p-4 text-center gap-y-2'>
-                      <p className='text-xl font-medium text-indigo-600'>
-                        Bénédiction de {received?.concernedAmount}{connected?.currency}
-                      </p>
-                      <p className='text-xs text-gray-500'>Du: {format(new Date(received?.createdAt), DATE_FORMAT)}</p>
-                    </Card>
-                  </Link>
-                </div>
-              ))
-            }
-            </div>
-          </TabsContent>
-        </Tabs>
       </div>
     )
 }
