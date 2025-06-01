@@ -17,8 +17,14 @@ import { ArrowUp01, BadgeDollarSign, Building2, FilePen, HandCoins, MapPin, Phon
 const DATE_FORMAT = "d MMM yyyy, HH:mm" 
 
 const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
-  const connected = await CurrentProfile()
-  // TOUS LES PARTICIPANT À LA COLLECTE
+  const connected:any = await CurrentProfile()
+  // LA COLLECTE CONCERNÉE
+  const concernedCollection = await prismadb.collection.findFirst({
+    where: {
+      id: params?.collectionId
+    }
+  })
+  // TOUS LES PARTICIPANTS À LA COLLECTE
   const participants = await prismadb.collectionParticipant.findMany({
     where: { 
       collectionId: params?.collectionId,
@@ -29,33 +35,22 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
       recipient: true
     }
   })
-  // LE RECIPIENT QU'IL A CHOISI
-  const recipientChosen = await prismadb.collectionParticipant.findFirst({
+  // LE CONNECTÉ COMME PARTICIPANT
+  const connectedAsParticipant = await prismadb.collectionParticipant.findFirst({
     where: {
       collectionId: params?.collectionId,
       participantId: connected?.id
     }
   })
-  // SI LE GROUP EST COMPLET
-  const verif = await prismadb.collection.findFirst({
-    where: {
-      id: params?.collectionId
-    }
-  })
-  // le nbre de fois qu'il est recipient
-  const isReceipientCount = await prismadb.collectionParticipant.count({
+  //
+  // LE CONNECTÉ COMME RECIPIENT
+  const connectedAsRecipient = await prismadb.collectionParticipant.findFirst({
     where: {
       collectionId: params?.collectionId,
       recipientId: connected?.id
     }
   })
-  // le select tout les donation number s'il a été choisi > 1 
-  const dNumbers = await prismadb.collectionParticipant.findMany({
-    where: {
-      collectionId: params?.collectionId,
-      recipientId: connected?.id
-    }
-  })
+  //
   // le nbr de fois que son donor a validé et pas lui
   const isReceipientValidationCount = await prismadb.collectionParticipant.count({
     where: {
@@ -65,18 +60,25 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
       recipientValidation: false
     }
   })
-  // SI LE CONNECTÉ A ETE CHOISI PAR DE TOUS LES PARTICIPANTS
-  const result1 = await prismadb.collectionResult.findFirst({
+  // SI LE CONNECTÉ A ETE CHOISI PAR TOUS LES PARTICIPANTS
+  const result1AsRecipient = await prismadb.collectionResult.findFirst({
     where: {
       collectionId: params?.collectionId,
       recipientId: connected?.id
     }
   })
+  // si le connecté à choisi son destinataire
+  const result2AsDonor = await prismadb.collectionResult.findFirst({
+    where: {
+      collectionId: params?.collectionId,
+      donorId: connected?.id
+    }
+  })
   // 
   async function handleConfirm() {
     "use server";
-    if (!recipientChosen?.recipientId) return;
-    await donorValidationAction(recipientChosen?.recipientId, params.collectionId);
+    if (!connectedAsParticipant?.recipientId) return;
+    await donorValidationAction(connectedAsParticipant?.recipientId, params.collectionId);
   }
   //
   return (
@@ -106,7 +108,7 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
             <Separator/> 
             {
               // affiché seulement si destinataire
-              recipientChosen?.recipientId && recipientChosen.recipientId === donor?.participantId && (
+              connectedAsParticipant?.recipientId && connectedAsParticipant.recipientId === donor?.participantId && (
                 <div className='w-full flex flex-row gap-4 mt-2'>
                   <div className='basis-1/3'>
                     <UserRound className='text-indigo-600'/>
@@ -146,7 +148,7 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
               </div>
             </div>
             {
-              recipientChosen?.recipientId && recipientChosen.recipientId === donor?.participantId && (
+              connectedAsParticipant?.recipientId && connectedAsParticipant.recipientId === donor?.participantId && (
                 <div className='w-full flex flex-row gap-4 mt-2'>
                   <div className='basis-1/3'>
                     <Phone className="text-indigo-600"/>
@@ -179,30 +181,23 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
                 </p>
               </div>
             </div>
-            {
-              connected?.id === donor?.participant?.id && donor?.isRecipientChosen === true && donor?.recipientValidation === false && (
-                <div className='w-full grid grid-cols-1'>
-                  {
-                    dNumbers.map((nbr) =>(
-                      <div key={nbr?.id} className='w-full flex flex-row gap-4 mt-2'>
-                        <div className='basis-1/3'>
-                          <ArrowUp01 className="text-indigo-600"/>
-                        </div>
-                        <div className='basis-2/3 text-end'>
-                          <p className="text-slate-700">
-                            <strong>{donor?.donationNumber}</strong>
-                          </p>
-                        </div>
-                      </div>
-                    ))
-                  }
+            { connected && connected?.id === donor?.participantId && donor?.isRecipientChosen === true && (
+              <div className='w-full flex flex-row gap-4 mt-2'>
+                <div className='basis-1/3'>
+                  <ArrowUp01 className="text-indigo-600"/>
                 </div>
-              ) 
+                <div className='basis-2/3 text-end'>
+                  <p className="text-slate-700">
+                    <strong>{donor?.donationNumber}</strong>
+                  </p>
+                </div>
+              </div>
+              )
             }
             <Separator className="my-4"/>  
             {/* Si le groupe n'est pas complet on affiche le boutton sortir */} 
             {
-              connected && connected?.id === donor?.participantId && verif?.isGroupComplete === false && (
+              connected && connected?.id === donor?.participantId && concernedCollection?.isGroupComplete === false && (
                 <LeaveCollectionButton 
                 collectionId={params.collectionId}
                 participantId={connected.id} />
@@ -212,7 +207,7 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
               { donor?.donorValidation && (<p>Validé le:</p>)}
               { donor?.donorValidationAt && (<p>{format(new Date(donor?.donorValidationAt), DATE_FORMAT)}</p>)}
             </div>
-            {donor?.donatorValidation && (
+            {donor?.donorValidation && (
               <div className='w-full flex flex-row gap-4 mt-2'>
                 <div className='basis-1/3'>
                   <BadgeDollarSign className='text-indigo-600'/>
@@ -222,78 +217,57 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
                 </div>  
               </div>
             )}
-            {donor?.donatorValidation && (
+            {donor?.donorValidation && (
               <div className='w-full flex flex-row gap-4 mt-2'>
                 <div className='basis-1/3'>
                   <Send className='text-indigo-600'/>
                 </div>
                 <div className='basis-2/3 text-end'>
-                  <p>SMS:{donor?.donationNumber} &nbsp;<span className='text-green-600'>OK</span></p>
+                  <p>SMS &nbsp;<span className='text-green-600'>OK</span></p>
                 </div>
               </div>
             )}
-            {/* le donateur confirme avoir donné */}
-            { connected && donor?.donatorValidation === false && connected?.id === donor?.participantId && donor?.isRecipientChosen === true ? (
+            {/* le connecté est le participantId, il a choisi le destinataire, et n'a pas encore validé le transfert == on affiche */}
+            { connected && donor?.donorValidation === false 
+            && connected?.id === donor?.participantId 
+            && donor?.isRecipientChosen === true && (
               <DonorValidation onConfirm={handleConfirm}/>
-            ):(
-              <>
-              {
-                // la session exist
-                connected && 
-                // le group est complet
-                verif?.isGroupComplete === true &&
-                // le connecté n'a pas encore choisi
-                recipientChosen?.isRecipientChosen === false && 
-                // le connecté n'est pas le participant concerné
-                connected?.id !== donor?.participantId || 
-                (
-                  connected && 
-                  // le group est complet
-                  verif?.isGroupComplete === true &&
-                  // le connecté n'a pas encore choisi
-                  recipientChosen?.isRecipientChosen === false && 
-                  // le connecté n'est pas le participant concerné
-                  connected?.id !== donor?.participantId &&
-                  // le connecté à reçu de tous ou le connecté n'est pas recipient participant concerné
-                  //result1?.donationReceived === verif?.group - 1 || connected?.id !== donor?.recipientId) && (
-                  result1?.donationReceived === verif?.group - 1 ) && (
-                    <ChooseRecipientButton
-                      collectionId={params.collectionId}
-                      participantId={connected.id}
-                      recipientId={donor?.participant?.id}
-                    />
-                )}
-              </>
             )} 
-            {/* n'apparait que sur le profil du participant donor connecté */}
+            {/* 
+            CAS OÙ LE CONNECTÉ EST CHOISI ET N'A PAS ENCORE CHOISI
+            */}
             {
-              recipientChosen?.recipientId && recipientChosen.recipientId === donor?.participantId && (
-                <button className="w-full mt-4 bg-green-700 text-white px-4 py-2 rounded-lg disabled:opacity-50">
-                  Destinataire choisi
-                </button>
+              concernedCollection?.isGroupComplete === true  // si le groupe est complet
+              && connected?.id && connected?.id !== donor?.participantId // le connecté n'es pas le participant affiché
+              && connectedAsParticipant?.isRecipientChosen === false // le connecté n'a pas encore choisi de recipient
+              && (!connectedAsRecipient || connectedAsRecipient && connectedAsRecipient?.participantId !== donor?.participantId)  // le connecté a été choisi et celui qui l'a choisi n'est pas le participant affiché
+              && (
+                <ChooseRecipientButton collectionId={params?.collectionId} participantId={connected?.id} recipientId={donor?.participant?.id}/>
+              )
+            }
+            {/* 
+            CAS OÙ LE CONNECTÉ EST CHOISI PAR TOUS LES AUTRES PARTICIPANT ET N'A PAS ENCORE CHOISI
+            */}
+            {
+              concernedCollection?.isGroupComplete === true  // si le groupe est complet
+              && connected?.id && connected?.id !== donor?.participantId // le connecté n'es pas le participant affiché
+              && connectedAsParticipant?.isRecipientChosen === false // le connecté n'a pas encore choisi de recipient
+              && result1AsRecipient?.donationReceived === concernedCollection?.group - 1  // le connecté a été choisi par 99% des participants
+              && (
+                <ChooseRecipientButton collectionId={params?.collectionId} participantId={connected?.id} recipientId={donor?.participant?.id}/>
               )
             }
             {/* n'apparait que sur le profil du recipient connecté */}
             {
               connected?.id === donor?.recipientId && (
-                <button className="w-full mt-4 bg-green-700 text-white px-4 py-2 rounded-lg disabled:opacity-50">
-                  Votre donateur
+                <button className="w-full mt-4 bg-green-600 text-white px-4 py-2 rounded-lg disabled:opacity-50">
+                  Votre Donateur
                 </button>
               )
             }
-            {/* n'apparait que sur le profil du recipient connecté */}
-            {
-              isReceipientCount > 0 && connected?.id === donor?.participantId && (
-                <button className="w-full mt-4 bg-green-700 text-white px-4 py-2 rounded-lg disabled:opacity-50">
-                  Vous avez été choisi {isReceipientCount > 1 && (<span>({isReceipientCount})</span>)}
-                </button>
-              )
-            }
-            {/* n'apparait que sur le profil du recipient connecté */}
-            { isReceipientValidationCount > 0 && connected?.id === donor?.participantId && (
-                <RecipientValidation/> 
-              )
-            }
+            {/* TODO: - ou si le connecté a été choisi par tous les participant */}
+            {/* si le connecté est le donor, on affiche ceci sur le profil de son destinataire s'il n'a pas encore validé le transfert */}
+            
             {/* n'apparait que sur le profil du participant donor connecté */}
             {donor?.donorValidation && connected?.id === donor?.participantId && (
               <div className='mt-5'>
@@ -301,6 +275,32 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
                 <p className='mt-5 text-indigo-600'>Merci pour votre générosité 🙏🏼</p>
               </div> 
             )}
+
+            {/* ################ S'AFFICHE SUR LE PROFIL DU RECIPIENT ############### */}
+            {
+              connectedAsParticipant?.isRecipientChosen === true && connectedAsParticipant?.recipientId === donor?.participantId && donor?.donorValidation === false && (
+                <button className="w-full mt-4 bg-green-600 text-white px-4 py-2 rounded-lg disabled:opacity-50">
+                  Votre Destinataire
+                </button>
+              )
+            }
+            {/* n'apparait que sur le profil du connecté s'il est recipientId */}
+            {
+              result1AsRecipient && connected?.id === donor?.participantId && (
+                <button className="w-full mt-4 bg-green-600 text-white px-4 py-2 rounded-lg disabled:opacity-50">
+                  Vous avez été choisi {result1AsRecipient?.donationReceived > 1 && (<span>({result1AsRecipient?.donationReceived})</span>)}
+                </button>
+              )
+            }
+            {/* n'apparait que sur le profil du recipient connecté */}
+            { isReceipientValidationCount > 0 && connected?.id === donor?.participantId && (
+                <RecipientValidation 
+                collectionId={params.collectionId}
+                recipientId={connected.id}
+                donorId={donor?.recipient?.id ?? ""}
+              />
+              )
+            }
           </div>
         </Card>
         ))}

@@ -37,12 +37,12 @@ function ChooseRecipientButton({
 
   return (
     <Dialog>
-      <DialogTrigger asChild className="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 disabled:opacity-50">
+      <DialogTrigger className="text-xl font-semibold mt-4 bg-indigo-600 text-white px-4 py-4 rounded-lg hover:bg-indigo-700 disabled:opacity-50">
         Choisir comme bénéficiaire
       </DialogTrigger>
       <DialogContent className="w-full flex flex-col items-center justify-center">
         <DialogHeader className='mt-5'>
-          <DialogTitle></DialogTitle>
+          <DialogTitle className='text-center mb-5 text-indigo-600 text-2xl'>Personne à bénir</DialogTitle>
           <DialogDescription className='text-center text-xl text-slate-700'>
             <span>NB:</span>&nbsp;Votre choix sera irréverssible
           </DialogDescription>
@@ -52,18 +52,17 @@ function ChooseRecipientButton({
         <button
           onClick={handleClick}
           disabled={isPending}
-          className="w-full h-12 font-semibold text-xl rounded-lg text-white bg-red-500 hover:bg-red-600"
+          className="w-full p-2 font-semibold text-xl rounded-lg text-white bg-red-500 hover:bg-red-600"
         >
-          {isPending ? 'Choix en cours...' : 'Choisir comme bénéficiaire'} 
+          {isPending ? 'Choix en cours...' : 'Oui, je choisi ce destinataire'} 
         </button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   )
 }
-
+//
 export default ChooseRecipientButton
-
 
 /*
 

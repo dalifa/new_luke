@@ -23,7 +23,7 @@ export async function recipientChoiceAction({
         participantId,
       },
       data: {
-        // donationNumber à refaire en mieux
+        // donationNumber à refaire en mieux  
         donationNumber: 1000 + nbr,
         recipientId,
         isRecipientChosen: true,
@@ -31,6 +31,40 @@ export async function recipientChoiceAction({
       }
     })
     // ENTRER LE DONOR ET LE RECIPIENT DANS RESULT POUR SAVOIR QUI À CHOISI QUI
+    await prismadb.collectionResult.create({
+      data:{
+        collectionId,
+        donorId: participantId,
+        recipientId,
+      }
+    })
+    // on vérifie si le recipient a déjà été choisi dans cette collecte
+    const recipientCount = await prismadb.collectionResult.count({
+      where: {
+        collectionId,
+        recipientId
+      }
+    }) 
+    //
+    const recipientResult = await prismadb.collectionResult.findFirst({
+      where: {
+        collectionId,
+        recipientId
+      }
+    }) 
+    //
+    if(recipientCount > 0 && recipientResult)
+    {
+      await prismadb.collectionResult.updateMany({
+        where: {
+          collectionId,
+          recipientId
+        },
+        data: {
+          donationReceived: recipientResult?.donationReceived + 1
+        }
+      })
+    }
     //
     revalidatePath(`/dashboard/snippets/myCollections/${collectionId}`);
     redirect(`/dashboard/snippets/myCollections/${collectionId}`);
@@ -42,39 +76,5 @@ export async function recipientChoiceAction({
 }
 
 
-/* "use server";
-import { CurrentProfile } from "@/hooks/own-current-user";
-//
-import { prismadb } from "@/lib/prismadb";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-//
-export async function recipientChoiceAction(collectionId: string) {
-  const connected = await CurrentProfile()
-  if (!collectionId) return;
-  // on select le amountId concerné
-  const concerned = await prismadb.collectionParticipant.findFirst({
-    where: {
-      collectionId
-    }
-  })
-  //
-  if(connected?.id)
-  {
-    await prismadb.collectionParticipant.updateMany({
-      where: { 
-        collectionId,
-        participantId: connected?.id,
-        isRecipientChosen: true
-      },
-      data: {
-        donorValidation: true,
-        donorValidationAt: new Date(), // Date et heure actuelles
-      },
-    });
-  }
-  //
-  revalidatePath(`/dashboard/snippets/myCollections/${concerned?.collectionId}`);
-  redirect(`/dashboard/snippets/myCollections/${concerned?.collectionId}`);
-}
+/* 
 */

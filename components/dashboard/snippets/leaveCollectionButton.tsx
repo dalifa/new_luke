@@ -41,7 +41,7 @@ function LeaveCollectionButton({
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
+      <DialogTrigger asChild> 
         <Button className="w-full mt-4 bg-red-400 text-white px-4 py-2 rounded-lg hover:bg-red-500 disabled:opacity-50">Quitter</Button>
       </DialogTrigger>
       <DialogContent className="w-full flex flex-col items-center justify-center">

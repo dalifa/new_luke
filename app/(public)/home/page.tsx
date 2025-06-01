@@ -138,7 +138,7 @@ const Home = () => {
       </div>
       <div className="flex flex-col items-center justify-center text-white bg-indigo-600 px-4 md:px-10 py-10 md:py-20 font-semibold">
         <p className="text-center text-3xl leading-relaxed">
-        Notre but ultime: Permettre à chaque enfant de Dieu, partout dans le monde, de bénir et d&apos;être béni en Continuellement.
+        Notre but ultime: Permettre à chaque enfant de Dieu, partout dans le monde, de bénir et d&apos;être béni continuellement.
         </p>
       </div>
       <div className="mb-10">

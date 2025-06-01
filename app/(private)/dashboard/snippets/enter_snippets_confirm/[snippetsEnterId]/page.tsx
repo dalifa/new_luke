@@ -33,7 +33,7 @@ const ConfirmEnterInSnippets = async ({params}:{params: {snippetsEnterId:string}
     <div className="flex flex-col w-full h-full pt-10 lg:pt-14 items-center justify-center bg-indigo-600">
       <div className="flex flex-col w-full h-screen pt-[20%] lg:pt-[10%] items-center">
         {
-           !existingPendingParticipation ? (
+          !existingPendingParticipation ? (
           <Card className="w-4/5 lg:w-2/5 px-5 py-10 lg:py-10 border-2 shadow-xl">
             <div className="flex flex-row items-center justify-center">
               <h1 className="text-center font-semibold text-indigo-600 text-2xl">Rejoindre une liste pour bénir</h1>

@@ -32,7 +32,7 @@ export default function DonorValidation({
   return (
     <Dialog>
       <DialogTrigger className="w-full font-medium p-3 bg-green-700 hover:bg-green-600 text-white rounded-md text-xl">
-        Confirmer le transfert
+        Confirmer avoir fait le transfert 
       </DialogTrigger>
       <DialogContent className="rounded-md w-4/5">
         <DialogHeader>

@@ -160,7 +160,7 @@ model CollectionParticipant {
 //
 model AlreadyMet {
   id               String   @id @default(auto()) @map("_id") @db.ObjectId
-  profileId        String?   @db.ObjectId
+  profileId        String?   @db.ObjectId // donor
   profile          Profile?  @relation("metProfiles", fields: [profileId], references: [id])
   profileMetId     String?   @db.ObjectId
   profileMet       Profile?  @relation("metByProfiles", fields: [profileMetId], references: [id])    

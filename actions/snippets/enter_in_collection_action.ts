@@ -3,7 +3,6 @@
 import { CurrentProfile } from "@/hooks/own-current-user";
 import { prismadb } from "@/lib/prismadb";
 import { revalidatePath } from "next/cache";  
-import { redirect } from "next/navigation"; 
 //
 export const enterInSnippetsAction = async (params: string) => {
   try {
@@ -14,6 +13,7 @@ export const enterInSnippetsAction = async (params: string) => {
     const amountConcerned = await prismadb.amount.findFirst({
       where: { id: params }
     });
+    //
     const ctype = "snippets";
     const connected = await CurrentProfile();
 
@@ -90,7 +90,6 @@ export const enterInSnippetsAction = async (params: string) => {
             rank: 'asc',
           }
         });
-      
         // Vérification de rencontres passées
         const hasAlreadyMet = async () => {
           for (const participant of existingParticipants) {
@@ -175,7 +174,7 @@ export const enterInSnippetsAction = async (params: string) => {
           // ON ENTRE LE CONNECTÉ À LA PLACE DU 1ER PARTICIPANT ID OÙ ONSTANBY === TRUE
           await prismadb.collectionParticipant.updateMany({
             where: {
-              participantId: firstStandBy?.participantId // l'ancien participant
+              id: firstStandBy?.id // l'ancien participant
             },
             data: {
               participantId: connected.id, // le nouveau qui le remplace
@@ -190,15 +189,7 @@ export const enterInSnippetsAction = async (params: string) => {
               ...(isGroupNowComplete && { isGroupComplete: true })
             }
           });
-          // TODO: envoyer les notifications email si groupe complet
-          
-          await prismadb.collection.update({
-            where: { id: existingCollection.id },
-            data: {
-              groupStatus: newRank,
-              ...(isGroupNowComplete && { isGroupComplete: true })
-            }
-          });
+
           // TODO: envoyer les notifications email si groupe complet
       }      
       // ################################################################
@@ -287,7 +278,7 @@ export const enterInSnippetsAction = async (params: string) => {
                 await prismadb.collectionParticipant.updateMany({
                   where: {
                     collectionId: coll?.id,
-                    participantId: firstStandBy?.participantId // l'ancien participant
+                    id: firstStandBy?.id // l'ancien participant
                   },
                   data: {
                     participantId: connected.id, // le nouveau
