@@ -263,7 +263,6 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
               && connected?.id && connected?.id !== donor?.participantId // le connecté n'es pas le participant affiché
               && connectedAsParticipant?.isRecipientChosen === false // le connecté n'a pas encore choisi de recipient
               && (!connectedAsRecipient || connectedAsRecipient && connectedAsRecipient?.participantId !== donor?.participantId)  // le connecté a été choisi et celui qui l'a choisi n'est pas le participant affiché
-              && result1AsRecipient?.donationReceived !== concernedCollection?.group - 1
               && (
                 <ChooseRecipientButton collectionId={params?.collectionId} participantId={connected?.id} recipientId={donor?.participant?.id}/>
               )

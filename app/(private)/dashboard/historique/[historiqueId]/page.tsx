@@ -35,7 +35,7 @@ const HistoryDetails = async ({
         recipientValidation: true,
         participantId: { not: connected?.id }
       },
-      include: {
+      include: { 
         participant: true, // celui qui a donné
         recipient: true    // celui qui a reçu
       }

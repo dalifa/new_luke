@@ -16,9 +16,10 @@ export const MyCollections = async () => {
         { recipientId: connected?.id },
       ],
       recipientValidation: false, 
-      onStandBy: false
-    }
-  })
+      onStandBy: false,
+    },
+    distinct: ['amountId'] // select  par amountId différent
+  }) 
   //
   return ( 
     <Card className="bg-white shadow-xl p-6 rounded-lg">
