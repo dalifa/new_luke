@@ -92,7 +92,7 @@ const Ccm = () => {
               Confirmation côté Destinataire
             </h1>
             <p className="text-xl md:text-2xl text-white text-justify">
-            Le bénéficiaire de votre don, confirme sur WBY qu&apos;il a bien reçu votre don en saisissant le <strong>Donation Number</strong>
+            Le bénéficiaire de votre don, confirme sur WBY qu&apos;il a bien reçu votre don en saisissant le <strong>Donation Number</strong> &nbsp;
             reçu dans le libellé du transfert et par SMS, dans un formulaire dédié.<br/> <br/>
             Cela vous permet de pouvoir à nouveau donner ce montant si vous le souhaitez.
             </p>
