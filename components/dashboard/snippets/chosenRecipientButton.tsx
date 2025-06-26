@@ -27,7 +27,7 @@ function ChooseRecipientButton({
         recipientId,
       })
 
-      if (res.success) {
+      if (res?.success) {
         toast.success('Bénéficiaire choisi', {
             description: 'Votre choix a été enregistré avec succès.',
         })
@@ -42,9 +42,9 @@ function ChooseRecipientButton({
       </DialogTrigger>
       <DialogContent className="w-full flex flex-col items-center justify-center">
         <DialogHeader className='mt-5'>
-          <DialogTitle className='text-center mb-5 text-indigo-600 text-2xl'>Personne à bénir</DialogTitle>
-          <DialogDescription className='text-center text-xl text-slate-700'>
-            <span>NB:</span>&nbsp;Votre choix sera irréverssible
+          <DialogTitle className='text-center mb-8 text-indigo-600 text-2xl'>Confirmation du choix</DialogTitle>
+          <DialogDescription className='text-center text-xl p-2 bg-red-500 text-white rounded'>
+            <span>NB:</span>&nbsp;Votre décision sera irréverssible
           </DialogDescription>
         </DialogHeader>
         
@@ -52,7 +52,7 @@ function ChooseRecipientButton({
         <button
           onClick={handleClick}
           disabled={isPending}
-          className="w-full p-2 font-semibold text-xl rounded-lg text-white bg-red-500 hover:bg-red-600"
+          className="w-full p-2 font-semibold text-xl rounded-lg text-white bg-green-700 hover:bg-green-600"
         >
           {isPending ? 'Choix en cours...' : 'Oui, je choisi ce destinataire'} 
         </button>

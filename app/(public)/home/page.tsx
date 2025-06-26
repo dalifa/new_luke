@@ -6,6 +6,7 @@ import { Suspense } from "react"
 import { FaRobot } from "react-icons/fa"
 import { FaUsersBetweenLines } from "react-icons/fa6";
 import { FaPray } from "react-icons/fa";
+import Image from "next/image"
 //
 const Home = () => {
   return (
@@ -35,9 +36,11 @@ const Home = () => {
         </div>
         {/* Image en bas (mobile), à droite (desktop) */}
         <div className="w-full h-full flex md:p-0 border-x-2 border-indigo-600">
-          <img
+          <Image
             src={`/assets/donner.jpg`}
             alt="image 1"
+            width={800}
+            height={600}
             className="w-full h-full object-cover"
           />
         </div>
@@ -50,9 +53,11 @@ const Home = () => {
 
       <div className="flex flex-col items-center p-4 space-y-10 md:space-y-20">
         <div className="grid grid-cols-1 md:grid-cols-2 md:flex-row rounded-lg">
-          <img
+          <Image
             src={`/assets/argent.jpg`}
             alt="image 1"
+            width={800}
+            height={600}
             className="w-full h-full object-cover rounded-t-lg md:rounded-l-lg md:rounded-r-none"
           />
           <div className="flex flex-col items-center justify-center bg-white rounded-b-lg md:rounded-r-lg md:rounded-l-none p-4">
@@ -63,42 +68,47 @@ const Home = () => {
         </div>
         {/* 2 */}
         <div className="flex flex-col md:flex-row-reverse rounded-lg">
-          <img
+          <Image
             src={`/assets/donataires.jpg`}
             alt="image 1"
+            width={800}
+            height={600}
             className="w-full h-full md:w-1/2 object-cover rounded-t-lg md:rounded-r-lg md:rounded-l-none"
           />
           <div className="flex flex-col items-center justify-center bg-white rounded-b-lg md:rounded-l-lg md:rounded-r-none p-4">
             <h1 className="text-2xl md:text-3xl text-center text-slate-700 font-semibold">
-              Sélectionner une personne à bénir parmi les profils qui vous seront proposés.
+              Vous serez integré à un groupe où vous selectionnerez une personne à bénir.
             </h1>
           </div>
         </div>
         {/* 3 */}
         <div className="grid grid-cols-1 md:grid-cols-2 md:flex-row rounded-lg">
-          <img
+          <Image
             src={`/assets/transfert.jpg`}
             alt="image 1"
+            width={800}
+            height={600}
             className="w-full h-full object-cover rounded-t-lg md:rounded-l-lg md:rounded-r-none"
           />
           <div className="flex flex-col items-center justify-center bg-white rounded-b-lg md:rounded-r-lg md:rounded-l-none p-4">
             <h1 className="text-2xl md:text-3xl text-center text-slate-700 font-semibold">
               Faites lui votre don directement en toute transparence, de personne à personne,
-              via Wero, ou votre App bancaire.
+              via une App de transfert.
             </h1>
           </div>
         </div>
         {/* 4 */}
         <div className="flex flex-col md:flex-row-reverse rounded-lg">
-          <img
+          <Image
             src={`/assets/giv1.jpg`}
             alt="image 1"
+            width={800}
+            height={600}
             className="w-full h-full md:w-1/2 object-cover rounded-t-lg md:rounded-r-lg md:rounded-l-none"
           />
           <div className="flex flex-col items-center justify-center bg-white rounded-b-lg md:rounded-l-lg md:rounded-r-none p-4">
             <h1 className="text-2xl md:text-3xl text-center text-slate-700 font-semibold">
-            Le donataire confirme la reception du don, et vous êtes à votre tour 
-            rendu visible auprès des prochains donateurs.
+            Le donataire confirme la reception du don, ce qui vous permet de bénir à nouveau si tel est votre souhait.
             </h1>
           </div>
         </div>

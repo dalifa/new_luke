@@ -5,7 +5,6 @@ import { useState, useTransition } from "react"
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { useRouter } from "next/navigation"
 
 export default function RecipientValidation({
   collectionId,
@@ -14,9 +13,9 @@ export default function RecipientValidation({
   collectionId: string
   recipientId: string
 }) {
+  //const { toast } = useToast()
   const [donationNumber, setDonationNumber] = useState<number | "">("")
   const [isPending, startTransition] = useTransition()
-  const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -31,15 +30,14 @@ export default function RecipientValidation({
       })
 
       if (res?.success) {
-        setDonationNumber("");
-        router.push(`/dashboard/snippets/myCollections/${collectionId}`); // redirection côté client 
+        setDonationNumber("")
       } 
     })
   }
 
   return (
     <Dialog>
-      <DialogTrigger className="w-full font-medium p-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-md text-xl">
+      <DialogTrigger className="w-full font-medium p-3 bg-green-700 hover:bg-green-600 text-white rounded-md text-xl">
         Confirmer avoir reçu le don  
       </DialogTrigger>
       <DialogContent className="rounded-md w-4/5">
@@ -52,7 +50,7 @@ export default function RecipientValidation({
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-6">
           <Input
             type="number"
-            placeholder="Entrez le numéro"
+            placeholder="Entrez le numéro reçu par SMS"
             value={donationNumber}
             onChange={(e) => {
               const val = e.target.value
@@ -62,7 +60,7 @@ export default function RecipientValidation({
           />
 
           <Button type="submit" disabled={isPending} className="w-full bg-green-600 hover:bg-green-700 text-white text-xl">
-            {isPending ? "Confirmation en cours..." : "Je confirme"}
+            {isPending ? "Confirmation en cours..." : "Valider"}
           </Button>
         </form>
       </DialogContent>

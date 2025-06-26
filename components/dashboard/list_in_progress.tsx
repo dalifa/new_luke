@@ -17,7 +17,7 @@ const DATE_FORMAT = "d MMM yyyy, HH:mm"
 export async function ListInProgress() {
   // 
   const connected = await CurrentProfile()
-  // dernier don fait ou last donation made
+  // les groupes en construction
   const openLists = await prismadb.collection.findMany({
     where: { 
       isGroupComplete: false
@@ -25,20 +25,26 @@ export async function ListInProgress() {
     include: { amount: true }
   }) 
   //
+  const openListsCount = await prismadb.collection.count({
+    where: { 
+      isGroupComplete: false
+    }
+  }) 
   //
   return (
     <Card className='bg-white shadow-xl p-4'>
       <p className='text-center mb-5 font-semibold text-slate-600 text-xl lg:text-lg'>
-        Liste en construction 
+        GROUPE EN COURS...
       </p>
       <hr className='w-full mb-2'/>
       {/*  */}
       <div className='grid grid-cols-1 gap-2 bg-white'>
         {
           openLists && openLists.map((list) => (
-            <p>Liste de {list?.amount?.amount}{list?.amount?.currency} avec {list?.groupStatus}/{list?.group} personnes</p>
+            <p key={list.id}>{list?.groupStatus} personnes / {list?.group} pour bénir de {list?.amount?.amount}{list?.amount?.currency}</p>
           ))
         }
+        { openListsCount === 0 && (<p className="text-center">Aucun groupe en construction</p>)}
       </div>
     </Card>
   )

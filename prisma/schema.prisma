@@ -205,13 +205,17 @@ model CommissionRate {
 // ####  
 // TRÈS IMPORTANT
 model Metric {
-  id                   String  @id @default(auto()) @map("_id") @db.ObjectId
+  id                    String  @id @default(auto()) @map("_id") @db.ObjectId
   // maximum de personnes dans la liste actuellement
-  currentGroup         Int  @default(4)
+  currentGroup          Int  @default(4)
   //
+  currentDonationNumber Int @default(1000)
+  //
+  nextDonationNumber    Int @default(10000)
 }
 //
 // C'EST L'ADMIN QUI ENTRE LE USER POUR LA PREMIÈRE FOIS
+// TODO: CRÉER UN CRON DANS VERCEL POUR RENOUVELER LE REMAININGDAYS AUTOMATIQUEMENT
 model Subscription {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
   profileId      String   @db.ObjectId

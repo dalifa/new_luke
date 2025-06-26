@@ -22,7 +22,7 @@ function LeaveCollectionButton({
   collectionId: string
   participantId: string
 }) {
-  const [isPending, startTransition] = useTransition()
+  const [isPending, startTransition] = useTransition() 
 
   const router = useRouter();
 
@@ -34,7 +34,7 @@ function LeaveCollectionButton({
       }); 
 
       if (res?.success) {
-        router.push('/dashboard'); // redirection côté client
+        router.push('/dashboard'); // redirection côté client 
       }
     })
   }  

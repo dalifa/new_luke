@@ -24,8 +24,9 @@ export async function recipientValidationAction({
     const exist = await prismadb.collectionParticipant.findFirst({
       where: {
         collectionId,
-        recipientId: connected?.id,
+        recipientId: connected?.id, // il est recipient
         donationNumber,
+        recipientValidation:false // très important
       }
     }) 
     // Mettre recipientValidation à true
@@ -50,6 +51,27 @@ export async function recipientValidationAction({
           profileMetId: recipientId 
         },
       })
+      // on vérifie si tous ont donnés ou pas
+      const concerneCollection = await prismadb.collection.findFirst({
+        where: { id: collectionId }
+      })
+      // on compte combien il y a de recipientValidation faite
+      const validationNumber = await prismadb.collectionParticipant.count({
+        where: { 
+          collectionId,
+          recipientValidation: true
+        }
+      })
+      // si tous ont validé, on closed la collecte
+      if(validationNumber === concerneCollection?.group)
+      {
+        await prismadb.collection.updateMany({
+          where: {id: collectionId},
+          data: {
+            isCollectionClosed: true
+          }
+        })
+      }
       // On update le total reçu ou donné par le recipient et le donor
       const donorProfile = await prismadb.profile.findFirst({
         where: {

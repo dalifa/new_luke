@@ -117,20 +117,35 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
             {
               // affiché seulement si le participantId est destinataire d'un autre
               connectedAsParticipant?.recipientId && connectedAsParticipant.recipientId === donor?.participantId && (
-                <div className='w-full flex flex-row gap-4 mt-2'>
-                  <div className='basis-1/3'>
-                    <UserRound className='text-indigo-600'/>
+                <>
+                  <div className='w-full flex flex-row gap-4 mt-2'>
+                    <div className='basis-1/3'>
+                      <UserRound className='text-green-600'/>
+                    </div>
+                    <div className='basis-2/3 text-end'>
+                      { donor?.participant && (
+                        <p className="text-lg font-semibold text-slate-600 break-all">
+                          {capitalize(donor?.participant?.firstname)}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                  <div className='basis-2/3 text-end'>
-                    { donor?.participant && (
-                      <p className="text-lg font-semibold text-indigo-600 break-all">
-                        {capitalize(donor?.participant?.firstname)}
+                  <div className='w-full flex flex-row gap-4 mt-2'>
+                    <div className='basis-1/3'>
+                      <Phone className="text-green-600"/>
+                    </div>
+                    <div className='basis-2/3 text-end'>
+                      { donor?.participant && (
+                      <p className="text-slate-600 font-medium">
+                        {decrypt(donor?.participant?.encryptedPhone)}
                       </p>
-                    )}
+                      )}
+                    </div>
                   </div>
-                </div>
+                </>
               )
             }
+            {/* COMMUNS A TOUS LES PROFILS */}
             <div className='w-full flex flex-row gap-4 mt-2'>
               <div className='basis-1/3'>
                 <Building2 className='text-indigo-600'/>
@@ -155,28 +170,12 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
                 )}
               </div>
             </div>
-            {
-              connectedAsParticipant?.recipientId && connectedAsParticipant.recipientId === donor?.participantId && (
-                <div className='w-full flex flex-row gap-4 mt-2'>
-                  <div className='basis-1/3'>
-                    <Phone className="text-indigo-600"/>
-                  </div>
-                  <div className='basis-2/3 text-end'>
-                    { donor?.participant && (
-                      <p className="text-slate-600">
-                        {decrypt(donor?.participant?.encryptedPhone)}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              )
-            }
             <div className='w-full flex flex-row gap-4 mt-2'>
               <div className='basis-1/3'>
                 <HandCoins className="text-indigo-600"/>
               </div>
               <div className='basis-2/3 text-end'>
-                <p className="text-xl font-bold text-green-600">
+                <p className="font-medium text-slate-600">
                   {donor?.concernedAmount} {connected?.currency}
                 </p>
               </div>
@@ -195,7 +194,7 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
                   <ArrowUp01 className="text-indigo-600"/>
                 </div>
                 <div className='basis-2/3 text-end'>
-                  <p className="text-slate-700">
+                  <p className="text-indigo-600 font-medium">
                     <strong>{donor?.donationNumber}</strong>
                   </p>
                 </div>
@@ -203,7 +202,7 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
               )
             }
             {
-              connected?.id === donor?.participantId && connectedAsRecipient?.recipientValidation === true && (
+              connected?.id === donor?.participantId && novar > 0 && (
                 <div className='w-full flex flex-row gap-4 mt-2'>
                 <div className='basis-1/3'>
                   <CheckSquare className="text-indigo-600"/>
@@ -260,10 +259,10 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
             */}
             {
               concernedCollection?.isGroupComplete === true  // si le groupe est complet
-              && connected?.id && connected?.id !== donor?.participantId // le connecté n'es pas le participant affiché
+              && connected?.id && connected?.id !== donor?.participantId // le connecté n'est pas le participant affiché
               && connectedAsParticipant?.isRecipientChosen === false // le connecté n'a pas encore choisi de recipient
-              && (!connectedAsRecipient || connectedAsRecipient && connectedAsRecipient?.participantId !== donor?.participantId)  // le connecté a été choisi et celui qui l'a choisi n'est pas le participant affiché
-              && result1AsRecipient?.donationReceived !== concernedCollection?.group - 1
+              && result1AsRecipient?.donationReceived !== (concernedCollection?.group - 1) // si tous ne l'ont pas choisi
+              && donor?.recipientId !== connected?.id // si le connecté n'est pas déjà recipient du profil affiché
               && (
                 <ChooseRecipientButton collectionId={params?.collectionId} participantId={connected?.id} recipientId={donor?.participant?.id}/>
               )
@@ -294,15 +293,21 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
             {/* n'apparait que sur le profil du participant donor connecté */}
             {donor?.donorValidation && connected?.id === donor?.participantId && (
               <div className='mt-5'>
-                <p>Votre donataire ne devrait pas tarder à valider de son côté la reception de votre don.</p>
+                {!donor?.recipientValidation && (<p>Votre donataire ne devrait pas tarder à valider de son côté la reception de votre don.</p>)}
                 <p className='mt-5 text-indigo-600'>Merci pour votre générosité 🙏🏼</p>
               </div> 
             )}
 
             {/* ################ S'AFFICHE SUR LE PROFIL DU RECIPIENT ############### */}
             {
-              connectedAsParticipant?.isRecipientChosen === true && connectedAsParticipant?.recipientId === donor?.participantId && donor?.recipientValidation === false && (
-                <button className="w-full mt-4 bg-green-600 text-white px-4 py-2 rounded-lg disabled:opacity-50">
+              /*
+              ON PEUT AFFICHE CECI:
+              - si le connecté est donateur et à choisi son recipient
+              - si son recipient est ce profil
+              - si son recipient n'a pas encore validé la reception du don
+              */
+              connectedAsParticipant?.isRecipientChosen === true && connectedAsParticipant?.recipientId === donor?.participantId && connectedAsParticipant?.recipientValidation === false && (
+                <button className="w-full mt-4 bg-slate-600 text-white px-4 py-2 rounded-lg disabled:opacity-50">
                   Votre Destinataire
                 </button>
               )
@@ -310,7 +315,7 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
             {
               connectedAsParticipant?.recipientId === donor?.participantId && connectedAsParticipant?.recipientValidation === true && (
                 <button className="w-full mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg disabled:opacity-50">
-                  Votre destinataire a confirmé avoir reçu le don
+                  Votre destinataire a confirmé avoir reçu votre don
                 </button>
               )
             }

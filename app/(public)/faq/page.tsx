@@ -31,7 +31,7 @@ const Faq = () => {
             </AccordionTrigger>
             <AccordionContent className="text-xl leading-relaxed">
               Un abonnement mensuel, sans engagement, est demandé à chaque utilisateur. <br />
-              Par exemple, en zone euro, il est de 2 € par mois.
+              Par exemple, en zone euro, il est de 2€ par mois.
             </AccordionContent>
           </AccordionItem>
 
@@ -51,7 +51,7 @@ const Faq = () => {
             </AccordionTrigger>
             <AccordionContent className="text-xl leading-relaxed">
               Vous choisissez librement un montant parmi ceux proposés. <br />
-              En zone euro par exemple : 5 €, 10 €, 20 €, 50 €, 100 € ou 200 €.
+              En zone euro par exemple : 5€, 10€, 20€, 50€, 100€ ou 200€.
             </AccordionContent>
           </AccordionItem>
 
@@ -60,8 +60,8 @@ const Faq = () => {
               A qui donner?
             </AccordionTrigger>
             <AccordionContent className="text-xl leading-relaxed">
-              À l&apos;une des deux personnes qui vous seront proposées. Elles-mêmes ayant 
-              déjà donné ce même montant à une autre personne.
+              À l&apos;une des personnes qui fera partie de votre groupe. 
+              Chaque personne dans le groupe est là pour donner à un autre le même montant.
             </AccordionContent>
           </AccordionItem>
 
@@ -81,8 +81,8 @@ const Faq = () => {
               Comment reçoit-on un don ?
             </AccordionTrigger>
             <AccordionContent className="text-xl leading-relaxed">
-              Vous serez notifié directement par votre application bancaire ou de transfert (ex. : Wero) 
-              dès que vous recevrez un don. <br /> Le donateur peut également vous prévenir par SMS.
+              Vous serez notifié directement par votre application de transfert (ex. : Wero) 
+              dès que vous recevrez un don. <br /> Le donateur va également vous prévenir par SMS.
             </AccordionContent>
           </AccordionItem>
 
@@ -91,9 +91,9 @@ const Faq = () => {
               Comment reconnaître un don venant de WBY ?
             </AccordionTrigger>
             <AccordionContent className="text-xl leading-relaxed">
-              Le donateur reçoit un numéro unique appelé <span className="font-semibold">Donation Number</span>. <br />
-              Il le place dans le libellé du transfert (ex: WBY-2954) et peut aussi vous l&apos;envoyer par SMS. 
-              Vous pourrez alors l&apos;identifier dans l&apos;historique de vos virements.
+              Lorsqu&apos;il vous choisi, le donateur reçoit un numéro unique appelé <span className="font-semibold">Donation Number</span>.<br/>
+              Il le place dans le libellé du transfert (ex: WBY-2954) et vous l&apos;envoie aussi par SMS. 
+              Vous pourrez alors l&apos;identifier dans l&apos;historique de vos virements reçus.
             </AccordionContent>
           </AccordionItem>
 
@@ -123,22 +123,14 @@ const Faq = () => {
               Puis-je annuler un don une fois envoyé ?
               </AccordionTrigger>
             <AccordionContent className="text-xl leading-relaxed">
-              Non, une fois le don effectué, il n&apos;est pas remboursable. Assurez-vous d&apos;être 
-              certain·e avant d&apos;envoyer le transfert.
+              Non, une fois le don effectué, il n&apos;est pas remboursable. 
+              Assurez-vous de bien vouloir donner, 
+              d&apos;avoir choisi le bon montant selon vos moyens, la bonne personne, 
+              et d&apos;envoyer au bon numéro portable.
             </AccordionContent>
           </AccordionItem>
 
           <AccordionItem value="item-13">
-            <AccordionTrigger className="text-start text-2xl font-semibold">
-              Que se passe-t-il si je ne fais pas le don après avoir vu les coordonnées ?
-            </AccordionTrigger>
-            <AccordionContent className="text-xl leading-relaxed">
-              Ne pas effectuer le don après avoir choisi un donataire est une tromperie. Cela peut entraîner
-              l&apos;exclusion de la plateforme.
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem value="item-14">
             <AccordionTrigger className="text-start text-2xl font-semibold">
               Que se passe-t-il si je me trompe de numéro lors du transfert?
             </AccordionTrigger>
@@ -149,13 +141,23 @@ const Faq = () => {
             </AccordionContent>
           </AccordionItem>
 
+          <AccordionItem value="item-14">
+            <AccordionTrigger className="text-start text-2xl font-semibold">
+              Que se passe-t-il si je ne fais pas le don après avoir vu les coordonnées ?
+            </AccordionTrigger>
+            <AccordionContent className="text-xl leading-relaxed">
+              Ne pas effectuer le don après avoir choisi un donataire est une tromperie. Cela peut entraîner
+              l&apos;exclusion de la plateforme.
+            </AccordionContent>
+          </AccordionItem>
+
           <AccordionItem value="item-15">
             <AccordionTrigger className="text-start text-2xl font-semibold">
               Combien de temps ai-je pour faire un don ou pour en confirmer un reçu ?
             </AccordionTrigger>
             <AccordionContent className="text-xl leading-relaxed">
-              Le mieux est de le faire dans l&apos;heure, mais vous aurez jusqu'à 12 heures maximum dans les deux cas.
-              Passé ce délai, nous, votre destinataire, ou donateur, pourrons vous relancer.
+              Le mieux est de le faire dans l&apos;heure, mais vous aurez jusqu&apos;à 12 heures maximum dans les deux cas.
+              Passé ce délai, nous WBY, votre destinataire, ou donateur, pourrons vous relancer par SMS.
             </AccordionContent>
           </AccordionItem>
 
