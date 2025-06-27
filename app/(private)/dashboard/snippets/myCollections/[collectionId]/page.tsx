@@ -42,7 +42,6 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
       participantId: connected?.id
     }
   })
-  //
   // LE CONNECTÉ COMME RECIPIENT
   const connectedAsRecipient = await prismadb.collectionParticipant.findFirst({
     where: {
@@ -50,7 +49,6 @@ const MyRecipients = async ({params}:{params: {collectionId: string}}) => {
       recipientId: connected?.id
     }
   })
-  //
   // le nbr de fois que son donor a validé et pas lui
   const isReceipientValidationCount = await prismadb.collectionParticipant.count({
     where: {

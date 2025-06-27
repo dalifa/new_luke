@@ -168,7 +168,14 @@ model AlreadyMet {
   //
   createdAt       DateTime @default(now())
 }
-//
+// parrainage
+model sponsorship {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  email          String   // crypté
+  hashedEmail    String?  // email hashé pour comparer avec celui de la table profile
+  parrainId      String?
+  createdAt      DateTime @default(now())
+}
 //
 model Activity {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId

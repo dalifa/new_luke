@@ -5,11 +5,12 @@ import Link from "next/link"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { CircleUserRound, ShieldEllipsis } from "lucide-react"
 import { auth } from "@/auth"
+import { prismadb } from "@/lib/prismadb"
 
 export async function PrivateTopbar() {
   const session = await auth()
   const connected = await CurrentProfile()
-  // 
+  //
   return (
     <div className="flex flex-col items-center justify-center fixed top-0 left-0 z-20 bg-indigo-600 text-white w-full h-16 border-b-2 border-indigo-400">
       <div className="flex flex-row w-full px-4 md:px-0 md:w-3/4 items-center justify-between">

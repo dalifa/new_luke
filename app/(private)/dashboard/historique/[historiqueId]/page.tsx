@@ -17,96 +17,36 @@ const HistoryDetails = async ({
     params: { historiqueId: string }
   }) => {
     const connected = await CurrentProfile()
-    const myHistorical = await prismadb.collectionParticipant.findFirst({
-      where:{
-        collectionId: params?.historiqueId,
-        recipientValidation: true,
-        participantId: connected?.id
-      },
-      include: {
-        participant: true, // celui qui a donné
-        recipient: true    // celui qui a reçu
-      }
+    // On select selon id ( = historiqueId ) de l'entrée du connecté dans la collecte 
+    const myId = await prismadb.collectionParticipant.findFirst({
+      where: { id: params?.historiqueId }
     })
     // on select les champs de la collecte concerné quand le recipient à validé 
     const historical = await prismadb.collectionParticipant.findMany({
       where: {
-        collectionId: params?.historiqueId,
-        recipientValidation: true,
-        participantId: { not: connected?.id }
+        collectionId: myId?.collectionId,
+        // recipientValidation: true,
       },
       include: { 
         participant: true, // celui qui a donné
         recipient: true    // celui qui a reçu
       }
     });    
-    
-    //
     //
     return (
       <div className='pt-2 h-ull flex items-center flex-col'>
         <div className='w-full lg:w-4/5 flex flex-col items-center gap-y-4 m-4 px-4'>
           <Card className='w-full flex flex-col p-4 gap-y-2 mb-2 text-center text-indigo-600 shadow-xl'>
-            <p className='text-xl md:text-2xl'>Historique de la collecte</p>
+            <p className='text-xl md:text-2xl'>Historique de la liste de {myId?.concernedAmount}{connected?.currency}</p>
           </Card>
-          <div className='w-full grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4'>
-            <Card className="bg-white shadow-md py-6 px-3 w-full text-center mt-6">
-              {/* Infos Donateur connecté */}
-              <div className="w-full grid grid-cols-2 gap-4 my-4 items-center">
-                <Avatar className="h-20 w-20">
-                  { myHistorical?.participant?.googleImage && (<AvatarImage src={myHistorical?.participant?.googleImage} />) }
-                      <AvatarFallback className="bg-indigo-600 text-white text-3xl">
-                        {myHistorical?.participant?.firstname?.charAt(0).toUpperCase() || "?"}
-                      </AvatarFallback>
-                    </Avatar>
-                    { myHistorical?.participant &&  (<p className="text-lg break-words font-semibold text-slate-600">
-                      {capitalize(myHistorical?.participant?.username)}
-                    </p>)}
-                  </div>
-                  {/* Infos supplémentaires */}
-                  <div className="w-full grid grid-cols-2 gap-4 mt-2">
-                    <UserRound className="text-indigo-600" />
-                    {myHistorical?.participant && (<p className="text-lg text-slate-600 break-words font-semibold">
-                      {capitalize(myHistorical?.participant?.firstname)}
-                    </p>)}
-                </div>
-                <div className="w-full grid grid-cols-2 gap-4 mt-2">
-                  <MapPin className="text-indigo-600" />
-                  {myHistorical?.participant && (<p className="text-slate-600 break-words">
-                    {capitalize(myHistorical?.participant?.country)}
-                  </p>)}
-                </div>
-                  <div className="w-full grid grid-cols-2 gap-4 mt-2">
-                    <HandCoins className="text-indigo-600" />
-                    {myHistorical?.participant && (<p className="text-xl font-bold text-green-600">
-                      {myHistorical?.concernedAmount} {connected?.currency}
-                    </p>)}
-                  </div>
-                  <div className="w-full grid grid-cols-2 gap-4 mt-2">
-                    <Building2 className="text-indigo-600"/>
-                    {myHistorical?.participant && (<p className="text-slate-600 break-words">
-                      {capitalize(myHistorical?.participant?.bio)}
-                    </p>)}
-                  </div>
-                  
-                  <div className="w-full grid grid-cols-2 gap-4 mt-4 text-slate-500">
-                    <div>
-                      <p className='text-start'>Validation reçu le:</p>
-                    </div>
-                    <div>
-                      { myHistorical?.recipientValidationAt &&(<p>{format(new Date(myHistorical?.recipientValidationAt), DATE_FORMAT)}</p>)}
-                    </div>
-                  </div>
-                  <Separator className="my-4"/>
-                  <p className='text-xl font font-medium text-indigo-600'>Donateur</p>
-            </Card>
-
+          <Card className='w-full flex flex-col p-4 gap-y-2 mb-2 text-center text-indigo-600 shadow-xl'>
+            <div className='grid grid-cols-2'>
+              <div>Donateur</div>
+              <div>Bénéficiaire</div>
+            </div>
             { historical.map((historic) => (
-              <Card 
-                key={historic?.id}  className="bg-white shadow-md py-6 px-3 w-full text-center mt-6"
-              >
-                {/* Infos autres participants à la list */}
-                  <div className="w-full grid grid-cols-2 gap-4 my-4 items-center">
+              <div key={historic?.id}  className="grid grid-cols-2 gap-4">
+                <div className="w-full flex flex-col items-center gap-y-2 border-b-2 pb-2">
                     <Avatar className="h-20 w-20">
                       { historic?.participant?.googleImage && <AvatarImage src={historic?.participant?.googleImage}/> }
                       <AvatarFallback className="bg-indigo-600 text-white text-3xl">
@@ -116,57 +56,30 @@ const HistoryDetails = async ({
                     { historic?.participant &&  (<p className="text-lg break-words font-semibold text-slate-600">
                       {capitalize(historic?.participant?.username)}
                     </p>)}
-                  </div>
-                  {/* Infos supplémentaires */}
-                  <div className="w-full grid grid-cols-2 gap-4 mt-2">
-                    <UserRound className="text-indigo-600" />
-                    {historic?.participant && (<p className="text-lg text-slate-600 break-words font-semibold">
-                      {capitalize(historic?.participant?.firstname)}
-                    </p>)}
+                    
+                      {historic?.donorValidationAt && (<p className='text-slate-400 text-xs'>{format(new Date(historic?.donorValidationAt), DATE_FORMAT)}</p>)}
+
                 </div>
-                <div className="w-full grid grid-cols-2 gap-4 mt-2">
-                  <MapPin className="text-indigo-600" />
-                  {historic?.participant && (<p className="text-slate-600 break-words">
-                    {capitalize(historic?.participant?.country)}
-                  </p>)}
-                </div>
-                  <div className="w-full grid grid-cols-2 gap-4 mt-2">
-                    <HandCoins className="text-indigo-600" />
-                    {historic?.participant && (<p className="text-xl font-bold text-green-600">
-                      {historic?.concernedAmount} {connected?.currency}
+                  {/* son donataire*/}
+                  <div className="w-full flex flex-col items-center gap-y-2 border-b-2 pb-2 ">
+                    <Avatar className="h-20 w-20">
+                      { historic?.recipient?.googleImage && <AvatarImage src={historic?.recipient?.googleImage}/> }
+                      <AvatarFallback className="bg-indigo-600 text-white text-3xl">
+                        {historic?.recipient?.firstname.charAt(0).toUpperCase() || "?"}
+                      </AvatarFallback> 
+                    </Avatar>
+                    { historic?.recipient &&  (<p className="text-lg break-words font-semibold text-slate-600">
+                      {capitalize(historic?.recipient?.username)}
                     </p>)}
-                  </div>
-                  <div className="w-full grid grid-cols-2 gap-4 mt-2">
-                      <Building2 className="text-indigo-600" />
-                      {historic?.participant && (<p className="text-slate-600 break-words">
-                      {capitalize(historic?.participant?.bio)}
-                    </p>)}
-                  </div>
-                  <div className="w-full grid grid-cols-2 gap-4 mt-4 text-slate-500">
                     <div>
-                      <p className='text-start'>Choisi le:</p>
-                    </div>
-                    <div>
-                      {historic?.recipientChosenOn && (<p>{format(new Date(historic?.recipientChosenOn), DATE_FORMAT)}</p>)}
+                      {historic?.recipientValidationAt && (<p className='text-slate-400 text-xs'>
+                        {format(new Date(historic?.recipientValidationAt), DATE_FORMAT)}
+                      </p>)}
                     </div>
                   </div>
-                  {/* validation du donator */}
-                  <div className="w-full grid grid-cols-2 gap-4 mt-4 text-slate-500">
-                    <div>
-                      <p className='text-start'>Don fait le:</p>
-                    </div>
-                    <div>
-                      {historic?.donorValidationAt && (<p>{format(new Date(historic?.donorValidationAt), DATE_FORMAT)}</p>)}
-                    </div>
-                  </div>
-                <Separator className="my-4" />
-                  {historic?.recipientId === connected?.id ?(
-                    <p className='text-xl font font-medium text-indigo-600'>Destinataire</p>):(
-                      <p className='text-xl font font-medium text-indigo-600'>Participant</p>
-                    )}
-                </Card>
+              </div>
             ))}
-          </div>
+          </Card>
         </div>
       </div>
     )

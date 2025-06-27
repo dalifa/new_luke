@@ -29,3 +29,12 @@ export const CreateProfileSchema = z.object({
   bio: z.string().toLowerCase(),
 //
 });
+
+// sponsorship
+export const ParrainageSchema = z.object({
+  email: z.string()
+    .email("Adresse email invalide")
+    .refine((email) => email.endsWith("@gmail.com"), {
+      message: "Seules les adresses Gmail sont acceptées",
+    }),
+})

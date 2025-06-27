@@ -6,13 +6,23 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { Archive, BarChart4, LayoutDashboard, MenuIcon, UserRound } from "lucide-react"
+import { Archive, BarChart4, LayoutDashboard, MenuIcon, UserRound, UserRoundPlus, UserRoundSearch } from "lucide-react"
 import { Separator } from "../ui/separator"
 import Link from "next/link"
 import { CurrentProfile } from "@/hooks/own-current-user"
+import { prismadb } from "@/lib/prismadb"
 
 export async function PrivateSheet() {
   const connected = await CurrentProfile()
+  // pour la période BETA TEST
+  const parrainageCount = await prismadb.sponsorship.count({
+    where: {hashedEmail: connected?.hashedEmail}
+  })
+  //
+  const godChildren = await prismadb.sponsorship.findMany({
+    where: { parrainId: connected?.id }
+  }) 
+  //
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -26,6 +36,9 @@ export async function PrivateSheet() {
         </SheetHeader>
         <Separator/>
         <div className="grid gap-2 py-4">
+        {/* enlever la condition à la fin du BETA TEST */}
+        { parrainageCount !== 0 && ( 
+         <>
           <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-indigo-400">
             <Link href={"/dashboard"} className="text-slate-600">
               <div className="flex flex-row gap-5 ">
@@ -48,12 +61,31 @@ export async function PrivateSheet() {
             </Link>
           </SheetClose>
           <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-indigo-400">
+            <Link href={"/dashboard/parrainage"} className="text-slate-600">
+              <div className="flex flex-row gap-5 ">
+                <UserRoundPlus className="text-indigo-600"/> Parrainage
+              </div>
+            </Link>
+          </SheetClose>
+          {
+            godChildren && (
+              <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-indigo-400">
+            <Link href={"/dashboard/filleuls"} className="text-slate-600">
+              <div className="flex flex-row gap-5 ">
+                <UserRoundSearch className="text-indigo-600"/> Filleuls
+              </div>
+            </Link>
+          </SheetClose>
+            )
+          }
+          <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-indigo-400">
             <Link href={"/dashboard/stats"} className="text-slate-600">
               <div className="flex flex-row gap-5 ">
                 <BarChart4 className="text-indigo-600"/> Stats
               </div>
             </Link>
           </SheetClose>
+          </>)} {/* enlever à la fin du BETA TEST */}
           <SheetClose asChild className="mt-10 bg-indigo-600 rounded-md hover:bg-indigo-400 p-2">
             <Link href={"/logout"} className="text-center text-white ">
               <p>Déconnexion</p>

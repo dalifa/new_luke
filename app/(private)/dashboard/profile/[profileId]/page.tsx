@@ -3,6 +3,7 @@ import { auth } from "@/auth"
 import { prismadb } from "@/lib/prismadb"
 import { decrypt } from "@/lib/utils"
 import { ProfileForm } from "./_component/profileForm"
+import { redirect } from "next/navigation"
 //  
 const Profile = async ({ params }: { params: { profileId: string } }) => {
   // la redirection pour les non connectés est faite depuis le fichier middleware 
@@ -18,7 +19,12 @@ const Profile = async ({ params }: { params: { profileId: string } }) => {
       id: params?.profileId
     } 
   })
-  //
+  // On vérifie s'il est parrainé
+  const parrainageCount = await prismadb.sponsorship.count({
+    where: {hashedEmail: concerned?.hashedEmail}
+  })
+  if(parrainageCount < 1)
+    redirect("/dashboard/noParrainage");
   // tous les pays
   const allCountries = await prismadb.country.findMany({ orderBy: { name: 'asc' } })
   //

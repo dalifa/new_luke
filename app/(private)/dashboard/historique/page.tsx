@@ -29,7 +29,7 @@ const History = async () => {
       <div className='h-full flex items-center justify-center flex-col px-5  gap-5 bg-indigo-600'>
         <div className='w-4/5 lg:w-2/5 p-3 mt-10 border rounded text-center bg-white shadow-xl'>
           <p className='text-indigo-600 text-center text-xl'>
-            Historique des bénédictions
+            Historique des listes de bénédictions
           </p>
         </div>
         <div className='w-full grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4'>
