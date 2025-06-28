@@ -34,13 +34,13 @@ export async function PrivateTopbar() {
               </Avatar>
             </Link> 
           )}
-          {/* {  
+          {  
           // enlever User en Prod
-            connected?.role === "ADMIN" || connected?.role === "USER" && ( */}
+            connected?.role === "ADMIN"  && ( 
               <Link href={"/dashboard/admin"}>
                 <ShieldEllipsis/>
               </Link>
-          {/*  )}  */}
+            )}
           <PrivateSheet/>
         </div>
       </div>

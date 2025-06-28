@@ -45,10 +45,10 @@ export function PublicSheet() {
       <SheetContent className="pt-14">
         <SheetTitle className="hidden"></SheetTitle>
         <div className="h-full flex flex-col items-start gap-3 px-2 py-4 bg-neutral-100 rounded-sm">
-          <SheetClose className="bg-neutral-100 hover:bg-indigo-600 hover:text-black hover:font-medium rounded-md text-slate-600 w-full p-2">
+          <SheetClose className="bg-neutral-100 hover:bg-indigo-400 hover:text-black hover:font-medium rounded-md text-slate-600 w-full p-2">
             <Link href={"/home"}>
               <div className="flex flex-row items-center gap-2">
-                <Home className="text-indigo-400"/>
+                <Home className="text-indigo-600"/>
                 <p>Accueil</p>
               </div>
             </Link>
@@ -56,7 +56,7 @@ export function PublicSheet() {
           <SheetClose className="bg-neutral-100 hover:bg-indigo-400 hover:text-black hover:font-medium rounded-md text-slate-600 w-full p-2">
             <Link href={"/ccm"}>
               <div className="flex flex-row items-center gap-2">
-                <Settings className="text-indigo-400"/>
+                <Settings className="text-indigo-600"/>
                 <p className="hidden lg:flex">Comment ça marche</p>
                 <p className="flex lg:hidden">
                   Cçm
@@ -67,7 +67,7 @@ export function PublicSheet() {
           <SheetClose className="bg-neutral-100 hover:bg-indigo-400 hover:text-black hover:font-medium rounded-md text-slate-600 w-full p-2">
             <Link href={"/faq"}>
               <div className="flex flex-row items-center gap-2">
-                <ShieldQuestion className="text-indigo-400"/>
+                <ShieldQuestion className="text-indigo-600"/>
                 <p className="hidden lg:flex">Questions fréquemment posées</p>
                 <p className="flex lg:hidden">
                   Faq
@@ -103,14 +103,14 @@ export function PublicSheet() {
             </Link>
           </SheetClose>
           
-          <SheetClose className="bg-neutral-100 hover:bg-indigo-400 hover:text-black hover:font-medium rounded-md text-slate-600 w-full p-2">
+        {/*  <SheetClose className="bg-neutral-100 hover:bg-indigo-400 hover:text-black hover:font-medium rounded-md text-slate-600 w-full p-2">
             <Link href={"/newHome"}>
               <div className="flex flex-row items-center gap-2">
                 <BarChart4 className="text-indigo-600"/>
                 <p>NewHome</p>
               </div>
             </Link>
-          </SheetClose> 
+          </SheetClose> */}
 
           <div className="bottom-0 w-full">
             <LogGoogleButton/>

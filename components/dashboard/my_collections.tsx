@@ -38,6 +38,7 @@ export const MyCollections = async () => {
         VOS GROUPES POUR BÉNIR
       </p>
       <hr className="border-t border-gray-300 mb-4" />
+      { myCollectionsCount === 0 && (<p className="text-center">Vous n&apos;avez pas de groupe</p>)}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* collectes non cloturé */}  
         {myCollections.map((collecte) => (
@@ -49,7 +50,6 @@ export const MyCollections = async () => {
             </Link> 
           </div>
         ))}
-        { myCollectionsCount === 0 && (<p className="text-center">Vous n&apos;avez pas de groupe</p>)}
       </div>
     </Card>
   ); 

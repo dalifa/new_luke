@@ -33,6 +33,10 @@ export async function Counters() {
     },
     orderBy: { id: "desc"}
   }) 
+  // jours d'abonnement restant
+  const days = await prismadb.subscription.findFirst({
+    where: { codepin: connected?.codepin }
+  })
   //
   return (
     <Card className='bg-white shadow-xl p-4'>
@@ -43,7 +47,7 @@ export async function Counters() {
       {/* PIN = Personal Indentification Number */}
       <div className='grid grid-cols-1 gap-2 bg-white'>
         <div className="flex flex-row items-center justify-between text-slate-500">
-          <TooltipProvider>
+          <TooltipProvider> 
             <Tooltip>
               <TooltipTrigger asChild>
                 <p className='mb-2 text-slate-500 font-medium text-md lg:text-lg cursor-pointer'>Code PIN:</p>
@@ -54,6 +58,10 @@ export async function Counters() {
             </Tooltip>
           </TooltipProvider>
           <p className="text-blue-700 font-semibold text-xl">{connected?.codepin}</p>
+        </div>
+        <div className="flex flex-row items-center justify-between text-slate-600 mb-4">
+          <p>Jours d&apos;abonnement</p>
+          <p className="text-blue-700 font-semibold text-xl">{days?.remainingDays}</p>
         </div>
         <div className="grid grid-cols-2 items-center text-slate-500 text-md md:text-lg justify-between">
             <p>Total Donné:</p>
