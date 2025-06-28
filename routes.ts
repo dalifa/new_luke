@@ -12,7 +12,8 @@ export const publicRoutes = [
   "/infos",
   "/partenariat",
   "/stats",
-  "/securite"
+  "/securite",
+  "/newHome"
 ];
 
 /**

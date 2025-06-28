@@ -102,6 +102,15 @@ export function PublicSheet() {
               </div>
             </Link>
           </SheetClose>
+          
+          <SheetClose className="bg-neutral-100 hover:bg-indigo-400 hover:text-black hover:font-medium rounded-md text-slate-600 w-full p-2">
+            <Link href={"/newHome"}>
+              <div className="flex flex-row items-center gap-2">
+                <BarChart4 className="text-indigo-600"/>
+                <p>NewHome</p>
+              </div>
+            </Link>
+          </SheetClose> 
 
           <div className="bottom-0 w-full">
             <LogGoogleButton/>
