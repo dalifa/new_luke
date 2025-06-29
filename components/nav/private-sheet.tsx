@@ -6,7 +6,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { Archive, BarChart4, LayoutDashboard, MenuIcon, UserRound, UserRoundPlus, UserRoundSearch } from "lucide-react"
+import { Archive, BarChart4, CircleUserRound, LayoutDashboard, MenuIcon, UserRound, UserRoundPlus, UserRoundSearch } from "lucide-react"
 import { Separator } from "../ui/separator"
 import Link from "next/link"
 import { CurrentProfile } from "@/hooks/own-current-user"
@@ -69,15 +69,22 @@ export async function PrivateSheet() {
           </SheetClose>
           {
             godChildren && (
-              <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-indigo-400">
-            <Link href={"/dashboard/filleuls"} className="text-slate-600">
+            <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-indigo-400">
+              <Link href={"/dashboard/filleuls"} className="text-slate-600">
+                <div className="flex flex-row gap-5 ">
+                  <CircleUserRound className="text-indigo-600"/> Filleuls
+                </div>
+              </Link>
+            </SheetClose>
+            )
+          }
+          <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-indigo-400">
+            <Link href={"/dashboard/retrouver"} className="text-slate-600">
               <div className="flex flex-row gap-5 ">
-                <UserRoundSearch className="text-indigo-600"/> Filleuls
+                <UserRoundSearch className="text-indigo-600"/> Retrouver
               </div>
             </Link>
           </SheetClose>
-            )
-          }
           <SheetClose asChild className="p-2 border rounded-md hover:text-white hover:bg-indigo-400">
             <Link href={"/dashboard/stats"} className="text-slate-600">
               <div className="flex flex-row gap-5 ">

@@ -176,6 +176,13 @@ model sponsorship {
   parrainId      String?
   createdAt      DateTime @default(now())
 }
+// connaissance recherchés sur le site
+model MySearch {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  profileId      String?
+  searchedPhone  String?  // numéro hashé
+  createdAt      DateTime @default(now())
+}
 //
 model Activity {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId

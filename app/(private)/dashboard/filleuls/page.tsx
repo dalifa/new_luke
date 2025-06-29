@@ -11,6 +11,13 @@ const Parrainage = async () => {
   const godChildren = await prismadb.sponsorship.findMany({
     where: { parrainId: connected?.id }
   })  
+  // provisoir dev
+  const every = await prismadb.profile.findMany({
+    select: { 
+      encryptedPhone: true,
+      encryptedEmail: true
+    }
+  })
   //
   const godChildrenCount = await prismadb.sponsorship.count({
     where: { parrainId: connected?.id }
@@ -29,6 +36,16 @@ const Parrainage = async () => {
               <p key={son.id} className='text-lg font-semibold mb-2'>
                 {decrypt(son?.email)}
               </p>
+            ))
+          }
+        </div>
+        <div>
+          {
+            every.map((e) => (
+              <div key={e.encryptedEmail}>
+                <p>{decrypt(e.encryptedEmail)}</p>
+                <p>{decrypt(e.encryptedPhone)}</p>
+              </div>
             ))
           }
         </div>

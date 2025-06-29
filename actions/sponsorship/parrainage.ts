@@ -22,7 +22,7 @@ export const parrainage = async (formData: FormData) => {
   //
   await prismadb.sponsorship.create({
     data: { 
-      email: encryptedEmail,
+      email: encryptedEmail, 
       hashedEmail: emailHashed,
       parrainId: connected?.id 
     },

@@ -15,9 +15,9 @@ export const CreateProfileSchema = z.object({
     message: "Renseignez vos Noms."
   }).max(14, { message: "14 caractères au max."}),
   // phone
-  phone: z.string().toLowerCase().min(10, {
+  phone: z.string().toLowerCase().min(15, {
     message: "Renseigner votre numéro de portable."
-  }).max(10,{ message: "Dix chiffre maxi."}),
+  }).max(15,{ message: "Quinze chiffre maxi."}),
   // ville d'habitation
   city: z.string().toLowerCase().min(2,{
     message:"Votre ville d'habitation, svp"
@@ -38,3 +38,11 @@ export const ParrainageSchema = z.object({
       message: "Seules les adresses Gmail sont acceptées",
     }),
 })
+// schéma pour rechercher une personne
+export const SearchFriendSchema = z.object({
+  phoneSearched: z
+    .string()
+    .min(10, { message: "Renseigner le numéro de portable." })
+    .max(15, { message: "Quinze chiffres maxi." })
+    .optional(),
+});

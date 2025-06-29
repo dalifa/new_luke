@@ -17,6 +17,7 @@ const MemberManaged = async ({ params }: { params: { memberManagedId: string } }
         <p>Prénom: <span className="text-blue-500 font-semibold">{memberConcerned?.firstname}</span></p>
         <p>Account: { memberConcerned?.isActiveAccount === true ? (<span className="text-green-500 font-semibold">ACTIF</span>):(<span className="text-rose-500 font-semibold">INACTIF</span>)}</p>
         <p>Ville: {memberConcerned?.city}</p>
+        <p>currency: {memberConcerned?.currency}</p>
       </div> 
     </div>  
   )
